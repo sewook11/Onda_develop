@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/common/Button";
-import LoginForm from "@/components/Loginform";
+import LoginForm from "@/app/login/_components/Loginform";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

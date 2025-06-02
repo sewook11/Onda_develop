@@ -1,5 +1,5 @@
 import { SignupState } from "@/stores/useSignUpStore";
-import TextInput from "./TextInput";
+import TextInput from "../../../components/common/TextInput";
 
 interface Props {
   birthYear: string;

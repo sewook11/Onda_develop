@@ -1,11 +1,11 @@
 "use client";
 import { useSignupStore } from "@/stores/useSignUpStore";
 import AreaSelector from "@/components/common/AreaSelector";
-import InterestSelector from "@/components/InterestSelector";
-import DigitalLevelSelector from "@/components/DigitalLevelSelector";
+import InterestSelector from "@/app/signup/_components/InterestSelector";
+import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector";
 import { useSignupSubmit } from "@/hooks/useSignupSubmit";
-import LabeledInput from "@/components/common/LabeledInput";
-import BirthDateInput from "@/components/common/BirthDateInput";
+import LabeledInput from "@/app/signup/_components/LabeledInput";
+import BirthDateInput from "@/app/signup/_components/BirthDateInput";
 
 export default function SignupPage() {
   const { handleSubmit, setValue } = useSignupSubmit();
