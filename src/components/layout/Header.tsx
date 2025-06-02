@@ -22,7 +22,7 @@ export default function Header() {
         <Link href={"/meet/search"}>모임찾기</Link>
         <Link href={"#"}>리더신청</Link>
         <Link href={"#"}>소통하기</Link>
-        <Link href={"#"}>온:다 소개</Link>
+        <Link href={"/about"}>온:다 소개</Link>
       </nav>
 
       {/* 우측 */}

@@ -1,8 +1,8 @@
-import BannerSection from "@/components/homeComponents/BannerSection";
-import HeroSection from "@/components/homeComponents/HeroSection";
-import MainBannerSection from "@/components/homeComponents/MainBannerSection";
-import MeetingListSection from "@/components/homeComponents/MeetingListSection";
-import StartSurveySection from "@/components/homeComponents/StartSurveySection";
+import BannerSection from "@/app/_components/BannerSection";
+import HeroSection from "@/app/_components/HeroSection";
+import MainBannerSection from "@/app/_components/MainBannerSection";
+import MeetingListSection from "@/app/_components/MeetingListSection";
+import StartSurveySection from "@/app/_components/StartSurveySection";
 
 export default function Home() {
   return (

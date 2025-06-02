@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Button from "../common/Button";
+import Button from "../../components/common/Button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import BannerImage from "@/assets/images/homeBanner.png";
@@ -35,7 +35,7 @@ export default function MainBannerSection() {
             그 경험을 나누는 &#39;리더&#39;가 되는 곳입니다.
           </p>
         </div>
-        <Button width="w-[200px]" onClick={() => router.push("/#")}>
+        <Button width="w-[200px]" onClick={() => router.push("/about")}>
           더 알아보기
         </Button>
       </div>

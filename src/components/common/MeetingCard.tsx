@@ -4,7 +4,7 @@ import Image from "next/image";
 import DefaultGatheringImage from "../common/DefaultMeetingImage";
 import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
 import { MeetingCardProps } from "@/types/meetings";
-import MeeringStatusButtons from "../homeComponents/MeetingStatusButton";
+import MeeringStatusButtons from "../../app/_components/MeetingStatusButton";
 
 export const MeetingCard = ({ item }: MeetingCardProps) => {
   const {
@@ -27,7 +27,7 @@ export const MeetingCard = ({ item }: MeetingCardProps) => {
     rawStatus === "모집 마감" ? "모집 마감" : "모집중";
 
   return (
-    <div className="min-w-[320px] rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
+    <div className="min-w-[320px] max-w-[420px] rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
       {/*  */}
       <div className="flex gap-4 text-sm text-orange-400 font-semibold items-center mb-4">
         {interestIcon}

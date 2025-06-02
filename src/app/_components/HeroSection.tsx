@@ -3,7 +3,7 @@
 import React from "react";
 import heroImage from "@/assets/images/hero.png";
 import Image from "next/image";
-import Button from "../common/Button";
+import Button from "../../components/common/Button";
 import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
