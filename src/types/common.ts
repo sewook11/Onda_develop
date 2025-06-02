@@ -33,6 +33,7 @@ export interface CommonInputProps {
   ) => void;
   placeholder?: string;
   required?: boolean;
+  type?: "text" | "email" | "password" | "number";
 }
 
 export interface IconButtonProps {

@@ -1,8 +1,12 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthStore } from "@/stores/useAuth";
 
 export default function Header() {
+  const { currentUser, logout } = useAuthStore();
+
   return (
     <div className="w-full h-[110px] flex items-center justify-between px-12">
       {/* 로고 부분*/}
@@ -15,7 +19,7 @@ export default function Header() {
       {/* 중앙 */}
       <nav className="flex gap-10 text-black font-medium text-base">
         <Link href={"/"}>홈으로</Link>
-        <Link href={"#"}>모임찾기</Link>
+        <Link href={"/meet/search"}>모임찾기</Link>
         <Link href={"#"}>리더신청</Link>
         <Link href={"#"}>소통하기</Link>
         <Link href={"#"}>온:다 소개</Link>
@@ -23,8 +27,19 @@ export default function Header() {
 
       {/* 우측 */}
       <div className="flex gap-6 text-black font-medium text-base">
-        <Link href={"#"}>로그인</Link>
-        <Link href={"#"}>마이페이지</Link>
+        {currentUser ? (
+          <>
+            <button onClick={logout} className="hover:underline">
+              로그아웃
+            </button>
+            <Link href={"/"}>마이페이지</Link>
+          </>
+        ) : (
+          <>
+            <Link href={"/login"}>로그인</Link>
+            <Link href={"/signup"}>회원가입</Link>
+          </>
+        )}
       </div>
     </div>
   );
