@@ -1,30 +1,36 @@
+"use client";
+
 import React from "react";
 
-interface Option {
-  label: string;
+interface SelectBoxProps {
   value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: { label: string; value: string }[];
+  className?: string;
+  placeholder?: string;
 }
 
-interface SelectBoxProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  options: Option[];
-}
-
-export default function SelectBox({ label, options, ...props }: SelectBoxProps) {
+export default function SelectBox({
+  value,
+  onChange,
+  options,
+  className = "",
+  placeholder = "선택하세요",
+}: SelectBoxProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <label className="text-sm text-gray-700 font-medium">{label}</label>
-      <select
-        {...props}
-        className="border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-      >
-        <option value="">선택하세요</option>
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      value={value}
+      onChange={onChange}
+      className={`border border-gray-300 text-sm rounded-md px-3 h-[44px] ${className}`}
+    >
+      <option value="" disabled hidden>
+        {placeholder}
+      </option>
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
   );
-}
+} 

@@ -1,15 +1,18 @@
+// src/app/meet/search/_components/MeetCardList.tsx
 "use client";
 
 import React from "react";
 import MeetCard from "./MeetCard";
 
 interface MeetItem {
-  id: number;
-  category: string;
+  meet_id: number;
   title: string;
+  interest: number;
   date: string;
   time: string;
   location: string;
+  image?: string;
+  status: string;
 }
 
 interface MeetCardListProps {
@@ -22,23 +25,26 @@ interface MeetCardListProps {
 }
 
 export default function MeetCardList({ searchQuery, filters }: MeetCardListProps) {
-  // 더미 데이터
   const dummyData: MeetItem[] = [
     {
-      id: 1,
-      category: "원예/정원 가꾸기",
+      meet_id: 1,
       title: "걷기 & 대화 모임",
-      date: "2025.06.04 (목)",
+      interest: 9,
+      date: "2025-06-04",
       time: "14:00",
       location: "서울 특별시 어쩌구 저쩌구",
+      image: "",
+      status: "모집중",
     },
     {
-      id: 2,
-      category: "디지털 기초",
+      meet_id: 2,
       title: "줌 사용법 마스터",
-      date: "2025.06.05 (금)",
+      interest: 8,
+      date: "2025-06-05",
       time: "10:00",
       location: "부산 해운대구",
+      image: "",
+      status: "모집 마감",
     },
   ];
 
@@ -48,14 +54,7 @@ export default function MeetCardList({ searchQuery, filters }: MeetCardListProps
         <p className="text-center text-gray-500 col-span-full">모임이 없습니다.</p>
       ) : (
         dummyData.map((meet) => (
-          <MeetCard
-            key={meet.id}
-            category={meet.category}
-            title={meet.title}
-            date={meet.date}
-            time={meet.time}
-            location={meet.location}
-          />
+          <MeetCard key={meet.meet_id} item={meet} />
         ))
       )}
     </section>

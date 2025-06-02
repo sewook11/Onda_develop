@@ -66,7 +66,7 @@ export default function MeetFormFields({
         required
       />
       <SelectBox
-        label="카테고리"
+        placeholder="카테고리"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
         options={[
@@ -74,7 +74,6 @@ export default function MeetFormFields({
           { label: "디지털 심화", value: "디지털 심화" },
           { label: "커뮤니케이션", value: "커뮤니케이션" },
         ]}
-        required
       />
       <div className="grid grid-cols-2 gap-4">
         <TextInput
@@ -118,7 +117,7 @@ export default function MeetFormFields({
         ]}
       />
       <SelectBox
-        label="디지털 난이도"
+        placeholder="디지털 난이도"
         value={digitalLevel}
         onChange={(e) => setDigitalLevel(e.target.value)}
         options={[
@@ -126,7 +125,6 @@ export default function MeetFormFields({
           { label: "중 (앱 사용)", value: "중" },
           { label: "하 (전화만 가능)", value: "하" },
         ]}
-        required
       />
       <TextInput
         label="모집 마감일"
