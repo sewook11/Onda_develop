@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import TextInput from "../common/TextInput";
-import Button from "../common/Button";
+import TextInput from "../../../../components/common/TextInput";
+import Button from "../../../../components/common/Button";
 
 interface MeetSearchBarProps {
   value: string;

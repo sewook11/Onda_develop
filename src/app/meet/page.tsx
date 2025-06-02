@@ -1,5 +1,5 @@
 import React from "react";
-import MeetForm from "@/components/meet/MeetForm";
+import MeetForm from "./create/_components/MeetForm";
 
 export default function MeetPage() {
   return (

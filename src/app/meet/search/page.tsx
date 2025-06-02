@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import MeetSearchBar from "@/components/meet/MeetSearchBar";
-import MeetFilterBar from "@/components/meet/MeetFilterBar";
-import MeetCardList from "@/components/meet/MeetCardList";
+import MeetSearchBar from "@/app/meet/search/_components/MeetSearchBar";
+import MeetFilterBar from "@/app/meet/search/_components/MeetFilterBar";
+import MeetCardList from "@/app/meet/search/_components/MeetCardList";
 
 export default function MeetSearchPage() {
   const [searchQuery, setSearchQuery] = useState("");

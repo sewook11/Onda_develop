@@ -2,7 +2,7 @@ import React from "react";
 import TextInput from "@/components/common/TextInput";
 import Textarea from "@/components/common/Textarea";
 import SelectBox from "@/components/common/SelectBox";
-import ToggleButtonGroup from "../common/ToggleButtonGroup";
+import ToggleButtonGroup from "@/components/common/ToggleButtonGroup";
 
 interface MeetFormFieldsProps {
   title: string;
