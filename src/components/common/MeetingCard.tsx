@@ -1,12 +1,16 @@
 import React from "react";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin, MessageSquareIcon } from "lucide-react";
 import Image from "next/image";
 import DefaultGatheringImage from "../common/DefaultMeetingImage";
 import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
 import { MeetingCardProps } from "@/types/meetings";
 import MeeringStatusButtons from "../../app/_components/MeetingStatusButton";
 
-export const MeetingCard = ({ item }: MeetingCardProps) => {
+export const MeetingCard = ({
+  item,
+  isApplied = false,
+  context,
+}: MeetingCardProps) => {
   const {
     title,
     interest,
@@ -14,6 +18,7 @@ export const MeetingCard = ({ item }: MeetingCardProps) => {
     time,
     location,
     image,
+    contact,
     status: rawStatus,
   } = item;
 
@@ -59,11 +64,29 @@ export const MeetingCard = ({ item }: MeetingCardProps) => {
         {new Date(date).toLocaleDateString("ko-KR", { weekday: "short" })}){" "}
         {time}
       </div>
-      <div className="text-gray-600 text-xs flex items-center mb-4">
+      <div className="text-gray-600 text-xs flex items-center mb-1">
         <MapPin size={16} className="mr-1" />
         {location}
       </div>
-      <MeeringStatusButtons status={status} />
+      {isApplied && contact && (
+        <div className="text-gray-600 text-xs flex items-center mb-1 break-all">
+          <MessageSquareIcon size={20} className="mr-1" />
+          <a
+            href={contact}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="no-underline hover:underline hover:text-orange-500 hover:font-bold cursor-pointer transition"
+          >
+            {/* {contact} */}
+            오픈채팅
+          </a>
+        </div>
+      )}
+
+      <MeeringStatusButtons
+        status={status}
+        mode={context === "past" ? "past" : "default"}
+      />
     </div>
   );
 };

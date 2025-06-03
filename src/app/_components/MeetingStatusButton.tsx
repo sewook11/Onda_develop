@@ -4,13 +4,30 @@ interface MeeringStatusButtonsProps {
   status: "모집중" | "모집 마감"; // 모집 마감 여부
   onClickDetail?: () => void;
   onClickApply?: () => void;
+  mode?: "default" | "past";
 }
 
 export default function MeeringStatusButtons({
   status,
   onClickDetail,
   onClickApply,
+  mode = "default",
 }: MeeringStatusButtonsProps) {
+  if (mode === "past") {
+    return (
+      <div className="flex gap-2">
+        <button className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition">
+          후기작성
+        </button>
+        <button
+          className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
+          onClick={onClickDetail}
+        >
+          상세보기
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="flex gap-2">
       {status === "모집중" ? (

@@ -32,7 +32,7 @@ export default function Header() {
             <button onClick={logout} className="hover:underline">
               로그아웃
             </button>
-            <Link href={"/"}>마이페이지</Link>
+            <Link href={"/mypage"}>마이페이지</Link>
           </>
         ) : (
           <>

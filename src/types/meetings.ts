@@ -7,6 +7,9 @@ export interface MeetingCardProps {
     time: string;
     location: string;
     image?: string;
-    status: string; 
+    status: string;
+    contact?: string;
   };
+  isApplied?: boolean; // 신청한 모임인지 여부
+  context?: "applied" | "past";
 }

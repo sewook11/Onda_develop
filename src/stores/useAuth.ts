@@ -3,9 +3,11 @@ import { create } from "zustand";
 interface User {
   email: string;
   password: string;
+  name: string;
+  nickname: string;
 }
 
-interface AuthState {
+export interface AuthState {
   email: string;
   password: string;
   users: User[];

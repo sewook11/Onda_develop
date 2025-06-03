@@ -12,6 +12,7 @@ export function useSignupSubmit() {
     password_confirm,
     name,
     phone,
+    nickname,
     birthYear,
     birthMonth,
     setValue,
@@ -71,7 +72,7 @@ export function useSignupSubmit() {
       return;
     }
 
-    addUser({ email, password });
+    addUser({ email, password, name, nickname });
 
     resetForm();
     router.push("/");
