@@ -52,7 +52,7 @@ export const MeetingCard = ({
           </div>
         ) : (
           <div className="mb-4">
-            <DefaultGatheringImage />
+            <DefaultGatheringImage width="w-full" height="h-40" />
           </div>
         )}
       </div>

@@ -6,7 +6,7 @@ import CloseButton from "./Buttons/CloseButton";
 const Modal = ({ modalKey, children, className = "" }: ModalProps) => {
   const { modals, closeModal } = useModalStore();
   const isOpen = modals[modalKey] ?? false;
-
+  
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeModal(modalKey);
@@ -18,7 +18,7 @@ const Modal = ({ modalKey, children, className = "" }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-gray-500/10">
       <div className="absolute inset-0" onClick={() => closeModal(modalKey)} />
       <div
         className={`modal-wrapper relative bg-white dark:bg-dark-800 rounded-2xl shadow-xl max-h-screen md:max-w-full max-w-4xl p-[60px] ${className}`}

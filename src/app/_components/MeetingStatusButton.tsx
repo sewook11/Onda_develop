@@ -1,57 +1,91 @@
-import React from "react";
+"use client";
+
+import { useModalStore } from "@/stores/useModalStore";
+import React, { useState } from "react";
+import FinishedMeetDetailModal from "../meet/detail/_components/FinishedMeetDetailModal";
 
 interface MeeringStatusButtonsProps {
   status: "모집중" | "모집 마감"; // 모집 마감 여부
-  onClickDetail?: () => void;
   onClickApply?: () => void;
   mode?: "default" | "past";
 }
 
 export default function MeeringStatusButtons({
   status,
-  onClickDetail,
   onClickApply,
   mode = "default",
 }: MeeringStatusButtonsProps) {
+
+  const dummyData = {
+    title: "걷기 & 대화 모임",
+    date: "2025-06-04",
+    location: "서울특별시 어쩌구 저쩌구",
+    descrlption: "가볍게 함께 걸으며\n건강도 챙기고 이웃과 마음을 나눠요",
+    image: null,
+    leaderName: "리더 이름",
+    leaderImage: null,
+  };
+
+  const { openModal,closeModal } = useModalStore()
+
+const openhandler = () => {
+  openModal("finishedMeetDetail")
+}
+const closehandler = () => {
+  closeModal("finishedMeetDetail")
+  //setShowModal(false)
+}
+
   if (mode === "past") {
     return (
-      <div className="flex gap-2">
-        <button className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition">
-          후기작성
-        </button>
-        <button
-          className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
-          onClick={onClickDetail}
-        >
-          상세보기
-        </button>
-      </div>
+      <>
+        <div className="flex gap-2">
+          <button className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition">
+            후기작성
+          </button>
+          <button
+            className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
+            onClick={openhandler}
+          >
+            상세보기
+          </button>
+        </div>
+
+        <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
+      </>
     );
   }
-  return (
-    <div className="flex gap-2">
-      {status === "모집중" ? (
-        <button
-          className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition"
-          onClick={onClickApply}
-        >
-          신청하기
-        </button>
-      ) : (
-        <button
-          className="flex-1 bg-gray-300 text-white py-2 rounded-md cursor-not-allowed"
-          disabled
-        >
-          모집 마감
-        </button>
-      )}
 
-      <button
-        className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
-        onClick={onClickDetail}
-      >
-        상세 보기
-      </button>
-    </div>
+  return (
+    <>
+      <div className="flex gap-2">
+        {status === "모집중" ? (
+          <button
+            className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition"
+            onClick={onClickApply}
+          >
+            신청하기
+          </button>
+        ) : (
+          <button
+            className="flex-1 bg-gray-300 text-white py-2 rounded-md cursor-not-allowed"
+            disabled
+          >
+            모집 마감
+          </button>
+        )}
+
+        <button
+          className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
+          onClick={openhandler}
+
+        >
+          상세 보기
+        </button>
+      </div>
+
+      
+        <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
+    </>
   );
 }
