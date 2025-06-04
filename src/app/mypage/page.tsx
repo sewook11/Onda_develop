@@ -5,13 +5,8 @@ import AppliedScheduleList from "./_components/AppliedScheduleList";
 import PastScheduleList from "./_components/PastScheduleList";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
-import { useModalStore } from "@/stores/useModalStore";
-import FinishedMeetDetailModal from "../meet/detail/_components/FinishedMeetDetailModal";
 
 export default function Mypage() {
-  const { modals, closeModal } = useModalStore();
-
-  
   const { currentUser } = useAuthStore();
   console.log(currentUser?.name);
   const router = useRouter();

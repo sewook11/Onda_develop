@@ -1,7 +1,6 @@
 "use client";
 
 import { useModalStore } from "@/stores/useModalStore";
-import React, { useState } from "react";
 import FinishedMeetDetailModal from "../meet/detail/_components/FinishedMeetDetailModal";
 
 interface MeeringStatusButtonsProps {
@@ -15,7 +14,6 @@ export default function MeeringStatusButtons({
   onClickApply,
   mode = "default",
 }: MeeringStatusButtonsProps) {
-
   const dummyData = {
     title: "걷기 & 대화 모임",
     date: "2025-06-04",
@@ -26,15 +24,15 @@ export default function MeeringStatusButtons({
     leaderImage: null,
   };
 
-  const { openModal,closeModal } = useModalStore()
+  const { openModal, closeModal } = useModalStore();
 
-const openhandler = () => {
-  openModal("finishedMeetDetail")
-}
-const closehandler = () => {
-  closeModal("finishedMeetDetail")
-  //setShowModal(false)
-}
+  const openhandler = () => {
+    openModal("finishedMeetDetail");
+  };
+  const closehandler = () => {
+    closeModal("finishedMeetDetail");
+    //setShowModal(false)
+  };
 
   if (mode === "past") {
     return (
@@ -78,14 +76,12 @@ const closehandler = () => {
         <button
           className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
           onClick={openhandler}
-
         >
           상세 보기
         </button>
       </div>
 
-      
-        <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
+      <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
     </>
   );
 }
