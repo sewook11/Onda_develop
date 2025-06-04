@@ -3,9 +3,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuth";
+import { useSignupStore } from "@/stores/useSignUpStore";
 
 export default function Header() {
   const { currentUser, logout } = useAuthStore();
+  const { isKakaoUserSignedUp, setKakaoUserSignedUp } = useSignupStore();
+  const handleLogout = () => {
+    logout();
+    setKakaoUserSignedUp(false);
+  };
 
   return (
     <div className="w-full h-[110px] flex items-center justify-between px-12">
@@ -27,9 +33,9 @@ export default function Header() {
 
       {/* 우측 */}
       <div className="flex gap-6 text-black font-medium text-base">
-        {currentUser ? (
+        {currentUser || isKakaoUserSignedUp ? (
           <>
-            <button onClick={logout} className="hover:underline">
+            <button onClick={handleLogout} className="hover:underline">
               로그아웃
             </button>
             <Link href={"/mypage"}>마이페이지</Link>

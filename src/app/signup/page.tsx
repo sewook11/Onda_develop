@@ -8,6 +8,7 @@ import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
 
 export default function SignupPage() {
+  // const { isKakaoUser } = useSignupStore();
   const { handleSubmit, setValue } = useSignupSubmit();
   const {
     email,
@@ -21,6 +22,8 @@ export default function SignupPage() {
     birthDay,
     agreement,
     toggleAgreement,
+    isKakaoUser,
+    // setKakaoUserSignedUp,
   } = useSignupStore();
 
   return (
@@ -41,28 +44,36 @@ export default function SignupPage() {
             placeholder="이름"
             required
           />
-          <LabeledInput
-            label="닉네임"
-            name="nickname"
-            value={nickname}
-            onChange={(e) => setValue("nickname", e.target.value)}
-            placeholder="닉네임"
-            required
-          />
+          {!isKakaoUser && (
+            <>
+              <LabeledInput
+                label="닉네임"
+                name="nickname"
+                value={nickname}
+                onChange={(e) => setValue("nickname", e.target.value)}
+                placeholder="닉네임"
+                required
+              />
+            </>
+          )}
           <BirthDateInput
             birthYear={birthYear}
             birthMonth={birthMonth}
             birthDay={birthDay}
             setValue={setValue}
           />
-          <LabeledInput
-            label="이메일"
-            name="email"
-            value={email}
-            onChange={(e) => setValue("email", e.target.value)}
-            placeholder="이메일"
-            required
-          />
+          {!isKakaoUser && (
+            <>
+              <LabeledInput
+                label="이메일"
+                name="email"
+                value={email}
+                onChange={(e) => setValue("email", e.target.value)}
+                placeholder="이메일"
+                required
+              />
+            </>
+          )}
           <LabeledInput
             label="비밀번호"
             name="password"

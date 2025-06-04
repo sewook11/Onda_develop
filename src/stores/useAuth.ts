@@ -5,6 +5,10 @@ interface User {
   password: string;
   name: string;
   nickname: string;
+  phone: string;
+  selectedSido: string;
+  selectedDistricts: string[];
+  selectedInterests: string[];
 }
 
 export interface AuthState {
@@ -15,6 +19,7 @@ export interface AuthState {
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   addUser: (user: User) => void;
+  setCurrentUser: (user: User) => void;
   reset: () => void;
   login: (email: string, password: string) => boolean;
   logout: () => void;
@@ -32,12 +37,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setEmail: (email) => set({ email }),
   setPassword: (password) => set({ password }),
 
-  addUser: (user) =>
+  addUser: (newUser: User) =>
     set((state) => {
-      const updatedUsers = [...state.users, user];
+      const updatedUsers = [...state.users, newUser];
       localStorage.setItem("users", JSON.stringify(updatedUsers));
-      return { users: updatedUsers };
+      return { users: updatedUsers, currentUser: newUser };
     }),
+
+  setCurrentUser: (user) => set({ currentUser: user }),
 
   reset: () => set({ email: "", password: "" }),
 

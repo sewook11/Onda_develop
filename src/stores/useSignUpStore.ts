@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface SignupState {
   email: string;
@@ -13,6 +14,10 @@ export interface SignupState {
   birthYear: string;
   birthMonth: string;
   birthDay: string;
+  isKakaoUser: boolean;
+  setIsKakaoUser: (value: boolean) => void;
+  isKakaoUserSignedUp: boolean; // 회원가입 수단 구분을 위한 변수
+  setKakaoUserSignedUp: (value: boolean) => void;
 
   // 지역
   selectedSido: string; // 현재 선택된 시/도
@@ -39,56 +44,10 @@ export interface SignupState {
   resetForm: () => void;
 }
 
-export const useSignupStore = create<SignupState>((set) => ({
-  // 초기 값
-  email: "",
-  password: "",
-  password_confirm: "",
-  nickname: "",
-  name: "",
-  phone: "",
-  area_id: null,
-  interest_id: null,
-  digitalLevel_id: null,
-  birthYear: "",
-  birthMonth: "",
-  birthDay: "",
-
-  selectedSido: "서울",
-  selectedDistricts: [],
-  selectedInterests: [],
-  agreement: false,
-
-  // 관심사 토글함수
-  toggleInterest: (interest: string) =>
-    set((state) => ({
-      selectedInterests: state.selectedInterests.includes(interest)
-        ? state.selectedInterests.filter((i) => i !== interest)
-        : [...state.selectedInterests, interest],
-    })),
-
-  setValue: (key, value) => set((state) => ({ ...state, [key]: value })),
-
-  // 구/군 토글함수
-  toggleDistrict: (district) =>
-    set((state) => ({
-      selectedDistricts: state.selectedDistricts.includes(district)
-        ? state.selectedDistricts.filter((d) => d !== district)
-        : [...state.selectedDistricts, district],
-    })),
-
-  // 시/도 데이터를 바꾸는 함수
-  selectSido: (sido) =>
-    set(() => ({
-      selectedSido: sido,
-      selectedDistricts: [], // 사용자가 선택한 지역을 담고 있는 배열 상태
-    })),
-
-  toggleAgreement: () => set((state) => ({ agreement: !state.agreement })),
-
-  // 폼상태 초기화
-  resetForm: () =>
-    set({
+export const useSignupStore = create(
+  persist<SignupState>(
+    (set) => ({
+      // 초기 값
       email: "",
       password: "",
       password_confirm: "",
@@ -101,9 +60,69 @@ export const useSignupStore = create<SignupState>((set) => ({
       birthYear: "",
       birthMonth: "",
       birthDay: "",
+      isKakaoUser: false,
+      isKakaoUserSignedUp: false,
+      setIsKakaoUser: (value) => set({ isKakaoUser: value }),
+      setKakaoUserSignedUp: (value) => set({ isKakaoUserSignedUp: value }),
+
       selectedSido: "서울",
       selectedDistricts: [],
       selectedInterests: [],
       agreement: false,
+
+      // 관심사 토글함수
+      toggleInterest: (interest: string) =>
+        set((state) => ({
+          selectedInterests: state.selectedInterests.includes(interest)
+            ? state.selectedInterests.filter((i) => i !== interest)
+            : [...state.selectedInterests, interest],
+        })),
+
+      setValue: (key, value) => set((state) => ({ ...state, [key]: value })),
+
+      // 구/군 토글함수
+      toggleDistrict: (district) =>
+        set((state) => ({
+          selectedDistricts: state.selectedDistricts.includes(district)
+            ? state.selectedDistricts.filter((d) => d !== district)
+            : [...state.selectedDistricts, district],
+        })),
+
+      // 시/도 데이터를 바꾸는 함수
+      selectSido: (sido) =>
+        set(() => ({
+          selectedSido: sido,
+          selectedDistricts: [], // 사용자가 선택한 지역을 담고 있는 배열 상태
+        })),
+
+      toggleAgreement: () => set((state) => ({ agreement: !state.agreement })),
+
+      // 폼상태 초기화
+      resetForm: () =>
+        set((state) => ({
+          ...state,
+          email: state.isKakaoUser ? state.email : "",
+          password: "",
+          password_confirm: "",
+          nickname: state.isKakaoUser ? state.nickname : "",
+          name: "",
+          phone: "",
+          area_id: null,
+          interest_id: null,
+          digitalLevel_id: null,
+          birthYear: "",
+          birthMonth: "",
+          birthDay: "",
+          selectedSido: "서울",
+          selectedDistricts: [],
+          selectedInterests: [],
+          agreement: false,
+          isKakaoUser: false,
+          isKakaoUserSignedUp: state.isKakaoUserSignedUp,
+        })),
     }),
-}));
+    {
+      name: "signup-storage", // 로컬스토리지에 저장될 키이름
+    }
+  )
+);

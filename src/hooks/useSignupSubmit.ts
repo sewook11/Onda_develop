@@ -18,6 +18,11 @@ export function useSignupSubmit() {
     setValue,
     agreement,
     resetForm,
+    isKakaoUser,
+    selectedSido,
+    selectedInterests,
+    selectedDistricts,
+    // setKakaoUserSignedUp,
   } = useSignupStore();
 
   const { addUser } = useAuthStore();
@@ -72,9 +77,22 @@ export function useSignupSubmit() {
       return;
     }
 
-    addUser({ email, password, name, nickname });
+    addUser({
+      email,
+      password,
+      name,
+      nickname,
+      phone,
+      selectedSido,
+      selectedInterests,
+      selectedDistricts,
+    });
 
     resetForm();
+    if (isKakaoUser) {
+      const { setKakaoUserSignedUp } = useSignupStore.getState();
+      setKakaoUserSignedUp(true);
+    }
     router.push("/");
   };
   return { handleSubmit, setValue };
