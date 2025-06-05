@@ -3,6 +3,7 @@
 import { useModalStore } from "@/stores/useModalStore";
 import FinishedMeetDetailModal from "../meet/detail/_components/FinishedMeetDetailModal";
 import MeetDetailModal from "../meet/detail/_components/MeetDetailModal";
+import ReviewWriteModal from "../meet/review/_components/ReviewWriteModal";
 
 interface MeeringStatusButtonsProps {
   status: "모집중" | "모집 마감";
@@ -37,7 +38,10 @@ export default function MeeringStatusButtons({
       <div className="flex gap-2">
         {mode === "past" ? (
           <>
-            <button className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition">
+            <button
+              className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition"
+              onClick={() => openModal("reviewWrite")}
+            >
               후기작성
             </button>
             <button
@@ -74,7 +78,7 @@ export default function MeeringStatusButtons({
         )}
       </div>
 
-    
+      
       {mode === "past" && modals["finishedMeetDetail"] && (
         <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
       )}
@@ -85,6 +89,18 @@ export default function MeeringStatusButtons({
           onApply={() => console.log("신청")}
           onCancel={() => console.log("취소")}
           onClose={closehandler}
+        />
+      )}
+
+      
+      {modals["reviewWrite"] && (
+        <ReviewWriteModal
+          modalKey="reviewWrite"
+          onClose={() => closeModal("reviewWrite")}
+          onSubmit={(rating, content) => {
+            console.log("후기 제출", rating, content);
+        
+          }}
         />
       )}
     </>
