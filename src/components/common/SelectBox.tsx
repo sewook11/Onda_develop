@@ -3,9 +3,9 @@
 import React from "react";
 
 interface SelectBoxProps {
-  value: string;
+  value: string | number;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: { label: string; value: string }[];
+  options: { label: string; value: string | number }[];
   className?: string;
   placeholder?: string;
 }

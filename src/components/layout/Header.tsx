@@ -30,7 +30,7 @@ export default function Header() {
         <Link href={"/"}>홈으로</Link>
         <Link href={"/meet/search"}>모임찾기</Link>
         <Link href={"#"}>리더신청</Link>
-        <Link href={"#"}>소통하기</Link>
+        <Link href={"/community"}>소통하기</Link>
         <Link href={"/about"}>온:다 소개</Link>
       </nav>
 
