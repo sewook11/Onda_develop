@@ -4,13 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuth";
 import { useSignupStore } from "@/stores/useSignUpStore";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const { currentUser, logout } = useAuthStore();
   const { isKakaoUserSignedUp, setKakaoUserSignedUp } = useSignupStore();
+  const router = useRouter();
   const handleLogout = () => {
     logout();
     setKakaoUserSignedUp(false);
+    router.push("/");
   };
 
   return (
