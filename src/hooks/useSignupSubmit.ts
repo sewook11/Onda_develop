@@ -89,6 +89,7 @@ export function useSignupSubmit() {
     });
 
     resetForm();
+    useAuthStore.getState().logout();
     if (isKakaoUser) {
       const { setKakaoUserSignedUp } = useSignupStore.getState();
       setKakaoUserSignedUp(true);

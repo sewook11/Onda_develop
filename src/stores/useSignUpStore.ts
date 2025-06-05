@@ -100,10 +100,10 @@ export const useSignupStore = create(
       resetForm: () =>
         set((state) => ({
           ...state,
-          email: state.isKakaoUser ? state.email : "",
+          email: "",
           password: "",
           password_confirm: "",
-          nickname: state.isKakaoUser ? state.nickname : "",
+          nickname: "",
           name: "",
           phone: "",
           area_id: null,

@@ -63,5 +63,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     set({ currentUser: null });
     localStorage.removeItem("currentUser");
+
+    // signupStore 초기화
+    import("@/stores/useSignUpStore").then(({ useSignupStore }) => {
+      useSignupStore.getState().resetForm();
+    });
   },
 }));
