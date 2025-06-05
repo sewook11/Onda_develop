@@ -21,7 +21,7 @@ export interface SignupState {
 
   // 지역
   selectedSido: string; // 현재 선택된 시/도
-  selectedDistricts: string[];
+  selectedDistrict: string | null;
 
   // 관심사
   selectedInterests: string[];
@@ -38,7 +38,7 @@ export interface SignupState {
   ) => void;
 
   // 구/군
-  toggleDistrict: (district: string) => void;
+  setDistrict: (district: string | null) => void;
   // 시/도
   selectSido: (sido: string) => void;
   resetForm: () => void;
@@ -66,7 +66,7 @@ export const useSignupStore = create(
       setKakaoUserSignedUp: (value) => set({ isKakaoUserSignedUp: value }),
 
       selectedSido: "서울",
-      selectedDistricts: [],
+      selectedDistrict: null,
       selectedInterests: [],
       agreement: false,
 
@@ -81,18 +81,17 @@ export const useSignupStore = create(
       setValue: (key, value) => set((state) => ({ ...state, [key]: value })),
 
       // 구/군 토글함수
-      toggleDistrict: (district) =>
+      setDistrict: (district) =>
         set((state) => ({
-          selectedDistricts: state.selectedDistricts.includes(district)
-            ? state.selectedDistricts.filter((d) => d !== district)
-            : [...state.selectedDistricts, district],
+          selectedDistrict:
+            state.selectedDistrict === district ? null : district,
         })),
 
       // 시/도 데이터를 바꾸는 함수
       selectSido: (sido) =>
         set(() => ({
           selectedSido: sido,
-          selectedDistricts: [], // 사용자가 선택한 지역을 담고 있는 배열 상태
+          selectedDistrict: null, // 사용자가 선택한 지역을 담고 있는 배열 상태
         })),
 
       toggleAgreement: () => set((state) => ({ agreement: !state.agreement })),
@@ -114,7 +113,7 @@ export const useSignupStore = create(
           birthMonth: "",
           birthDay: "",
           selectedSido: "서울",
-          selectedDistricts: [],
+          selectedDistrict: null,
           selectedInterests: [],
           agreement: false,
           isKakaoUser: false,

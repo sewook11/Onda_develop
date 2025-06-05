@@ -21,7 +21,7 @@ export function useSignupSubmit() {
     isKakaoUser,
     selectedSido,
     selectedInterests,
-    selectedDistricts,
+    selectedDistrict,
     // setKakaoUserSignedUp,
   } = useSignupStore();
 
@@ -85,7 +85,7 @@ export function useSignupSubmit() {
       phone,
       selectedSido,
       selectedInterests,
-      selectedDistricts,
+      selectedDistrict,
     });
 
     resetForm();

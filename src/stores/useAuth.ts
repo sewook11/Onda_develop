@@ -7,7 +7,7 @@ interface User {
   nickname: string;
   phone: string;
   selectedSido: string;
-  selectedDistricts: string[];
+  selectedDistrict: string | null;
   selectedInterests: string[];
 }
 

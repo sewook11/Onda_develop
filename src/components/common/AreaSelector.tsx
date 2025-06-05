@@ -20,7 +20,7 @@ export default function AreaSelector() {
 
   type Sido = keyof typeof AREA_OPTIONS;
 
-  const { selectedSido, selectedDistricts, selectSido, toggleDistrict } =
+  const { selectedSido, selectedDistrict, selectSido, setDistrict } =
     useSignupStore();
 
   const sidos = Object.keys(AREA_OPTIONS) as Sido[];
@@ -55,22 +55,7 @@ export default function AreaSelector() {
         {/* 오른쪽: 구/군 체크박스 */}
         <div className="flex flex-col gap-2 h-full">
           <label className="sticky top-0 bg-white px-2 py-1 flex items-center justify-between ">
-            <span className="font-semibold">전체</span>
-            <input
-              type="checkbox"
-              checked={districts.every((d) => selectedDistricts.includes(d))}
-              onChange={() => {
-                // 전체 선택/해제 토글
-                if (districts.every((d) => selectedDistricts.includes(d))) {
-                  districts.forEach((d) => toggleDistrict(d)); // 해제
-                } else {
-                  districts
-                    .filter((d) => !selectedDistricts.includes(d))
-                    .forEach((d) => toggleDistrict(d)); // 선택
-                }
-              }}
-              className="accent-orange-600 w-4 h-4"
-            />
+            <div className="font-semibold">전체</div>
           </label>
           <div
             className="overflow-y-auto flex-1"
@@ -82,14 +67,17 @@ export default function AreaSelector() {
                 className="flex items-center justify-between px-2 py-1 h-10 text-gray-700"
               >
                 <span
-                  className={`${selectedDistricts.includes(district) ? "font-bold" : ""}`}
+                  className={`${selectedDistrict === district ? "font-bold" : ""}`}
                 >
                   {district}
                 </span>
                 <input
-                  type="checkbox"
-                  checked={selectedDistricts.includes(district)}
-                  onChange={() => toggleDistrict(district)}
+                  type="radio"
+                  name="district"
+                  checked={selectedDistrict === district}
+                  onChange={() =>
+                    setDistrict(selectedDistrict === district ? null : district)
+                  }
                   className="accent-orange-600 w-4 h-4"
                 />
               </label>
