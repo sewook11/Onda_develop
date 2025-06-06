@@ -21,7 +21,7 @@ interface MeetDetailModalProps {
 
 const MeetDetailModal = ({ data, isApplied, onApply, onCancel, onClose }: MeetDetailModalProps) => {
   return (
-    <Modal modalKey="meetDetail" className="w-1/2 max-w-md rounded-2xl bg-white p-6 shadow-xl font-sans max-h-[90vh] overflow-y-auto">
+    <Modal modalKey="meetDetail" className="md:w-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-xl lg:max-w-2xl px-4 py-6 rounded-2xl">
 
       {/* 날짜 + 모집상태 */}
       <div className="flex items-center text-sm text-gray-600 mb-1">
