@@ -36,6 +36,8 @@ const MeetDetailModal = ({ data, isApplied, onApply, onCancel}: MeetDetailModalP
       {/* 리더 정보 */}
       <div className="flex items-center gap-3 mb-3">
         <Image
+          width = '40'
+          height= '40'
           src={data.leaderImage || "/default-profile.png"}
           alt="리더"
           className="w-10 h-10 rounded-full border border-gray-300"

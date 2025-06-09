@@ -1,8 +1,7 @@
-// src/app/meet/search/_components/MeetCardList.tsx
 "use client";
 
 import React from "react";
-import MeetCard from "./MeetCard";
+import { MeetingCard } from "@/components/common/MeetingCard";
 
 interface MeetItem {
   meet_id: number;
@@ -54,8 +53,8 @@ export default function MeetCardList({}: MeetCardListProps) {
         <p className="text-center text-gray-500 col-span-full">모임이 없습니다.</p>
       ) : (
         dummyData.map((meet) => (
-          <MeetCard key={meet.meet_id} item={meet} />
-        ))
+          <MeetingCard key={meet.meet_id} item={meet} />
+        ))  
       )}
     </section>
   );
