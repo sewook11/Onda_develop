@@ -59,7 +59,7 @@ export default function MeetCard({ item }: MeetCardProps) {
             />
           </div>
         ) : (
-          <DefaultGatheringImage />
+          <DefaultGatheringImage width='w-[136px]' height='h-[136px]'  />
         )}
       </div>
 

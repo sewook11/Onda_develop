@@ -1,7 +1,8 @@
 import Modal from "@/components/common/Modal";
-import { Star } from "lucide-react";
+// import { Star } from "lucide-react";
 import Button from "@/components/common/Button";
 import DefaultMeetingImage from "@/components/common/DefaultMeetingImage";
+import Image from "next/image";
 
 interface MeetDetailModalProps {
   data: {
@@ -19,7 +20,7 @@ interface MeetDetailModalProps {
   onClose: () => void;
 }
 
-const MeetDetailModal = ({ data, isApplied, onApply, onCancel, onClose }: MeetDetailModalProps) => {
+const MeetDetailModal = ({ data, isApplied, onApply, onCancel}: MeetDetailModalProps) => {
   return (
     <Modal modalKey="meetDetail" className="md:w-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-xl lg:max-w-2xl px-4 py-6 rounded-2xl">
 
@@ -34,7 +35,7 @@ const MeetDetailModal = ({ data, isApplied, onApply, onCancel, onClose }: MeetDe
 
       {/* 리더 정보 */}
       <div className="flex items-center gap-3 mb-3">
-        <img
+        <Image
           src={data.leaderImage || "/default-profile.png"}
           alt="리더"
           className="w-10 h-10 rounded-full border border-gray-300"
@@ -48,7 +49,7 @@ const MeetDetailModal = ({ data, isApplied, onApply, onCancel, onClose }: MeetDe
       {/* 이미지 */}
       <div className="mb-3">
         {data.image ? (
-          <img
+          <Image
             src={data.image}
             alt="대표 이미지"
             className="w-full h-auto rounded-xl border border-gray-300 object-cover"

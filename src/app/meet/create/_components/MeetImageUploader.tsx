@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 
 export default function MeetImageUploader() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export default function MeetImageUploader() {
         className="w-full h-48 rounded-xl border border-dashed border-gray-300 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-gray-200 transition"
       >
         {previewUrl ? (
-          <img src={previewUrl} alt="미리보기" className="h-full object-contain" />
+          <Image src={previewUrl} alt="미리보기" className="h-full object-contain" />
         ) : (
           <span className="text-gray-500">이미지를 업로드하려면 클릭하세요</span>
         )}

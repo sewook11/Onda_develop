@@ -2,6 +2,7 @@ import Modal from "@/components/common/Modal";
 import { Star } from "lucide-react";
 import Button from "@/components/common/Button";
 import DefaultMeetingImage from "@/components/common/DefaultMeetingImage";
+import Image from "next/image";
 
 interface FinishedMeetDetailModalProps {
   data: {
@@ -13,10 +14,11 @@ interface FinishedMeetDetailModalProps {
     leaderName?: string;
     leaderImage?: string | null;
   };
+   
   onClose: () => void;
 }
 
-const FinishedMeetDetailModal = ({ data, onClose }: FinishedMeetDetailModalProps) => {
+const FinishedMeetDetailModal = ({data}: FinishedMeetDetailModalProps) => {
   return (
     <Modal modalKey="finishedMeetDetail" className="md:w-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-xl lg:max-w-2xl px-4 py-6 rounded-2xl">
       {/* 날짜 + 모집상태 */}
@@ -30,7 +32,7 @@ const FinishedMeetDetailModal = ({ data, onClose }: FinishedMeetDetailModalProps
 
       {/* 리더 정보 */}
       <div className="flex items-center gap-3 mb-3">
-        <img
+        <Image
           src={data.leaderImage || "/default-profile.png"}
           alt="리더"
           className="w-10 h-10 rounded-full border border-gray-300"
@@ -44,7 +46,7 @@ const FinishedMeetDetailModal = ({ data, onClose }: FinishedMeetDetailModalProps
       {/* 이미지 */}
       <div className="mb-3">
         {data.image ? (
-          <img
+          <Image
             src={data.image}
             alt="대표 이미지"
             className="w-full min-h-[500px] h-full rounded-xl border border-gray-300 object-cover"
@@ -82,7 +84,7 @@ const FinishedMeetDetailModal = ({ data, onClose }: FinishedMeetDetailModalProps
           <div key={i} className="rounded-xl border border-gray-300 p-4 text-sm space-y-1 bg-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <img src="/default-profile.png" className="w-6 h-6 rounded-full" />
+                <Image src="/default-profile.png" alt="profile.image" className="w-6 h-6 rounded-full" />
                 <span className="font-medium">참가자</span>
               </div>
               <span className="text-xs text-gray-500">2025-05-26 14:00</span>

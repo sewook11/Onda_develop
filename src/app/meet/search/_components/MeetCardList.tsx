@@ -24,7 +24,7 @@ interface MeetCardListProps {
   };
 }
 
-export default function MeetCardList({ searchQuery, filters }: MeetCardListProps) {
+export default function MeetCardList({}: MeetCardListProps) {
   const dummyData: MeetItem[] = [
     {
       meet_id: 1,
