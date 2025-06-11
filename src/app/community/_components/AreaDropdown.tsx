@@ -1,3 +1,5 @@
+"use client"
+
 import AreaSelector from "@/components/common/AreaSelector";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

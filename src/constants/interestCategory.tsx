@@ -8,7 +8,8 @@ import {
   LaptopIcon,
   UsersIcon,
   CircleEllipsisIcon,
-  Sprout
+  Sprout,
+  MenuIcon
 } from "lucide-react";
 import { JSX } from "react";
 
@@ -17,6 +18,7 @@ export const INTEREST_CATEGORY_MAP: Record<
   number,
   { label: string; icon: JSX.Element }
 > = {
+  0: {label: "관심사", icon: <MenuIcon />},
   1: { label: "여행(지역탐방)", icon: <MapIcon /> },
   2: { label: "건강관리/운동", icon: <HeartPulseIcon /> },
   3: { label: "문화예술/창작", icon: <PaletteIcon /> },

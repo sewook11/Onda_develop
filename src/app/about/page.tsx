@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import React from "react";
 import aboutImage from "@/assets/images/about_main.png";
 
 const aboutSections = [

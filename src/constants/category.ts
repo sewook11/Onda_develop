@@ -13,7 +13,7 @@ export const POST_CATEGORY_MAP: Record<number, string> = {
 };
 
 export const categoryOptions = [
-  { label: "전체", value: 0 },
+  { label: "카테고리", value: 0 },
   { label: "정보", value: 1 },
   { label: "소통", value: 2 },
 ];
@@ -24,7 +24,7 @@ export const interestOptions = Object.entries(INTEREST_CATEGORY_MAP).map(([key, 
   }));
 
 export const digitalLevelOptions = [
-    { label: "전체", value: 0 },
+    { label: "디지털 난이도", value: 0 },
     { label: "상 (Zoom 사용)", value: 1 },
     { label: "중 (앱 사용)", value: 2 },
     { label: "하 (전화만 가능)", value: 3 },
