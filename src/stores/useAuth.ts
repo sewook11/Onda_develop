@@ -9,6 +9,7 @@ interface User {
   selectedSido: string;
   selectedDistrict: string | null;
   selectedInterests: string[];
+  isAdmin?: boolean;
 }
 
 export interface AuthState {

@@ -13,3 +13,13 @@ export interface MeetingCardProps {
   isApplied?: boolean; // 신청한 모임인지 여부
   context?: "applied" | "past";
 }
+
+export type Review = {
+  id: number;
+  user_id: number;
+  meet_id: number;
+  rating: number;
+  content: string;
+  created_at: Date;
+  updated_at: Date;
+}
