@@ -4,7 +4,7 @@ import React, { useState } from "react";
 // import MeetForm from "./_components/MeetForm";
 import MeetImageUploader from "./_components/MeetImageUploader";
 import MeetFormFields from "./_components/MeetFormFields";
-import Button from "@/components/common/Button";
+
 
 export default function MeetCreatePage() {
   const [title, setTitle] = useState("");
@@ -64,11 +64,6 @@ export default function MeetCreatePage() {
         setDeadline={setDeadline}
       />
 
-      <div className="text-center pt-4">
-        <Button type="submit" width="w-full" height="h-[44px]">
-          모임 생성하기
-        </Button>
-      </div>
     </form>
   );
 }

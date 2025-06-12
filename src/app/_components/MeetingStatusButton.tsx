@@ -2,19 +2,21 @@
 
 import { useModalStore } from "@/stores/useModalStore";
 import FinishedMeetDetailModal from "../meet/detail/_components/FinishedMeetDetailModal";
-import MeetDetailModal from "../meet/detail/_components/MeetDetailModal";
 import ReviewWriteModal from "../meet/review/_components/ReviewWriteModal";
+import Link from "next/link";
 
 interface MeeringStatusButtonsProps {
   status: "모집중" | "모집 마감";
   onClickApply?: () => void;
   mode?: "default" | "past";
+  meet_id?: number;
 }
 
 export default function MeeringStatusButtons({
   status,
   onClickApply,
   mode = "default",
+  meet_id, 
 }: MeeringStatusButtonsProps) {
   const { openModal, closeModal, modals } = useModalStore();
 
@@ -68,38 +70,29 @@ export default function MeeringStatusButtons({
                 모집 마감
               </button>
             )}
-            <button
-              className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
-              onClick={openhandler}
-            >
-              상세 보기
-            </button>
+
+            
+            <Link href={`/meet/${meet_id}`}>
+              <button className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition">
+                상세 보기
+              </button>
+            </Link>
           </>
         )}
       </div>
 
-      
+      {/* 과거 모임용 모달 */}
       {mode === "past" && modals["finishedMeetDetail"] && (
         <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
       )}
-      {mode !== "past" && modals["meetDetail"] && (
-        <MeetDetailModal
-          data={dummyData}
-          isApplied={true}
-          onApply={() => console.log("신청")}
-          onCancel={() => console.log("취소")}
-          onClose={closehandler}
-        />
-      )}
 
-      
+      {/* 후기 작성 모달 */}
       {modals["reviewWrite"] && (
         <ReviewWriteModal
           modalKey="reviewWrite"
           onClose={() => closeModal("reviewWrite")}
           onSubmit={(rating, content) => {
             console.log("후기 제출", rating, content);
-        
           }}
         />
       )}
