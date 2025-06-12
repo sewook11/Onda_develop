@@ -1,6 +1,15 @@
 import { useSignupStore } from "@/stores/useSignUpStore";
 
-export default function AreaSelector() {
+interface AreaSelectorProps {
+  onSelect: (sido: string, district: string) => void;
+}
+
+export default function AreaSelector({ onSelect }: AreaSelectorProps) {
+  // 모임생성 페이지
+  const handleSelect = (sido: string, district: string) => {
+    onSelect(sido, district);
+  };
+  // 지역 공동 컴포넌트
   const AREA_OPTIONS = {
     서울: [
       "강남구",
@@ -75,9 +84,14 @@ export default function AreaSelector() {
                   type="radio"
                   name="district"
                   checked={selectedDistrict === district}
-                  onChange={() =>
-                    setDistrict(selectedDistrict === district ? null : district)
-                  }
+                  onChange={() => {
+                    const newDistrict =
+                      selectedDistrict === district ? null : district;
+                    setDistrict(newDistrict);
+                    if (selectedSido && newDistrict) {
+                      handleSelect(selectedSido, newDistrict);
+                    }
+                  }}
                   className="accent-orange-600 w-4 h-4"
                 />
               </label>

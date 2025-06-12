@@ -10,13 +10,14 @@ export default function MeetForm() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
-  const [method,setMethod]=useState("");
+  const [method, setMethod] = useState("");
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [maxPeople, setMaxPeople] = useState("");
   const [digitalLevel, setDigitalLevel] = useState("");
   const [deadline, setDeadline] = useState("");
-  
+  const [meetCount, setMeetCount] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ export default function MeetForm() {
       maxPeople,
       digitalLevel,
       deadline,
+      meetCount,
     };
 
     console.log("폼 제출됨:", formData);
@@ -59,6 +61,10 @@ export default function MeetForm() {
         setDigitalLevel={setDigitalLevel}
         deadline={deadline}
         setDeadline={setDeadline}
+        endTime={endTime}
+        setEndTime={setEndTime}
+        meetCount={meetCount}
+        setMeetCount={setMeetCount}
       />
       <div className="text-center pt-4">
         <Button type="submit" color="primary" variant="fill" width="w-full">
