@@ -12,7 +12,7 @@ export const sampleUser: User = {
     digitalLevel: '중',
     interest: ['산책', '독서', '사진'],
     isLeader: true,
-    isAdmin: false,
+    isAdmin: true,
   };
 
 export const sampleLeaderApplication: LeaderApplication = {

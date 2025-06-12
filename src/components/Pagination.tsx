@@ -29,14 +29,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
   };
 
   return (
-    <div className="flex items-center gap-2 justify-center mt-6 text-sm">
+    <div className="flex items-center gap-2 justify-center mt-6 text-base">
       {/* prev */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 text-gray-500 hover:text-black disabled:opacity-30"
+        className="p-2 text-gray-600 hover:text-black disabled:opacity-30"
       >
-        <ChevronLeft size={16} />
+        <ChevronLeft size={20} strokeWidth={2.5} />
       </button>
 
       {/* page numbers */}
@@ -64,9 +64,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 text-gray-500 hover:text-black disabled:opacity-30"
+        className="p-2 text-gray-600 hover:text-black disabled:opacity-30"
       >
-        <ChevronRight size={16} />
+        <ChevronRight size={20} strokeWidth={2.5} />
       </button>
     </div>
   );

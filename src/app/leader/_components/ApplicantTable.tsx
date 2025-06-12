@@ -34,7 +34,7 @@ const ApplicantTable = ({ data }: ApplicantTableProps) => {
 
   return (
     <div className="space-y-6">
-    <h2 className="text-lg font-semibold">내 모임</h2>
+    <h2 className="text-lg font-semibold">리더 명단</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-base border-collapse">
           <thead>

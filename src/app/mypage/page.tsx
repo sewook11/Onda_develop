@@ -10,7 +10,7 @@ import { sampleReviews } from "@/datas/sampleReivew";
 import MoreLinkButton from "@/components/common/Buttons/MoreLinkButton";
 import LeaderMeetingList from "./_components/LeaderMeetingCardList";
 import { sampleLeaderMeetings } from "@/datas/sampleMeeting";
-import ApplicantTable from "./_components/ApplicantTable";
+import ApplicantTable from "../leader/_components/ApplicantTable";
 import { sampleApplicants } from "@/datas/sampleApplicants";
 import { useViewModeStore } from "@/stores/useViewModeStore";
 

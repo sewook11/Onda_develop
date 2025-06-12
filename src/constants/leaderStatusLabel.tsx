@@ -18,28 +18,28 @@ const metaByRole: Record<Role, Record<ApplicationStatus, StatusLabel>> = {
     },
     approved: {
       label: '승인',
-      className: 'bg-blue-500 text-white',
+      className: 'bg-accent-blue text-white',
     },
     rejected: {
       label: '거절',
-      className: 'bg-red-500 text-white',
+      className: 'bg-accnet-red text-white',
     },
   },
   leader: {
     pending: {
       label: '승인 대기중',
-      className: 'bg-yellow-100 text-yellow-800',
-      icon: <Loader size={14} className="mr-1" />,
+      className: 'text-gray-600',
+      icon: <Loader size={24} className="mr-1" />,
     },
     approved: {
       label: '승인됨',
-      className: 'bg-green-100 text-green-700',
-      icon: <BadgeCheck size={14} className="mr-1" />,
+      className: 'text-accent-blue',
+      icon: <BadgeCheck size={24} className="mr-1" />,
     },
     rejected: {
       label: '활동 중지',
-      className: 'bg-gray-300 text-gray-600',
-      icon: <Ban size={14} className="mr-1" />,
+      className: 'text-accent-red',
+      icon: <Ban size={24} className="mr-1" />,
     },
   },
 };
