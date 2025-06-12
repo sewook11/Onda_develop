@@ -200,7 +200,10 @@ export default function PostForm({
               </div>
               <button
                 type="button"
-                onClick={onCancel}
+                onClick={() => {
+                  setValue("images", undefined);
+                  setPreviewUrls([]);
+                }}
                 className="text-accent-red text-sm p-2 rounded-lg hover:bg-red-100 active:bg-red-200"
               >
                 삭제
