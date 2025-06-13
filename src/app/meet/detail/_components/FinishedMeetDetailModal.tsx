@@ -35,6 +35,8 @@ const FinishedMeetDetailModal = ({data}: FinishedMeetDetailModalProps) => {
         <Image
           src={data.leaderImage || "/default-profile.png"}
           alt="리더"
+          width={40}
+          height={40}
           className="w-10 h-10 rounded-full border border-gray-300"
         />
         <div>
@@ -84,7 +86,7 @@ const FinishedMeetDetailModal = ({data}: FinishedMeetDetailModalProps) => {
           <div key={i} className="rounded-xl border border-gray-300 p-4 text-sm space-y-1 bg-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Image src="/default-profile.png" alt="profile.image" className="w-6 h-6 rounded-full" />
+                <Image src="/default-profile.png" alt="profile.image" width={24} height={24} className="w-6 h-6 rounded-full" />
                 <span className="font-medium">참가자</span>
               </div>
               <span className="text-xs text-gray-500">2025-05-26 14:00</span>

@@ -86,6 +86,7 @@ export const MeetingCard = ({
       <MeeringStatusButtons
         status={status}
         mode={context === "past" ? "past" : "default"}
+        meet_id={item.meet_id}
       />
     </div>
   );

@@ -1,57 +1,41 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { Calendar, MapPin } from "lucide-react";
+import { MeetingCard } from "@/components/common/MeetingCard";
 
-interface MeetCardProps {
-  item: {
-    meet_id: number;
-    title: string;
-    interest: number;
-    date: string;
-    time: string;
-    location: string;
-    image?: string;
-    status: string;
-  };
-}
-
-export default function MeetCard({ item }: MeetCardProps) {
-  const {
-    meet_id,
-    title,
-    interest,
-    date,
-    //time,
-    location,
-    //image,
-    //status,
-  } = item;
+export default function MeetCardList() {
+  const dummyData = [
+    {
+      meet_id: 1,
+      title: "걷기 & 대화 모임",
+      interest: 9,
+      date: "2025-06-04",
+      time: "14:00",
+      location: "서울특별시 어쩌구 저쩌구",
+      image: "",
+      status: "모집중",
+    },
+    {
+      meet_id: 2,
+      title: "줌 사용법 마스터",
+      interest: 8,
+      date: "2025-06-05",
+      time: "10:00",
+      location: "부산 해운대구",
+      image: "",
+      status: "모집 마감",
+    },
+  ];
 
   return (
-    <div className="min-w-[320px] rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
-      <div className="flex flex-col gap-2 mb-4">
-        <span className="text-sm text-orange-400 font-semibold">카테고리 {interest}</span>
-        <h3 className="font-bold text-md">{title}</h3>
-      </div>
-
-      <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
-        <Calendar size={16} />
-        <span>{date}</span>
-      </div>
-
-      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-        <MapPin size={16} />
-        <span>{location}</span>
-      </div>
-
-    
-      <Link href={`/meet/${meet_id}`} className="block">
-        <button className="w-full h-[40px] border border-orange-500 text-orange-500 rounded-md text-sm">
-          상세 보기
-        </button>
-      </Link>
-    </div>
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {dummyData.length === 0 ? (
+        <p className="text-center text-gray-500 col-span-full">모임이 없습니다.</p>
+      ) : (
+        dummyData.map((meet) => (
+          <MeetingCard key={meet.meet_id} item={meet} />
+        ))
+      )}
+    </section>
   );
 }
