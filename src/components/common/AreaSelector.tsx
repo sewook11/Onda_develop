@@ -2,38 +2,26 @@ import { useSignupStore } from "@/stores/useSignUpStore";
 
 interface AreaSelectorProps {
   onSelect: (sido: string, district: string) => void;
+  areaOptions: {
+    area_name: string;
+    children: {
+      id: number;
+      area_name: string;
+    }[];
+  }[];
 }
 
-export default function AreaSelector({ onSelect }: AreaSelectorProps) {
-  // 모임생성 페이지
-  const handleSelect = (sido: string, district: string) => {
-    onSelect(sido, district);
-  };
-  // 지역 공동 컴포넌트
-  const AREA_OPTIONS = {
-    서울: [
-      "강남구",
-      "강동구",
-      "강북구",
-      "강서구",
-      "광진구",
-      "관악구",
-      "송파구",
-    ],
-    부산: ["해운대구", "수영구", "부산진구"],
-    대구: ["수성구", "중구", "달서구"],
-    인천: ["중구", "남동구", "부평구"],
-    광주: ["동구", "서구", "광산구"],
-    대전: ["동구", "중구", "유성구"],
-  } as const;
-
-  type Sido = keyof typeof AREA_OPTIONS;
-
+export default function AreaSelector({
+  onSelect,
+  areaOptions,
+}: AreaSelectorProps) {
   const { selectedSido, selectedDistrict, selectSido, setDistrict } =
     useSignupStore();
 
-  const sidos = Object.keys(AREA_OPTIONS) as Sido[];
-  const districts = selectedSido ? AREA_OPTIONS[selectedSido as Sido] : [];
+  // 지역 공동 컴포넌트
+  const sidos = areaOptions.map((area) => area.area_name);
+  const districts =
+    areaOptions.find((area) => area.area_name === selectedSido)?.children || [];
 
   return (
     <div className="w-full max-w-[600px] border rounded-lg p-4 bg-white h-[300px]">
@@ -70,27 +58,23 @@ export default function AreaSelector({ onSelect }: AreaSelectorProps) {
             className="overflow-y-auto flex-1"
             style={{ maxHeight: "230px" }}
           >
-            {districts.map((district: string) => (
+            {districts.map((district) => (
               <label
-                key={district}
+                key={district.id}
                 className="flex items-center justify-between px-2 py-1 h-10 text-gray-700"
               >
                 <span
-                  className={`${selectedDistrict === district ? "font-bold" : ""}`}
+                  className={`${selectedDistrict === district.area_name ? "font-bold" : ""}`}
                 >
-                  {district}
+                  {district.area_name}
                 </span>
                 <input
                   type="radio"
                   name="district"
-                  checked={selectedDistrict === district}
+                  checked={selectedDistrict === district.area_name}
                   onChange={() => {
-                    const newDistrict =
-                      selectedDistrict === district ? null : district;
-                    setDistrict(newDistrict);
-                    if (selectedSido && newDistrict) {
-                      handleSelect(selectedSido, newDistrict);
-                    }
+                    setDistrict(district.area_name);
+                    onSelect(selectedSido, district.area_name);
                   }}
                   className="accent-orange-600 w-4 h-4"
                 />

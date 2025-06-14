@@ -1,34 +1,35 @@
 import { useSignupStore } from "@/stores/useSignUpStore";
 
-const INTERESTS = [
-  "여행(지역탐방)",
-  "건강관리/운동",
-  "문화예술/창작",
-  "요리/음식",
-  "자기계발",
-  "봉사/재능기부",
-  "명상(마음챙김)",
-  "디지털 학습",
-  "사교/친목도모",
-  "기타",
-] as const;
+interface InterestOption {
+  id: number;
+  interest_name: string;
+}
 
-export default function InterestSelector() {
-  const { selectedInterests, toggleInterest } = useSignupStore();
+type Props = {
+  interests: InterestOption[];
+};
+export default function InterestSelector({ interests }: Props) {
+  const { interest_id, setValue } = useSignupStore();
 
   return (
     <div className="grid grid-cols-3 gap-2">
-      {INTERESTS.map((interest) => (
-        <label key={interest} className="flex items-center gap-2 text-gray-800">
-          <input
-            type="checkbox"
-            className="accent-orange-600"
-            checked={selectedInterests.includes(interest)}
-            onChange={() => toggleInterest(interest)}
-          />
-          {interest}
-        </label>
-      ))}
+      {interests.map((interest) => {
+        return (
+          <label
+            key={interest.id}
+            className="flex items-center gap-2 text-gray-800"
+          >
+            <input
+              type="radio"
+              name="interest"
+              className="accent-orange-600"
+              checked={interest_id === interest.id}
+              onChange={() => setValue("interest_id", interest.id)}
+            />
+            {interest.interest_name}
+          </label>
+        );
+      })}
     </div>
   );
 }

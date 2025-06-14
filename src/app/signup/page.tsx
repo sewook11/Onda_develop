@@ -6,10 +6,31 @@ import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector"
 import { useSignupSubmit } from "@/hooks/useSignupSubmit";
 import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
+import api from "@/apis/app";
+import { END_POINT } from "@/constants/route";
+import { useEffect, useState } from "react";
+
+export type AreaOption = {
+  area_name: string;
+  children: { id: number; area_name: string }[];
+};
+
+interface Interest {
+  id: number;
+  interest_name: string;
+}
+
+interface InterestApiResponse {
+  results: Interest[];
+}
 
 export default function SignupPage() {
   // const { isKakaoUser } = useSignupStore();
   const { handleSubmit, setValue } = useSignupSubmit();
+  const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
+  const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
+    results: [],
+  });
   const {
     email,
     password,
@@ -25,6 +46,19 @@ export default function SignupPage() {
     isKakaoUser,
     // setKakaoUserSignedUp,
   } = useSignupStore();
+
+  useEffect(() => {
+    api.get(END_POINT.OPTIONS_AREAS).then((res) => {
+      setAreaOptions(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get(END_POINT.OPTIONS_INTEREST).then((res) => {
+      setInterestOptions(res.data);
+    });
+  }, []);
+  console.log(interestOptions.results);
 
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
@@ -103,7 +137,20 @@ export default function SignupPage() {
           <div>
             <label className="text-xs font-bold text-gray-700">지역</label>
             <div className="mt-3">
-              <AreaSelector />
+              <AreaSelector
+                areaOptions={areaOptions}
+                onSelect={(sido, district) => {
+                  const matched = areaOptions
+                    .find((a) => a.area_name === sido)
+                    ?.children.find((d) => d.area_name === district);
+
+                  if (matched) {
+                    setValue("area_id", matched.id);
+                    setValue("selectedSido", sido);
+                    setValue("selectedDistrict", district);
+                  }
+                }}
+              />
             </div>
           </div>
 
@@ -112,7 +159,7 @@ export default function SignupPage() {
               관심사(중복가능)
             </label>
             <div className="mt-3">
-              <InterestSelector />
+              <InterestSelector interests={interestOptions.results ?? []} />
             </div>
           </div>
 

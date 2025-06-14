@@ -1,4 +1,4 @@
-export const BASE_URL = "api.ondamoim.com";
+export const BASE_URL = "https://api.ondamoim.com";
 
 /**
  * @example
@@ -21,7 +21,8 @@ export const END_POINT = {
   LEADERS_STATUS: (id: number) => `/api/leaders/apply/${id}/status`, // 리더 신청 승인/거절 처리
 
   // meetings : 모임 관련 api
-  MEETINGS_SUMMARY: (meet_id: number) => `/api/meetings/${meet_id}/reviews/summary/`, // 후기 요약 조회
+  MEETINGS_SUMMARY: (meet_id: number) =>
+    `/api/meetings/${meet_id}/reviews/summary/`, // 후기 요약 조회
   MEETINGS_REVIEWS: (id: number) => `/api/reviews/${id}/`, // 리뷰 상세 조회/수정/삭제
   MEETINGS: "/meets/", // 모임 생성/조회
   MEETINGS_DETAIL: (meet_id: number) => `/api/meets/${meet_id}`, // 모임 상세 조회/수정/삭제

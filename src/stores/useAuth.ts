@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import api from "@/apis/app";
+import { END_POINT } from "@/constants/route";
 
 interface User {
   email: string;
@@ -8,58 +10,49 @@ interface User {
   phone: string;
   selectedSido: string;
   selectedDistrict: string | null;
-  selectedInterests: string[];
+  interest_id: number | null;
+  area_id: number | null;
   isAdmin?: boolean;
 }
 
 export interface AuthState {
   email: string;
   password: string;
-  users: User[];
   currentUser: User | null;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
-  addUser: (user: User) => void;
   setCurrentUser: (user: User) => void;
   reset: () => void;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
-const savedUsers =
-  typeof window !== "undefined"
-    ? JSON.parse(localStorage.getItem("users") || "[]")
-    : [];
-export const useAuthStore = create<AuthState>((set, get) => ({
+
+export const useAuthStore = create<AuthState>((set) => ({
   email: "",
   password: "",
-  users: savedUsers,
   currentUser: null,
-
   setEmail: (email) => set({ email }),
   setPassword: (password) => set({ password }),
-
-  addUser: (newUser: User) =>
-    set((state) => {
-      const updatedUsers = [...state.users, newUser];
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-      return { users: updatedUsers, currentUser: newUser };
-    }),
-
   setCurrentUser: (user) => set({ currentUser: user }),
 
   reset: () => set({ email: "", password: "" }),
 
-  login: (email, password) => {
-    const matchedUser = get().users.find(
-      (user) => user.email === email && user.password === password
-    );
+  login: async (email: string, password: string) => {
+    try {
+      const response = await api.post(END_POINT.USERS_LOGIN, {
+        email,
+        password,
+      });
+      const user = response.data;
+      set({ currentUser: user });
 
-    if (matchedUser) {
-      set({ currentUser: matchedUser });
-      localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+      localStorage.setItem("currentUser", JSON.stringify(user));
+
       return true;
+    } catch (err) {
+      console.error("로그인 실패 :", err);
+      return false;
     }
-    return false;
   },
   logout: () => {
     set({ currentUser: null });

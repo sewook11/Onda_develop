@@ -10,6 +10,7 @@ export interface SignupState {
   phone: string;
   area_id: number | null;
   interest_id: number | null;
+  setInterestId: (id: number) => void;
   digitalLevel_id: number | null;
   birthYear: string;
   birthMonth: string;
@@ -22,10 +23,6 @@ export interface SignupState {
   // 지역
   selectedSido: string; // 현재 선택된 시/도
   selectedDistrict: string | null;
-
-  // 관심사
-  selectedInterests: string[];
-  toggleInterest: (interest: string) => void;
 
   // 약관 동의
   agreement: boolean;
@@ -56,6 +53,7 @@ export const useSignupStore = create(
       phone: "",
       area_id: null,
       interest_id: null,
+      setInterestId: (id) => set({ interest_id: id }),
       digitalLevel_id: null,
       birthYear: "",
       birthMonth: "",
@@ -67,16 +65,7 @@ export const useSignupStore = create(
 
       selectedSido: "서울",
       selectedDistrict: null,
-      selectedInterests: [],
       agreement: false,
-
-      // 관심사 토글함수
-      toggleInterest: (interest: string) =>
-        set((state) => ({
-          selectedInterests: state.selectedInterests.includes(interest)
-            ? state.selectedInterests.filter((i) => i !== interest)
-            : [...state.selectedInterests, interest],
-        })),
 
       setValue: (key, value) => set((state) => ({ ...state, [key]: value })),
 
@@ -114,7 +103,6 @@ export const useSignupStore = create(
           birthDay: "",
           selectedSido: "서울",
           selectedDistrict: null,
-          selectedInterests: [],
           agreement: false,
           isKakaoUser: false,
           isKakaoUserSignedUp: state.isKakaoUserSignedUp,

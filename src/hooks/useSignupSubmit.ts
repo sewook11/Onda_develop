@@ -2,11 +2,13 @@
 import { useSignupStore } from "@/stores/useSignUpStore";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuth";
+import api from "@/apis/app";
+import { END_POINT } from "@/constants/route";
 
 export function useSignupSubmit() {
   const router = useRouter();
-
   const {
+    area_id,
     email,
     password,
     password_confirm,
@@ -15,25 +17,23 @@ export function useSignupSubmit() {
     nickname,
     birthYear,
     birthMonth,
+    birthDay,
     setValue,
     agreement,
     resetForm,
     isKakaoUser,
-    selectedSido,
-    selectedInterests,
-    selectedDistrict,
-    // setKakaoUserSignedUp,
+    interest_id,
+    digitalLevel_id,
   } = useSignupStore();
 
-  const { addUser } = useAuthStore();
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const requiredFields = [
       { key: "name", value: name },
       { key: "birthYear", value: birthYear },
       { key: "birthMonth", value: birthMonth },
+      { key: "birthDay", value: birthDay },
       { key: "email", value: email },
       { key: "password", value: password },
       { key: "password_confirm", value: password_confirm },
@@ -77,16 +77,28 @@ export function useSignupSubmit() {
       return;
     }
 
-    addUser({
-      email,
-      password,
-      name,
-      nickname,
-      phone,
-      selectedSido,
-      selectedInterests,
-      selectedDistrict,
-    });
+    try {
+      const res = await api.post(END_POINT.USERS_SIGNUP, {
+        email,
+        password,
+        password_confirm,
+        name,
+        nickname,
+        phone_number: phone,
+        date_of_birth: `${birthYear}-${birthMonth}-${birthDay}`,
+        area: area_id,
+        interest: interest_id,
+        digital_level: digitalLevel_id,
+        // file: file_id,
+      });
+      if (res.status === 201) {
+        alert("회원가입 완료");
+        resetForm();
+      }
+      router.push("/login");
+    } catch (err) {
+      console.error("회원가입 실패", err);
+    }
 
     resetForm();
     useAuthStore.getState().logout();
