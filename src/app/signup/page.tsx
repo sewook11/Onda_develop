@@ -58,7 +58,6 @@ export default function SignupPage() {
       setInterestOptions(res.data);
     });
   }, []);
-  console.log(interestOptions.results);
 
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
