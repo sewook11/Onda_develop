@@ -22,7 +22,7 @@ export function useSignupSubmit() {
     agreement,
     resetForm,
     isKakaoUser,
-    interest_id,
+    interest_ids,
     digitalLevel_id,
   } = useSignupStore();
 
@@ -87,7 +87,7 @@ export function useSignupSubmit() {
         phone_number: phone,
         date_of_birth: `${birthYear}-${birthMonth}-${birthDay}`,
         area: area_id,
-        interest: interest_id,
+        interests: interest_ids,
         digital_level: digitalLevel_id,
         // file: file_id,
       });

@@ -9,8 +9,8 @@ export interface SignupState {
   name: string;
   phone: string;
   area_id: number | null;
-  interest_id: number | null;
-  setInterestId: (id: number) => void;
+  interest_ids: number[];
+  setInterestIds: (ids: number[]) => void;
   digitalLevel_id: number | null;
   birthYear: string;
   birthMonth: string;
@@ -23,6 +23,9 @@ export interface SignupState {
   // 지역
   selectedSido: string; // 현재 선택된 시/도
   selectedDistrict: string | null;
+
+  // 관심사
+  toggleInterest: (id: number) => void;
 
   // 약관 동의
   agreement: boolean;
@@ -52,8 +55,17 @@ export const useSignupStore = create(
       name: "",
       phone: "",
       area_id: null,
-      interest_id: null,
-      setInterestId: (id) => set({ interest_id: id }),
+      interest_ids: [],
+      toggleInterest: (id) =>
+        set((state) => {
+          const exists = state.interest_ids.includes(id);
+          return {
+            interest_ids: exists
+              ? state.interest_ids.filter((i) => i !== id)
+              : [...state.interest_ids, id],
+          };
+        }),
+      setInterestIds: (ids) => set({ interest_ids: ids }),
       digitalLevel_id: null,
       birthYear: "",
       birthMonth: "",
@@ -96,7 +108,7 @@ export const useSignupStore = create(
           name: "",
           phone: "",
           area_id: null,
-          interest_id: null,
+          interest_ids: [],
           digitalLevel_id: null,
           birthYear: "",
           birthMonth: "",
