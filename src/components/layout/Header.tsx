@@ -7,13 +7,12 @@ import { useSignupStore } from "@/stores/useSignUpStore";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const { currentUser, logout } = useAuthStore();
+  const { user, setLogout } = useAuthStore();
   const { isKakaoUserSignedUp, setKakaoUserSignedUp } = useSignupStore();
   const [isMobile, setIsMobile] = useState(false);
-
   const router = useRouter();
   const handleLogout = () => {
-    logout();
+    setLogout();
     setKakaoUserSignedUp(false);
     router.push("/");
   };
@@ -40,7 +39,7 @@ export default function Header() {
 
       {/* 우측 */}
       <div className="hidden md:flex gap-6 text-black font-medium text-base">
-        {currentUser || isKakaoUserSignedUp ? (
+        {user || isKakaoUserSignedUp ? (
           <>
             <button onClick={handleLogout} className="hover:underline">
               로그아웃
@@ -73,7 +72,7 @@ export default function Header() {
           <Link href={"#"}>리더신청</Link>
           <Link href={"/community"}>소통하기</Link>
           <Link href={"/about"}>온:다 소개</Link>
-          {currentUser || isKakaoUserSignedUp ? (
+          {user || isKakaoUserSignedUp ? (
             <div className="flex justify-end gap-4 mt-6 text-black text-base font-medium">
               <Link href="/mypage" onClick={toggleMenu}>
                 마이페이지

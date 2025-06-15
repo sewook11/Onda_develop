@@ -60,15 +60,8 @@ declare global {
 export default function LoginPage() {
   const router = useRouter();
 
-  const {
-    email,
-    password,
-    setEmail,
-    setPassword,
-    reset,
-    login,
-    setCurrentUser,
-  } = useAuthStore();
+  const { email, password, setEmail, setPassword, reset, setLogin, setUser } =
+    useAuthStore();
   const { setKakaoUserSignedUp, isKakaoUserSignedUp } = useSignupStore();
 
   // 카카오 회원인 경우(회원 가입이 돼있음)
@@ -110,7 +103,7 @@ export default function LoginPage() {
           );
 
           if (existingUser) {
-            setCurrentUser(existingUser);
+            setUser(existingUser);
             setKakaoUserSignedUp(true);
             router.push("/");
           } else {
@@ -139,7 +132,7 @@ export default function LoginPage() {
       return;
     }
 
-    const success = await login(email, password);
+    const success = await setLogin(email, password);
     if (success) {
       alert("로그인 성공!");
       reset();
