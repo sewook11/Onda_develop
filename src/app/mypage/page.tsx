@@ -14,15 +14,14 @@ import ApplicantTable from "../leader/_components/ApplicantTable";
 import { sampleApplicants } from "@/datas/sampleApplicants";
 import { useViewModeStore } from "@/stores/useViewModeStore";
 
-
 export default function Mypage() {
-  const { currentUser } = useAuthStore();
+  const { user } = useAuthStore();
   const { nickname } = useSignupStore();
   const { viewMode } = useViewModeStore();
 
   const router = useRouter();
 
-  const displayNickname = currentUser?.nickname || nickname;
+  const displayNickname = user?.nickname || nickname;
 
   const handleBtn = () => {
     router.push("/meet/search");
@@ -30,12 +29,10 @@ export default function Mypage() {
   return (
     <main className="px-10 py-12 max-w-5xl mx-auto space-y-10">
       <UserProfile />
-       {/* 관리자 */}
-      {currentUser?.isAdmin && (
-        <ApplicantTable data={sampleApplicants} />
-      )}
+      {/* 관리자 */}
+      {user?.isAdmin && <ApplicantTable data={sampleApplicants} />}
       {/* 리더 */}
-      {viewMode === 'leader' && (
+      {viewMode === "leader" && (
         <>
           <div>
             <LeaderMeetingList meetings={sampleLeaderMeetings} />
@@ -48,7 +45,7 @@ export default function Mypage() {
         </>
       )}
       {/* 일반유저 */}
-      {viewMode === 'user' && (
+      {viewMode === "user" && (
         <>
           {displayNickname && (
             <div className="w-full flex justify-center mb-6">
