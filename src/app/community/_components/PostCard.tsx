@@ -4,28 +4,31 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import PostMetaData from "./PostMetaData";
+import { FileData } from "@/types/file";
 interface PostProps {
   post: Post;
+  file?: FileData | null;
 }
 
-export default function PostCard({ post }: PostProps) {
+export default function PostCard({ post, file }: PostProps) {
   return (
-    <Link href={`/community/${post.post_id}`} className="block">
+    <Link href={`/community/${post.id}`} className="block">
       <div className="p-8 border border-gray-400 rounded-md flex flex-col gap-4 relative">
         <PostMetaData
-          post_id={post.post_id}
-          category_id={post.category_id}
-          interest_id={post.interest_id}
-          area_id={post.area_id ?? null}
-          digitalLevel_id={post.digitalLevel_id}
-          is_author={post.is_author}
+          ids={{
+            id: post.id,
+            category: post.category,
+            interest: post.interest,
+            area: post.area,
+          }}
+          is_mine={post.is_mine}
         />
         <h2 className="text-lg font-semibold">{post.title}</h2>
-        {post.image_url && (
+        {file && (
           <div className="relative h-[600px] w-full rounded-md overflow-hidden">
             <Image
-              src={post.image_url}
-              alt="게시물 이미지"
+              src={file.file_url}
+              alt={file.file_name ?? "게시물 이미지"}
               fill
               className="object-cover"
             />
@@ -37,8 +40,7 @@ export default function PostCard({ post }: PostProps) {
           <div className="flex gap-4">
             {post.updated_at ? (
               <>
-                <span>{formatDate(post.updated_at)}</span>{" "}
-                <span>수정됨</span>
+                <span>{formatDate(post.updated_at)}</span> <span>수정됨</span>
               </>
             ) : (
               <span> {formatDate(post.created_at)}</span>

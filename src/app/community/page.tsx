@@ -23,11 +23,16 @@ export default function PostListPage() {
     setTotalPages(pageCount);
   }, [posts]);
 
+  const handleClick = () => {
+    // 로그인 안된 경우 로그인 페이지로 이동
+    router.push("/community/write");
+  };
+
   return (
     <div className="flex flex-col items-center w-full my-20 max-w-[1440px] px-4 md:px-[160px] mx-auto">
       <div className="w-full flex justify-between">
         <h1 className="text-xl font-bold text-left w-full">게시판</h1>
-        <Button onClick={() => router.push("/community/write")}>글쓰기</Button>
+        <Button onClick={handleClick}>글쓰기</Button>
       </div>
       <PostSearch />
       <section className="w-full my-10">

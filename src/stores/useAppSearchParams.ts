@@ -1,21 +1,17 @@
 import { create } from "zustand";
 
 export type SearchParams = {
-  category_id: number;
-  interest_id: number;
-  digitalLevel_id: number;
+  category: number;
+  interest: number;
+  area: number;
   keyword: string;
-  sido: string;
-  districts: string;
 };
 
 const defaultParams: SearchParams = {
-  category_id: 0,
-  interest_id: 0,
+  category: 0,
+  interest: 0,
+  area: 0,
   keyword: "",
-  digitalLevel_id: 0,
-  sido: "",
-  districts: "",
 };
 
 type State = {

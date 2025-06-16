@@ -3,7 +3,7 @@
 import React from "react";
 
 interface SelectBoxProps {
-  value: string | number;
+  value: string | number | undefined;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { label: string; value: string | number }[];
   className?: string;

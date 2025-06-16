@@ -2,7 +2,7 @@
 
 import PostHeader from "./_components/PostHeader";
 import { useParams } from "next/navigation";
-import { useFetchPost } from "@/hooks/useFetchPost";
+import { useFetchPost } from "@/hooks/usePost";
 import PostContent from "./_components/PostContent";
 import CommentList from "./_components/CommentList";
 import CommentInput from "./_components/CommentInput";
@@ -14,7 +14,7 @@ import Pagination from "@/components/Pagination";
 export default function PostDetailPage() {
   const params = useParams();
   const postId = Number(params?.postId);
-  const { post } = useFetchPost(postId);
+  const { data: post, isLoading } = useFetchPost(postId);
 
   // 댓글 데이터 및 페이지네이션
   const comments: Comment[] = dummyComments.filter((c) => c.post_id === postId);
@@ -38,19 +38,23 @@ export default function PostDetailPage() {
   return (
     <div className="flex flex-col items-center w-full my-20 max-w-[1440px] px-4 md:px-[160px] mx-auto">
       <h1 className="text-xl font-bold text-left w-full">게시판</h1>
+      {isLoading && (<p>로딩중입니다...</p>)}
       <PostHeader
-        post_id={post.post_id}
-        nickname={post.nickname}
-        created_at={post.created_at}
-        updated_at={post.updated_at}
-        category_id={post.category_id}
-        interest_id={post.interest_id}
-        area_id={post.area_id ?? null}
-        digitalLevel_id={post.digitalLevel_id ?? null}
-        is_author={post.is_author}
+        ids={{
+          id: post.id,
+          category: post.category,
+          interest: post.interest,
+          area: post.area
+        }}
+        author={{
+          nickname: post.nickname,
+          created_at: post.created_at,
+          updated_at: post.updated_at,
+          is_mine: post.is_mine,
+        }}
         title={post.title}
       />
-      <PostContent image={post.image_url} content={post.content} />
+      <PostContent content={post.content} />
       <CommentInput onSubmit={() => console.log("댓글 등록")} />
       <CommentList comments={comments} />
       <Pagination

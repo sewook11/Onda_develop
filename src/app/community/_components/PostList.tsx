@@ -1,9 +1,9 @@
 import React from "react";
 import PostCard from "./PostCard";
-import { Post } from "@/types/post";
+import { PostWithFile } from "@/types/post";
 
 interface PostListProps {
-  posts: Post[];
+  posts: PostWithFile[];
 }
 
 export default function PostList({posts} : PostListProps) {
@@ -12,13 +12,12 @@ export default function PostList({posts} : PostListProps) {
     <div className="flex flex-col gap-4 w-full">
       {posts.map((post) => (
         <PostCard
-          key={post.post_id}
-          post={{
-            ...post,
-            image_url: post.image_url ?? undefined,
-          }}
+          key={post.id}
+          post={post}
+          file={post.fileData}
         />
       ))}
     </div>
   );
 }
+
