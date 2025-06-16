@@ -37,7 +37,7 @@ export const END_POINT = {
   OPTIONS_INTEREST: "/api/options/interests", // 관심사 목록 조회
 
   // posts: 게시글 관련 api
-  POSTS: "/api/posts/", // 게시글 목록 조회/생성
+  POSTS: "/api/posts", // 게시글 목록 조회/생성
   POSTS_DETAIL: (id: number) => `/api/posts/${id}`, // 게시글 상세 조회/수정/삭제
 
   // users: 유저/인증 관련 api
