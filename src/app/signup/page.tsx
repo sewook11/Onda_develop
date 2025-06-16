@@ -6,9 +6,9 @@ import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector"
 import { useSignupSubmit } from "@/hooks/useSignupSubmit";
 import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
-import api from "@/apis/app";
-import { END_POINT } from "@/constants/route";
 import { useEffect, useState } from "react";
+import { getAreaOptions, getInterestOptions } from "@/apis/options";
+// import { Area, Interest } from "@/types/options";
 
 export type AreaOption = {
   area_name: string;
@@ -48,15 +48,19 @@ export default function SignupPage() {
   } = useSignupStore();
 
   useEffect(() => {
-    api.get(END_POINT.OPTIONS_AREAS).then((res) => {
-      setAreaOptions(res.data);
-    });
+    const fetchAreaOptions = async () => {
+      const data = await getAreaOptions();
+      setAreaOptions(data);
+    };
+    fetchAreaOptions();
   }, []);
 
   useEffect(() => {
-    api.get(END_POINT.OPTIONS_INTEREST).then((res) => {
-      setInterestOptions(res.data);
-    });
+    const fetchInterestOptions = async () => {
+      const data = await getInterestOptions();
+      setInterestOptions(data);
+    };
+    fetchInterestOptions();
   }, []);
 
   return (

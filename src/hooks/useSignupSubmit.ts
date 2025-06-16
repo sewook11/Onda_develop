@@ -95,7 +95,6 @@ export function useSignupSubmit() {
         alert("회원가입 완료");
         resetForm();
       }
-      router.push("/login");
     } catch (err) {
       console.error("회원가입 실패", err);
     }
@@ -106,7 +105,7 @@ export function useSignupSubmit() {
       const { setKakaoUserSignedUp } = useSignupStore.getState();
       setKakaoUserSignedUp(true);
     }
-    router.push("/");
+    router.push("/login");
   };
   return { handleSubmit, setValue };
 }
