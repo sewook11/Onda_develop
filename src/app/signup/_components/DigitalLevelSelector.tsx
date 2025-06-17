@@ -1,4 +1,7 @@
-import { useSignupStore } from "@/stores/useSignUpStore";
+type DigitalLevelSelectorProps = {
+  value: number | null;
+  onChange: (value: number | null) => void;
+};
 
 const DIGITAL_LEVELS = [
   { id: 1, label: "상 - zoom 화상 회의 가능" },
@@ -6,9 +9,10 @@ const DIGITAL_LEVELS = [
   { id: 3, label: "하 - 전화만 가능" },
 ];
 
-export default function DigitalLevelSelector() {
-  const { digitalLevel_id, setValue } = useSignupStore();
-
+export default function DigitalLevelSelector({
+  value,
+  onChange,
+}: DigitalLevelSelectorProps) {
   return (
     <div>
       {DIGITAL_LEVELS.map((level) => (
@@ -16,13 +20,8 @@ export default function DigitalLevelSelector() {
           <input
             type="radio"
             className="accent-orange-600"
-            checked={digitalLevel_id === level.id}
-            onChange={() =>
-              setValue(
-                "digitalLevel_id",
-                digitalLevel_id === level.id ? null : level.id
-              )
-            }
+            checked={value === level.id}
+            onChange={() => onChange(value === level.id ? null : level.id)}
           />
           {level.label}
         </label>

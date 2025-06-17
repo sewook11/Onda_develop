@@ -1,12 +1,53 @@
 "use client";
-import { useSignupStore } from "@/stores/useSignUpStore";
+
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuth";
 import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
+import { useState } from "react";
+
+export interface SignupState {
+  email: string;
+  password: string;
+  password_confirm: string;
+  nickname: string;
+  name: string;
+  phone: string;
+  area_id: number | null;
+  interest_ids: number[];
+  digitalLevel_id: number | null;
+  birthYear: string;
+  birthMonth: string;
+  birthDay: string;
+  selectedSido: string;
+  selectedDistrict: string | null;
+  agreement: boolean;
+  isKakaoUser: boolean;
+  isKakaoUserSignedUp: boolean;
+}
 
 export function useSignupSubmit() {
   const router = useRouter();
+  const initialSignupData: SignupState = {
+    email: "",
+    password: "",
+    password_confirm: "",
+    nickname: "",
+    name: "",
+    phone: "",
+    area_id: null,
+    interest_ids: [],
+    digitalLevel_id: null,
+    birthYear: "",
+    birthMonth: "",
+    birthDay: "",
+    selectedSido: "서울",
+    selectedDistrict: null,
+    agreement: false,
+    isKakaoUser: false,
+    isKakaoUserSignedUp: false,
+  };
+  const [signupData, setSignupData] = useState<SignupState>(initialSignupData);
   const {
     area_id,
     email,
@@ -18,13 +59,11 @@ export function useSignupSubmit() {
     birthYear,
     birthMonth,
     birthDay,
-    setValue,
     agreement,
-    resetForm,
     isKakaoUser,
     interest_ids,
     digitalLevel_id,
-  } = useSignupStore();
+  } = signupData;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,23 +128,29 @@ export function useSignupSubmit() {
         area: area_id,
         interests: interest_ids,
         digital_level: digitalLevel_id,
-        // file: file_id,
       });
       if (res.status === 201) {
         alert("회원가입 완료");
         resetForm();
+        useAuthStore.getState().setLogout();
+
+        if (isKakaoUser) {
+          setSignupData((prev) => ({
+            ...prev,
+            isKakaoUserSignedUp: true,
+          }));
+        }
+        router.push("/login");
+        return;
       }
     } catch (err) {
       console.error("회원가입 실패", err);
     }
-
-    resetForm();
-    useAuthStore.getState().setLogout();
-    if (isKakaoUser) {
-      const { setKakaoUserSignedUp } = useSignupStore.getState();
-      setKakaoUserSignedUp(true);
-    }
-    router.push("/login");
   };
-  return { handleSubmit, setValue };
+
+  const resetForm = () => {
+    setSignupData(initialSignupData);
+  };
+
+  return { handleSubmit, setSignupData, signupData, resetForm };
 }

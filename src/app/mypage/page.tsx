@@ -3,7 +3,6 @@ import AppliedScheduleList from "./_components/AppliedScheduleList";
 import PastScheduleList from "./_components/PastScheduleList";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
-import { useSignupStore } from "@/stores/useSignUpStore";
 import UserProfile from "./_components/UserProfile";
 import ReviewList from "./_components/ReviewList";
 import { sampleReviews } from "@/datas/sampleReivew";
@@ -16,12 +15,11 @@ import { useViewModeStore } from "@/stores/useViewModeStore";
 
 export default function Mypage() {
   const { user } = useAuthStore();
-  const { nickname } = useSignupStore();
   const { viewMode } = useViewModeStore();
 
   const router = useRouter();
 
-  const displayNickname = user?.nickname || nickname;
+  const displayNickname = user?.nickname;
 
   const handleBtn = () => {
     router.push("/meet/search");

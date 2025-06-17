@@ -1,5 +1,5 @@
 "use client";
-import { useSignupStore } from "@/stores/useSignUpStore";
+// import { useSignupStore } from '@/stores/useSignUpStore';
 import AreaSelector from "@/components/common/AreaSelector";
 import InterestSelector from "@/app/signup/_components/InterestSelector";
 import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector";
@@ -8,7 +8,6 @@ import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
 import { useEffect, useState } from "react";
 import { getAreaOptions, getInterestOptions } from "@/apis/options";
-// import { Area, Interest } from "@/types/options";
 
 export type AreaOption = {
   area_name: string;
@@ -25,12 +24,18 @@ interface InterestApiResponse {
 }
 
 export default function SignupPage() {
-  // const { isKakaoUser } = useSignupStore();
-  const { handleSubmit, setValue } = useSignupSubmit();
+  const { handleSubmit, setSignupData, signupData } = useSignupSubmit();
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
   const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
     results: [],
   });
+  const [areaInfo, setAreaInfo] = useState({
+    area_id: -1,
+    selectedSido: "",
+    selectedDistrict: "",
+  });
+  // const [email, setEmail] = useState();
+
   const {
     email,
     password,
@@ -42,10 +47,8 @@ export default function SignupPage() {
     birthMonth,
     birthDay,
     agreement,
-    toggleAgreement,
-    isKakaoUser,
-    // setKakaoUserSignedUp,
-  } = useSignupStore();
+    // toggleAgreement,
+  } = signupData;
 
   useEffect(() => {
     const fetchAreaOptions = async () => {
@@ -77,45 +80,56 @@ export default function SignupPage() {
             label="이름"
             name="name"
             value={name}
-            onChange={(e) => setValue("name", e.target.value)}
+            onChange={(e) =>
+              setSignupData((prev) => ({ ...prev, name: e.target.value }))
+            }
             placeholder="이름"
             required
           />
-          {!isKakaoUser && (
+          {!signupData.isKakaoUser && (
             <>
               <LabeledInput
                 label="닉네임"
                 name="nickname"
                 value={nickname}
-                onChange={(e) => setValue("nickname", e.target.value)}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    nickname: e.target.value,
+                  }))
+                }
                 placeholder="닉네임"
                 required
               />
             </>
           )}
+
           <BirthDateInput
             birthYear={birthYear}
             birthMonth={birthMonth}
             birthDay={birthDay}
-            setValue={setValue}
+            setSignupData={setSignupData}
           />
-          {!isKakaoUser && (
-            <>
-              <LabeledInput
-                label="이메일"
-                name="email"
-                value={email}
-                onChange={(e) => setValue("email", e.target.value)}
-                placeholder="이메일"
-                required
-              />
-            </>
+
+          {!signupData.isKakaoUser && (
+            <LabeledInput
+              label="이메일"
+              name="email"
+              value={email}
+              onChange={(e) =>
+                setSignupData((prev) => ({ ...prev, email: e.target.value }))
+              }
+              placeholder="이메일"
+              required
+            />
           )}
           <LabeledInput
             label="비밀번호"
             name="password"
             value={password}
-            onChange={(e) => setValue("password", e.target.value)}
+            onChange={(e) =>
+              setSignupData((prev) => ({ ...prev, password: e.target.value }))
+            }
             placeholder="비밀번호"
             type="password"
             required
@@ -124,7 +138,12 @@ export default function SignupPage() {
             label="비밀번호 확인"
             name="password_confirm"
             value={password_confirm}
-            onChange={(e) => setValue("password_confirm", e.target.value)}
+            onChange={(e) =>
+              setSignupData((prev) => ({
+                ...prev,
+                password_confirm: e.target.value,
+              }))
+            }
             placeholder="비밀번호 확인"
             type="password"
             required
@@ -133,7 +152,9 @@ export default function SignupPage() {
             label="전화번호"
             name="phone"
             value={phone}
-            onChange={(e) => setValue("phone", e.target.value)}
+            onChange={(e) =>
+              setSignupData((prev) => ({ ...prev, phone: e.target.value }))
+            }
             placeholder="전화번호"
             required
           />
@@ -142,15 +163,20 @@ export default function SignupPage() {
             <div className="mt-3">
               <AreaSelector
                 areaOptions={areaOptions}
+                areaInfo={areaInfo}
+                setAreaInfo={setAreaInfo}
                 onSelect={(sido, district) => {
                   const matched = areaOptions
                     .find((a) => a.area_name === sido)
                     ?.children.find((d) => d.area_name === district);
 
                   if (matched) {
-                    setValue("area_id", matched.id);
-                    setValue("selectedSido", sido);
-                    setValue("selectedDistrict", district);
+                    setAreaInfo((prev) => ({
+                      ...prev,
+                      area_id: matched.id,
+                      selectedSido: sido,
+                      selectedDistrict: district,
+                    }));
                   }
                 }}
               />
@@ -162,7 +188,13 @@ export default function SignupPage() {
               관심사(중복가능)
             </label>
             <div className="mt-3">
-              <InterestSelector interests={interestOptions.results ?? []} />
+              <InterestSelector
+                interests={interestOptions.results ?? []}
+                interest_ids={signupData.interest_ids}
+                setInterestIds={(ids) =>
+                  setSignupData((prev) => ({ ...prev, interest_ids: ids }))
+                }
+              />
             </div>
           </div>
 
@@ -171,7 +203,12 @@ export default function SignupPage() {
               디지털 친숙도
             </label>
             <div className="mt-3">
-              <DigitalLevelSelector />
+              <DigitalLevelSelector
+                value={signupData.digitalLevel_id}
+                onChange={(val) =>
+                  setSignupData((prev) => ({ ...prev, digitalLevel_id: val }))
+                }
+              />
             </div>
           </div>
           {/* 약관 동의 & 완료 버튼 */}
@@ -180,7 +217,12 @@ export default function SignupPage() {
               <input
                 type="checkbox"
                 checked={agreement}
-                onChange={toggleAgreement}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    agreement: e.target.checked,
+                  }))
+                }
                 className="accent-orange-600 w-4 h-4"
                 id="agreement"
               />

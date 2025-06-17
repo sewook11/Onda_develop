@@ -1,5 +1,3 @@
-import { useSignupStore } from "@/stores/useSignUpStore";
-
 interface AreaSelectorProps {
   onSelect: (sido: string, district: string) => void;
   areaOptions: {
@@ -9,15 +7,27 @@ interface AreaSelectorProps {
       area_name: string;
     }[];
   }[];
+  areaInfo: {
+    selectedSido: string;
+    selectedDistrict: string;
+    area_id: number;
+  };
+  setAreaInfo: React.Dispatch<
+    React.SetStateAction<{
+      selectedSido: string;
+      selectedDistrict: string;
+      area_id: number;
+    }>
+  >;
 }
 
 export default function AreaSelector({
   onSelect,
   areaOptions,
+  areaInfo,
+  setAreaInfo,
 }: AreaSelectorProps) {
-  const { selectedSido, selectedDistrict, selectSido, setDistrict } =
-    useSignupStore();
-
+  const { selectedSido, selectedDistrict } = areaInfo;
   // 지역 공동 컴포넌트
   const sidos = areaOptions.map((area) => area.area_name);
   const districts =
@@ -36,7 +46,9 @@ export default function AreaSelector({
               <button
                 key={sido}
                 type="button"
-                onClick={() => selectSido(sido)}
+                onClick={() =>
+                  setAreaInfo((prev) => ({ ...prev, selectedSido: sido }))
+                }
                 className={`w-full text-left px-3 py-2 rounded ${
                   selectedSido === sido
                     ? "border-orange-500 bg-orange-100 font-bold text-orange-600"
@@ -73,7 +85,10 @@ export default function AreaSelector({
                   name="district"
                   checked={selectedDistrict === district.area_name}
                   onChange={() => {
-                    setDistrict(district.area_name);
+                    setAreaInfo((prev) => ({
+                      ...prev,
+                      selectedDistrict: district.area_name,
+                    }));
                     onSelect(selectedSido, district.area_name);
                   }}
                   className="accent-orange-600 w-4 h-4"
