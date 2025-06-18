@@ -131,7 +131,7 @@ export function useSignupSubmit() {
       };
 
       if (isKakaoUser) {
-        // ✅ 이미 가입된 카카오 유저는 PATCH로 정보 업데이트
+        // 이미 가입된 카카오 유저는 PATCH로 정보 업데이트
         const res = await api.patch(END_POINT.USERS_PROFILE, submitPayload);
         if (res.status === 200) {
           alert("카카오 유저 정보 입력 완료");
@@ -140,7 +140,7 @@ export function useSignupSubmit() {
           router.push("/");
         }
       } else {
-        // ✅ 일반 회원가입은 POST
+        // 일반 회원가입은 POST
         const res = await api.post(END_POINT.USERS_SIGNUP, {
           email,
           ...submitPayload,
