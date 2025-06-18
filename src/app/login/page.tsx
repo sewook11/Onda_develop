@@ -5,6 +5,7 @@ import LoginForm from "@/app/login/_components/Loginform";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useEffect } from "react";
 // import api from "@/apis/app";
 declare global {
   interface User {
@@ -18,8 +19,23 @@ declare global {
 export default function LoginPage() {
   const router = useRouter();
 
-  const { email, password, setEmail, setPassword, reset, setLogin } =
-    useAuthStore();
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    reset,
+    setLogin,
+    user,
+    isKakaoUserSignedUp,
+  } = useAuthStore();
+
+  useEffect(() => {
+    if (user && isKakaoUserSignedUp) {
+      router.push("/");
+    }
+  }, [user, isKakaoUserSignedUp, router]);
+
   const handleKakaoLogin = () => {
     const callbackUrl = "http://localhost:3000/users/kakao/callback";
     window.location.href = `https://api.ondamoim.com/api/users/kakao/login?callback_url=${callbackUrl}`;

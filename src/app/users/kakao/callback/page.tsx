@@ -4,6 +4,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuth";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useSignupSubmit } from "@/hooks/useSignupSubmit";
+import { END_POINT } from "@/constants/route";
+import api from "@/apis/app";
 
 interface DecodedToken {
   email: string;
@@ -16,7 +19,9 @@ export default function KakaoCallbackPage() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const state = searchParams.get("state");
+
   const auth = useAuthStore.getState();
+  const { setSignupData } = useSignupSubmit();
 
   useEffect(() => {
     if (!code || !state) return;
@@ -31,7 +36,7 @@ export default function KakaoCallbackPage() {
         const { access_token, csrf_token } = res.data;
         const decoded: DecodedToken = jwtDecode(access_token);
 
-        const isValidUser = !!decoded?.email && !!decoded.nickname;
+        // const isValidUser = !!decoded?.email && !!decoded.nickname;
         // set auth data
         auth.setAccessToken(access_token);
         auth.setCsrfToken(csrf_token);
@@ -40,19 +45,34 @@ export default function KakaoCallbackPage() {
           name: decoded.name,
           nickname: decoded.nickname,
           role: decoded.role,
-          isAdmin:
-            decoded.role === "admin" ||
-            decoded.role === "leader" ||
-            decoded.role === "user",
+          isAdmin: true,
         });
 
+        const profile = await api.get(END_POINT.USERS_PROFILE, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+        console.log("👀 profile data:", profile.data);
+        const { area, interests, digital_level } = profile.data;
+        const isNewUser = !area || !interests?.length || !digital_level;
+
         // redirect
-        if (isValidUser) {
-          router.push("/"); // 기존 가입 회원 → 홈으로
+        if (isNewUser) {
+          // 회원가입 폼에 미리 email, nickname 채워놓기
+          setSignupData((prev) => ({
+            ...prev,
+            isKakaoUser: true,
+            email: decoded.email,
+            nickname: decoded.nickname,
+          }));
+          router.push("/signup?kakao=1");
         } else {
-          router.push("/signup"); // 신규 회원 → 가입 폼으로
+          useAuthStore.getState().setKakaoUserSignedUp(true);
+          router.push("/");
         }
       } catch (err) {
+        useAuthStore.getState().setKakaoUserSignedUp(true);
         console.error(err);
         router.push("/login"); // 실패할 경우 로그인 페이지로
       }

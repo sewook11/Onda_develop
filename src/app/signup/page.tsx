@@ -8,6 +8,8 @@ import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
 import { useEffect, useState } from "react";
 import { getAreaOptions, getInterestOptions } from "@/apis/options";
+import { useSearchParams } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuth";
 
 export type AreaOption = {
   area_name: string;
@@ -66,6 +68,21 @@ export default function SignupPage() {
     fetchInterestOptions();
   }, []);
 
+  const searchParams = useSearchParams();
+  const authUser = useAuthStore((state) => state.user);
+
+  useEffect(() => {
+    const kakao = searchParams.get("kakao");
+    if (kakao === "1" && authUser) {
+      setSignupData((prev) => ({
+        ...prev,
+        isKakaoUser: true,
+        email: authUser.email ?? "",
+        nickname: authUser.nickname ?? "",
+      }));
+    }
+  }, [searchParams, authUser]);
+
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원가입</h1>
@@ -100,6 +117,7 @@ export default function SignupPage() {
                 }
                 placeholder="닉네임"
                 required
+                readOnly={signupData.isKakaoUser}
               />
             </>
           )}
@@ -112,23 +130,28 @@ export default function SignupPage() {
           />
 
           {!signupData.isKakaoUser && (
-            <LabeledInput
-              label="이메일"
-              name="email"
-              value={email}
-              onChange={(e) =>
-                setSignupData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              placeholder="이메일"
-              required
-            />
+            <>
+              <LabeledInput
+                label="이메일"
+                name="email"
+                value={email}
+                onChange={(e) =>
+                  setSignupData((prev) => ({ ...prev, email: e.target.value }))
+                }
+                placeholder="이메일"
+                required
+              />
+            </>
           )}
           <LabeledInput
             label="비밀번호"
             name="password"
             value={password}
             onChange={(e) =>
-              setSignupData((prev) => ({ ...prev, password: e.target.value }))
+              setSignupData((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
             }
             placeholder="비밀번호"
             type="password"
@@ -176,6 +199,11 @@ export default function SignupPage() {
                       area_id: matched.id,
                       selectedSido: sido,
                       selectedDistrict: district,
+                    }));
+
+                    setSignupData((prev) => ({
+                      ...prev,
+                      area_id: matched.id,
                     }));
                   }
                 }}

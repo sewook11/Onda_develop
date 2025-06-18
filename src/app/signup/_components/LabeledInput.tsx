@@ -8,6 +8,7 @@ interface LabeledInputProps {
   placeholder?: string;
   type?: string;
   required?: boolean;
+  readOnly?: boolean;
 }
 
 export default function LabeledInput({
@@ -18,6 +19,7 @@ export default function LabeledInput({
   placeholder,
   type = "text",
   required = false,
+  readOnly = false,
 }: LabeledInputProps) {
   return (
     <div>
@@ -30,6 +32,7 @@ export default function LabeledInput({
           onChange={onChange}
           required={required}
           type={type}
+          readOnly={readOnly}
         />
       </div>
     </div>

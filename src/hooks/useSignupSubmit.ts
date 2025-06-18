@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/useAuth";
 import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
 import { useState } from "react";
+import { AxiosError } from "axios";
 
 export interface SignupState {
   email: string;
@@ -73,7 +74,7 @@ export function useSignupSubmit() {
       { key: "birthYear", value: birthYear },
       { key: "birthMonth", value: birthMonth },
       { key: "birthDay", value: birthDay },
-      { key: "email", value: email },
+      ...(isKakaoUser ? [] : [{ key: "email", value: email }]),
       { key: "password", value: password },
       { key: "password_confirm", value: password_confirm },
       { key: "phone", value: phone },
@@ -117,8 +118,7 @@ export function useSignupSubmit() {
     }
 
     try {
-      const res = await api.post(END_POINT.USERS_SIGNUP, {
-        email,
+      const submitPayload = {
         password,
         password_confirm,
         name,
@@ -128,23 +128,45 @@ export function useSignupSubmit() {
         area: area_id,
         interests: interest_ids,
         digital_level: digitalLevel_id,
-      });
-      if (res.status === 201) {
-        alert("회원가입 완료");
-        resetForm();
-        useAuthStore.getState().setLogout();
+      };
 
-        if (isKakaoUser) {
-          setSignupData((prev) => ({
-            ...prev,
-            isKakaoUserSignedUp: true,
-          }));
+      if (isKakaoUser) {
+        // ✅ 이미 가입된 카카오 유저는 PATCH로 정보 업데이트
+        const res = await api.patch(END_POINT.USERS_PROFILE, submitPayload);
+        if (res.status === 200) {
+          alert("카카오 유저 정보 입력 완료");
+          useAuthStore.getState().setKakaoUserSignedUp(true);
+          resetForm();
+          router.push("/");
         }
-        router.push("/login");
-        return;
+      } else {
+        // ✅ 일반 회원가입은 POST
+        const res = await api.post(END_POINT.USERS_SIGNUP, {
+          email,
+          ...submitPayload,
+        });
+
+        if (res.status === 201) {
+          alert("회원가입 완료");
+          resetForm();
+          useAuthStore.getState().setLogout();
+          router.push("/login");
+        }
       }
-    } catch (err) {
-      console.error("회원가입 실패", err);
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<{ [key: string]: string[] }>;
+
+      console.error("회원가입 실패", axiosError);
+
+      const errors = axiosError.response?.data;
+
+      if (errors?.email?.[0]?.includes("already exists")) {
+        alert("이미 가입된 이메일입니다.");
+      } else if (errors?.nickname?.[0]?.includes("already exists")) {
+        alert("이미 사용 중인 닉네임입니다.");
+      } else {
+        alert("회원가입 중 오류가 발생했습니다.");
+      }
     }
   };
 

@@ -36,6 +36,8 @@ interface AuthState {
   password: string;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
+  isKakaoUserSignedUp: boolean;
+  setKakaoUserSignedUp: (value: boolean) => void;
   reset: () => void;
 }
 
@@ -57,6 +59,9 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   isAdmin: false,
   email: "",
   password: "",
+  isKakaoUserSignedUp: false,
+  setKakaoUserSignedUp: (value: boolean) =>
+    set(() => ({ isKakaoUserSignedUp: value })),
 
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
