@@ -1,5 +1,4 @@
 "use client";
-import { z } from "zod";
 import { FileData } from "./file";
 
 export type Post = {
@@ -38,21 +37,8 @@ export type PostAuthor = {
 
 export type PostContent = {
   content: string;
-  image?: string | null;
+  file?: string | null;
 }
-
-// 게시글 수정/생성 시 사용하는 폼 데이터 타입
-export const postSchema = z.object({
-  title: z.string().min(1, "제목을 입력해주세요"),
-  content: z.string().min(1, "내용을 입력해주세요"),
-  category: z.number().min(1, "카테고리를 선택해주세요"),
-  interest: z.number().optional(),
-  area: z.number().optional(),
-});
-
-export type PostFormData = z.infer<typeof postSchema> & {
-  file?: File | string;
-};
 
 // 댓글 타입
 export type Comment = {

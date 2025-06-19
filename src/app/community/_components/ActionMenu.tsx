@@ -28,7 +28,7 @@ export default function ActionMenu({
   };
 
   return (
-    <div className="relative text-gray-600">
+    <div className="relative text-gray-600 pr-4">
       <button onClick={handleToggle}>
         <MoreVertical />
       </button>

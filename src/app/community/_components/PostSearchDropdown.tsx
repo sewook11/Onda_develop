@@ -1,38 +1,58 @@
 import { Search } from "lucide-react";
 import React, { useState } from "react";
-import AreaDropdown from "./AreaDropdown";
-import SelectBox from "@/components/common/SelectBox";
-import { digitalLevelOptions, interestOptions } from "@/constants/category";
 import { useAppSearchParams } from "@/stores/useAppSearchParams";
+import { OptionResponse } from "@/apis/options";
+import DropdownInput from "./DropdownInput";
+import AreaDropdown from "./AreaDropdown";
 
-export default function PostSearchDropdown() {
-  const [showDetail, setShwoDetail] = useState(false);
+interface PostSearchDropdownProps {
+  options: OptionResponse | null;
+}
+
+export default function PostSearchDropdown({
+  options,
+}: PostSearchDropdownProps) {
+  const [showDetail, setShowDetail] = useState(false);
   const { searchParams, updateParams, resetParams } = useAppSearchParams();
 
-  const handleToggle = () => setShwoDetail((prev) => !prev);
+  const handleToggle = () => setShowDetail((prev) => !prev);
+
+  const interestOptions =
+    options?.interests?.map((opt) => ({
+      value: opt.id,
+      label: opt.interest_name,
+    })) ?? [];
+
+  const areaOptions = (options?.areas ?? []).map((opt) => ({
+    id: opt.id,
+    area_name: opt.area_name,
+    children:
+      opt.children?.map((child) => ({
+        id: child.id,
+        area_name: child.area_name,
+      })) ?? [],
+  }));
 
   return (
     <div className="w-full flex flex-col gap-4 mb-4">
       {/* 옵션 영역 */}
       {showDetail && (
         <div className="flex flex-wrap gap-4">
-          <SelectBox
-            value={searchParams.interest_id}
+          <DropdownInput
+            value={searchParams.interest}
+            onChange={(val) => updateParams("interest", val)}
             options={interestOptions}
             placeholder="관심사"
-            onChange={(e) =>
-              updateParams("interest_id", Number(e.target.value))
-            }
+            className="w-[250px]"
           />
-          <AreaDropdown />
-          <SelectBox
-            value={searchParams.digitalLevel_id}
-            options={digitalLevelOptions}
-            placeholder="디지털 난이도"
-            onChange={(e) =>
-              updateParams("digitalLevel_id", Number(e.target.value))
-            }
+          <AreaDropdown 
+            options={areaOptions}
+            value={searchParams.area}
+            onChange={(value) => updateParams("area", value)}
+            placeholder="지역"
+            className="flex-grow"
           />
+
         </div>
       )}
       {/* 버튼 영역 */}

@@ -7,7 +7,7 @@ export type AgeGroup = {
 export type Area = { 
     id: number;
     area_name: string;
-    depth: "시" | "구" | "동";
+    depth?: "시" | "구" | "동";
     children?: Area[];
 }
 

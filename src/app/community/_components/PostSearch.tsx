@@ -1,21 +1,36 @@
-import SelectBox from "@/components/common/SelectBox";
+"use client";
+
 import TextInput from "@/components/common/TextInput";
-import { categoryOptions } from "@/constants/category";
 import { Search } from "lucide-react";
 import PostSearchDropdown from "./PostSearchDropdown";
 import { useAppSearchParams } from "@/stores/useAppSearchParams";
+import { useOptionStore } from "@/stores/useOptionStore";
+import { useEffect } from "react";
+import DropdownInput from "./DropdownInput";
 
 export default function PostSearch() {
   const { searchParams, updateParams } = useAppSearchParams();
+  const { options, fetchOptions } = useOptionStore();
+
+  useEffect(() => {
+    fetchOptions();
+  }, [fetchOptions]);
+
+  const categoryOptions =
+    options?.categories?.map((opt) => ({
+      value: opt.id,
+      label: opt.category_name,
+    })) ?? [];
 
   return (
     <div className="w-full flex flex-col gap-4 border-b-2 mt-10 items-end">
       <div className="w-full flex gap-4 flex-wrap">
-        <SelectBox
-          value={searchParams.category_id}
+        <DropdownInput
+          value={searchParams.category}
+          onChange={(val) => updateParams("category", val)}
           options={categoryOptions}
           placeholder="카테고리"
-          onChange={(e) => updateParams("category_id", Number(e.target.value))}
+          className="min-w-[150px] w-auto"
         />
         <div className="flex-grow">
           <TextInput
@@ -28,7 +43,9 @@ export default function PostSearch() {
           ></TextInput>
         </div>
       </div>
-      <PostSearchDropdown />
+      <PostSearchDropdown 
+        options={options}
+      />
     </div>
   );
 }

@@ -3,14 +3,20 @@ import { create } from "zustand";
 export type SearchParams = {
   category: number;
   interest: number;
-  area: number;
+  area: {
+    parentId: number;
+    childId: number;
+  };
   keyword: string;
 };
 
 const defaultParams: SearchParams = {
   category: 0,
   interest: 0,
-  area: 0,
+  area: {
+    parentId: 0,
+    childId: 0,
+  },
   keyword: "",
 };
 

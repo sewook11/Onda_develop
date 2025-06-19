@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import Pagination from "@/components/Pagination";
 import { useAppSearchParams } from "@/stores/useAppSearchParams";
 import { useFilteredPosts } from "@/hooks/useFilteredPosts";
+import { useAuthStore } from "@/stores/useAuth";
+import { useModalStore } from "@/stores/useModalStore";
+import { LoginRequiredModal } from "./write/_components/PostModal";
 
 export default function PostListPage() {
   // 게시글 데이터 및 페이지네이션
@@ -16,6 +19,10 @@ export default function PostListPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   const router = useRouter();
+  const { accessToken } = useAuthStore();
+  const access = accessToken;
+
+    const { openModal } = useModalStore();
 
   useEffect(() => {
     const postsPerPage = 5;
@@ -24,8 +31,11 @@ export default function PostListPage() {
   }, [posts]);
 
   const handleClick = () => {
-    // 로그인 안된 경우 로그인 페이지로 이동
-    router.push("/community/write");
+    if (!access) {
+      openModal("LoginRequiredModal")
+    } else {
+      router.push("/community/write");
+    }
   };
 
   return (
@@ -43,6 +53,7 @@ export default function PostListPage() {
           onPageChange={(p) => setPage(p)}
         />
       </section>
+      <LoginRequiredModal />
     </div>
   );
 }

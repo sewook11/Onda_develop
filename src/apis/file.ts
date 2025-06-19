@@ -10,8 +10,15 @@ export const getFiles = async (): Promise<FileData[]> => {
 };
 
 export const uploadFiles = async (payload: File): Promise<FileData> => {
-  const response = await api.post<FileData>(END_POINT.FILES_UPLOAD, payload);
-  console.log("파일 업데이트", response.data);
+  const formData = new FormData();
+  formData.append("file", payload);
+
+  const response = await api.post<FileData>(END_POINT.FILES_UPLOAD, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  });
+  console.log("파일 업로드", response.data);
 
   return response.data;
 };

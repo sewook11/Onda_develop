@@ -15,7 +15,7 @@ export function useFilteredPosts(searchParams: SearchParams) {
       const filteredInterest =
         !searchParams.interest || post.interest === searchParams.interest;
       const filteredArea =
-        !searchParams.area || post.area === searchParams.area;
+        !searchParams.area || post.area === searchParams.area.childId;
 
       const filteredKeyword =
         !searchParams.keyword || post.title.includes(searchParams.keyword);
