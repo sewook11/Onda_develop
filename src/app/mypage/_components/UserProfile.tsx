@@ -30,11 +30,9 @@ const UserProfile = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
   const role = useAuthStore((s) => s.user?.role);
-  // const isAdmin = role === "admin";
   const isLeader = role === "leader";
 
   console.log(accessToken);
-  console.log("profile: ", profile);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -43,7 +41,6 @@ const UserProfile = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        console.log("res", res.data);
         setProfile(res.data);
       } catch (err) {
         console.error(err);

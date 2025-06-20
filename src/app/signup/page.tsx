@@ -82,7 +82,7 @@ export default function SignupPage() {
       }));
     }
   }, [searchParams, authUser]);
-
+  console.log("handleSubmit");
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원가입</h1>
@@ -126,7 +126,12 @@ export default function SignupPage() {
             birthYear={birthYear}
             birthMonth={birthMonth}
             birthDay={birthDay}
-            setSignupData={setSignupData}
+            setSignupData={(updated) => {
+              setSignupData((prev) => ({
+                ...prev,
+                ...updated,
+              }));
+            }}
           />
 
           {!signupData.isKakaoUser && (

@@ -45,7 +45,13 @@ export default function EditProfilePage() {
     interests: [] as number[],
     digital_level: null as number | null,
   });
-  console.log("form", form);
+
+  useEffect(() => {
+    if (!accessToken) {
+      router.replace("/login");
+    }
+  }, [accessToken, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -53,11 +59,11 @@ export default function EditProfilePage() {
       await api.patch(
         END_POINT.USERS_PROFILE,
         {
-          name: form.name,
-          nickname: form.nickname,
+          name: form.name.trim(),
+          nickname: form.nickname.trim(),
           phone_number: form.phone.replace(/-/g, ""),
           date_of_birth: `${form.birthYear}-${form.birthMonth}-${form.birthDay}`,
-          area: form.area_id,
+          area_id: form.area_id,
           interests: form.interests,
           digital_level: form.digital_level,
         },
