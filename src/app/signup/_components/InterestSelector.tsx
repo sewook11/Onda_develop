@@ -11,7 +11,7 @@ interface InterestSelectorProps {
 
 export default function InterestSelector({
   interests,
-  interest_ids,
+  interest_ids = [],
   setInterestIds,
 }: InterestSelectorProps) {
   const toggleInterest = (id: number) => {
@@ -33,7 +33,7 @@ export default function InterestSelector({
             type="checkbox"
             name="interest"
             className="accent-orange-600"
-            checked={interest_ids.includes(interest.id)}
+            checked={(interest_ids ?? []).includes(interest.id)}
             onChange={() => toggleInterest(interest.id)}
           />
           {interest.interest_name}

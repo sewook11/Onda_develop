@@ -88,8 +88,9 @@ export default function AreaSelector({
                     setAreaInfo((prev) => ({
                       ...prev,
                       selectedDistrict: district.area_name,
+                      area_id: district.id,
                     }));
-                    onSelect(selectedSido, district.area_name);
+                    onSelect(selectedSido, district.area_name, district.id);
                   }}
                   className="accent-orange-600 w-4 h-4"
                 />

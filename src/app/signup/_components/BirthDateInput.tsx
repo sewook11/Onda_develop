@@ -1,11 +1,19 @@
-import { SignupState } from "@/hooks/useSignupSubmit";
+// import { SignupState } from "@/hooks/useSignupSubmit";
 import TextInput from "../../../components/common/TextInput";
 
 interface Props {
+  // birthYear: string;
+  // birthMonth: string;
+  // birthDay: string;
+  // setSignupData: React.Dispatch<React.SetStateAction<SignupState>>;
   birthYear: string;
   birthMonth: string;
   birthDay: string;
-  setSignupData: React.Dispatch<React.SetStateAction<SignupState>>;
+  setSignupData: (updated: {
+    birthYear: string;
+    birthMonth: string;
+    birthDay: string;
+  }) => void;
 }
 
 export default function BirthDateInput({
@@ -22,7 +30,11 @@ export default function BirthDateInput({
           name="birthYear"
           value={birthYear}
           onChange={(e) =>
-            setSignupData((prev) => ({ ...prev, birthYear: e.target.value }))
+            setSignupData({
+              birthYear: e.target.value,
+              birthMonth: birthMonth,
+              birthDay: birthDay,
+            })
           }
           placeholder="YYYY"
           type="number"
@@ -33,7 +45,11 @@ export default function BirthDateInput({
           name="birthMonth"
           value={birthMonth}
           onChange={(e) =>
-            setSignupData((prev) => ({ ...prev, birthMonth: e.target.value }))
+            setSignupData({
+              birthYear: birthYear,
+              birthMonth: e.target.value,
+              birthDay: birthDay,
+            })
           }
           placeholder="MM"
           type="number"
@@ -44,7 +60,11 @@ export default function BirthDateInput({
           name="birthDay"
           value={birthDay}
           onChange={(e) =>
-            setSignupData((prev) => ({ ...prev, birthDay: e.target.value }))
+            setSignupData({
+              birthYear: birthYear,
+              birthMonth: birthMonth,
+              birthDay: e.target.value,
+            })
           }
           placeholder="DD"
           type="number"

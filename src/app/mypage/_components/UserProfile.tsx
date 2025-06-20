@@ -1,6 +1,5 @@
 "use client";
 
-// import { sampleUser } from "@/datas/sampleUser";
 import { ArrowLeftRight, Camera, SquarePen, UserRound } from "lucide-react";
 import Image from "next/image";
 import { useViewModeStore } from "@/stores/useViewModeStore";
@@ -8,8 +7,9 @@ import { useAuthStore } from "@/stores/useAuth";
 import { useEffect, useState } from "react";
 import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
+import { useRouter } from "next/navigation";
 
-interface Profile {
+export interface Profile {
   email: string;
   name: string;
   nickname: string;
@@ -25,11 +25,12 @@ interface Profile {
 }
 
 const UserProfile = () => {
+  const route = useRouter();
   const { viewMode, toggleViewMode } = useViewModeStore();
   const [profile, setProfile] = useState<Profile | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
   const role = useAuthStore((s) => s.user?.role);
-  const isAdmin = role === "admin";
+  // const isAdmin = role === "admin";
   const isLeader = role === "leader";
 
   console.log(accessToken);
@@ -56,18 +57,23 @@ const UserProfile = () => {
       {/* 상단 이름 + 수정 버튼 */}
       <div className="flex items-center">
         <h3 className="text-lg font-semibold">{profile?.name}님</h3>
-        <button className="text-gray-500 hover:text-black ml-3">
+        <button
+          className="text-gray-500 hover:text-black ml-3"
+          onClick={() => route.push("/mypage/edit_profile")}
+          aria-label="프로필 수정"
+        >
           <SquarePen />
         </button>
       </div>
 
       {/* 프로필 영역 */}
       <div className="flex items-center space-x-6">
+        {/* 이미지 */}
         <div className="relative w-52 h-52">
           <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 flex items-center justify-center">
             {profile?.file ? (
               <Image
-                src={profile?.file}
+                src={profile.file}
                 alt="프로필 이미지"
                 fill
                 className="object-cover"
@@ -83,7 +89,7 @@ const UserProfile = () => {
           </div>
         </div>
 
-        {/* 유저 정보 */}
+        {/* 정보 */}
         <div className="flex flex-col space-y-3 text-sm text-gray-800">
           <p>
             <span className="font-semibold mr-2">이메일</span>
@@ -99,20 +105,18 @@ const UserProfile = () => {
               ? new Date(profile.date_of_birth).toLocaleDateString("ko-KR")
               : "-"}
           </p>
-          {isAdmin || isLeader ? (
-            <p>
-              <span className="font-semibold mr-2">디지털난이도</span>
-              {profile?.digital_level?.display ?? "-"}
-            </p>
-          ) : (
-            <p>
-              <span className="font-semibold mr-2">관심 분야</span>
-              {profile?.interests?.map((i) => i.interest_name).join(", ")}
-            </p>
-          )}
+          <p>
+            <span className="font-semibold mr-2">디지털난이도</span>
+            {profile?.digital_level?.display ?? "-"}
+          </p>
+
+          <p>
+            <span className="font-semibold mr-2">관심 분야</span>
+            {profile?.interests?.map((i) => i.interest_name).join(", ")}
+          </p>
         </div>
 
-        {/* 사용자 변경 버튼 */}
+        {/* 보기 모드 전환 버튼 */}
         {isLeader && (
           <button
             onClick={toggleViewMode}
