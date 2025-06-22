@@ -1,15 +1,16 @@
-//import type { NextConfig } from "next";
+// next.config.js
 
-// const nextConfig: NextConfig = {
-//   /* config options here */
-// };
-
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   images: {
-    domains: ['placehold.co'], // 여기에 도메인 추가
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "onda-s3-2025-06-11.s3.amazonaws.com",
+        pathname: "/**", // 전체 경로 허용
+      },
+    ],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

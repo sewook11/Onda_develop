@@ -2,12 +2,14 @@
 
 import { ArrowLeftRight, Camera, SquarePen, UserRound } from "lucide-react";
 import Image from "next/image";
+import ProfileImageModal from "./ProfileImageModal";
 import { useViewModeStore } from "@/stores/useViewModeStore";
 import { useAuthStore } from "@/stores/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export interface Profile {
   email: string;
@@ -21,7 +23,13 @@ export interface Profile {
   interests?: {
     interest_name: string;
   }[];
-  file?: string;
+  file?:
+    | string
+    | {
+        file: string;
+        id: number;
+        thumbnail: string;
+      };
 }
 
 const UserProfile = () => {
@@ -31,8 +39,9 @@ const UserProfile = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
   const role = useAuthStore((s) => s.user?.role);
   const isLeader = role === "leader";
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showOptions, setShowOptions] = useState(false);
 
-  console.log(accessToken);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -49,6 +58,82 @@ const UserProfile = () => {
     fetchProfile();
   }, [accessToken]);
 
+  // 이미지 업로드 핸들러
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !accessToken) return;
+
+    const formData = new FormData();
+    formData.append("category", "profile");
+    formData.append("file", file);
+
+    try {
+      const uploadRes = await api.post(END_POINT.FILES_UPLOAD, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("uploadRes:", uploadRes.data);
+
+      const uploadId = uploadRes.data.ids?.[0];
+      if (!uploadId) {
+        console.error("업로드된 파일 ID가 없습니다.");
+        return;
+      }
+
+      await api.patch(
+        END_POINT.USERS_PROFILE,
+        { file: uploadId },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // 프로필 업데이트
+      const profileRes = await api.get(END_POINT.USERS_PROFILE, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setProfile(profileRes.data);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("응답 상태:", err.response?.status);
+        console.error("응답 메시지:", err.response?.data); // 여기가 핵심!
+      } else {
+        console.error("기타 에러:", err);
+      }
+    }
+  };
+  // 파일 삭제
+  const handleDeleteImage = async () => {
+    if (!accessToken || !profile?.file || typeof profile.file !== "object")
+      return;
+
+    try {
+      await api.delete(END_POINT.FILES_DELETE, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          ids: [profile.file.id], // 삭제 파일 ID
+        },
+      });
+      const res = await api.get(END_POINT.USERS_PROFILE, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setProfile(res.data);
+      setShowOptions(false);
+    } catch (err) {
+      console.error("이미지 삭제 실패:", err);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* 상단 이름 + 수정 버튼 */}
@@ -63,27 +148,63 @@ const UserProfile = () => {
         </button>
       </div>
 
+      {showOptions && (
+        <ProfileImageModal
+          onClose={() => setShowOptions(false)}
+          onChange={() => {
+            fileInputRef.current?.click();
+            setShowOptions(false);
+          }}
+          onDelete={async () => {
+            await handleDeleteImage();
+            setShowOptions(false);
+          }}
+        />
+      )}
+
       {/* 프로필 영역 */}
       <div className="flex items-center space-x-6">
         {/* 이미지 */}
         <div className="relative w-52 h-52">
-          <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 flex items-center justify-center">
-            {profile?.file ? (
+          {/* 프로필 이미지 */}
+          <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 relative">
+            {profile?.file &&
+            typeof profile.file === "object" &&
+            profile.file.file ? (
               <Image
-                src={profile.file}
+                src={profile.file.file}
                 alt="프로필 이미지"
-                fill
-                className="object-cover"
-                sizes="80px"
-                priority
+                className="w-full h-full object-cover"
+                width={208}
+                height={208}
               />
             ) : (
-              <UserRound className="text-gray-400 w-20 h-20" />
+              <UserRound className="text-gray-400 w-20 h-20 absolute inset-0 m-auto" />
             )}
-            <button className="absolute bottom-2 right-2 w-10 h-10 flex justify-center items-center bg-white border rounded-full p-1 shadow-sm hover:bg-gray-100">
-              <Camera size={20} />
-            </button>
           </div>
+
+          {/* 업로드 버튼 */}
+          <button
+            className="absolute bottom-2 right-2 z-50 w-10 h-10 bg-white border rounded-full p-1 shadow-md flex items-center justify-center hover:bg-gray-100"
+            onClick={() => {
+              if (profile?.file && typeof profile.file === "object") {
+                setShowOptions(true);
+              } else {
+                fileInputRef.current?.click();
+              }
+            }}
+          >
+            <Camera size={20} />
+          </button>
+
+          {/* 숨겨진 파일 input */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleImageUpload}
+          />
         </div>
 
         {/* 정보 */}

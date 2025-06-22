@@ -81,7 +81,7 @@ export default function SignupPage() {
         nickname: authUser.nickname ?? "",
       }));
     }
-  }, [searchParams, authUser]);
+  }, [searchParams, authUser, setSignupData]);
   console.log("handleSubmit");
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
