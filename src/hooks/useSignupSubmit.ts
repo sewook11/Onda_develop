@@ -166,12 +166,12 @@ export function useSignupSubmit() {
           email,
           ...submitPayload,
         });
-
+        console.log(res.data);
         if (res.status === 201) {
-          alert("회원가입 완료");
+          alert("회원가입 완료! 이메일 인증을 진행해주세요.");
           resetForm();
           useAuthStore.getState().setLogout();
-          router.push("/login");
+          router.replace("/login");
         }
       }
     } catch (err: unknown) {
@@ -186,7 +186,7 @@ export function useSignupSubmit() {
       } else if (errors?.nickname?.[0]?.includes("already exists")) {
         alert("이미 사용 중인 닉네임입니다.");
       } else if (errors?.error_message?.[0]) {
-        alert("자주 사용되는 비밀번호는 사용할 수 없습니다.");
+        alert("비밀번호가 보안 기준을 만족하지 않습니다.");
       } else {
         alert("회원가입 중 오류가 발생했습니다.");
       }

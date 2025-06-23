@@ -11,6 +11,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/users/verify/email",
+        destination: "/users/verify/email", // 실제 페이지 경로
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -82,11 +82,10 @@ export default function SignupPage() {
       }));
     }
   }, [searchParams, authUser, setSignupData]);
-  console.log("handleSubmit");
+
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원가입</h1>
-
       <div className="w-full flex justify-center mt-20">
         <form
           id="signupForm"

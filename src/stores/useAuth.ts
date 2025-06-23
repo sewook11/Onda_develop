@@ -31,6 +31,8 @@ interface AuthState {
   login: boolean;
   accessToken: string | null;
   csrfToken: string | null;
+  setAccessToken: (token: string) => void;
+  setCsrfToken: (token: string) => void;
   isAdmin: boolean;
   email: string;
   password: string;
@@ -66,8 +68,11 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
   setAccessToken: (token: string) => set({ accessToken: token }),
-  setCsrfToken: (token: string) => set({ csrfToken: token }),
-
+  setCsrfToken: (token: string) => {
+    set({ csrfToken: token });
+    console.log("setCsrfToken 토큰 실행됨");
+    console.log("token :", token);
+  },
   setUser: (user: User) => {
     set({
       user,
