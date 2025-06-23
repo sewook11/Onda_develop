@@ -5,13 +5,47 @@ import ActionMenu from "../../_components/ActionMenu";
 import CommentInput from "./CommentInput";
 import { useModalStore } from "@/stores/useModalStore";
 import DeleteModal, { DeleteModalData } from "../../_components/DeleteModal";
-import { useDeleteComment, useUpdateComment } from "@/hooks/useComments";
+import {
+  useCreateComment,
+  useDeleteComment,
+  useUpdateComment,
+} from "@/hooks/useComments";
+import ReplyList from "./ReplyList";
 
-export default function CommentItem(comment: Comment) {
+interface CommentItemProps {
+  comment: Comment;
+}
+
+export default function CommentItem({ comment }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const { mutate: createComment } = useCreateComment();
   const { mutate: updateComment } = useUpdateComment();
   const { mutate: deleteComment } = useDeleteComment();
   const { openModal } = useModalStore();
+
+  const handleReplySubmit = (newContent: string) => {
+    if (!newContent.trim()) return;
+    createComment(
+      {
+        postId: comment.post,
+        content: newContent,
+        parent: comment.id, // parent는 현재 댓글의 id
+      },
+      {
+        onSuccess: () => {
+          console.log("답글 작성 성공");
+          setIsReplying(false);
+        },
+        onError: (error) => {
+          console.error("답글 작성 실패:", error.message);
+          openModal("PostFailModal", {
+            message: "답글 작성에 실패했습니다.",
+          });
+        },
+      }
+    );
+  };
 
   const handleEditComment = () => {
     setIsEditing(true);
@@ -72,7 +106,7 @@ export default function CommentItem(comment: Comment) {
   };
 
   return (
-    <div className="w-full border-b pt-4 relative">
+    <div className="w-full pt-4 relative">
       {isEditing ? (
         <CommentInput
           mode="edit"
@@ -114,8 +148,27 @@ export default function CommentItem(comment: Comment) {
 
             <DeleteModal onDelete={handleDeleteComment} />
           </div>
-          <p className="mt-2 text-gray-800 mb-4 text-md">{comment.content}</p>
+          <p
+            className="mt-2 text-gray-800 mb-4 text-md cursor-pointer"
+            onClick={() => setIsReplying(true)}
+          >
+            {comment.content}
+          </p>
         </>
+      )}
+      {/* 대댓글 입력창 */}
+      {isReplying && (
+        <CommentInput
+          mode="create"
+          onSubmit={handleReplySubmit}
+          onCancel={() => setIsReplying(false)}
+        />
+      )}
+      {/* 대댓글 목록 */}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="ml-2 flex gap-4">
+          <ReplyList replies={comment.replies} />
+        </div>
       )}
     </div>
   );

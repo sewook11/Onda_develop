@@ -14,8 +14,8 @@ export default function CommentList({ comments }: CommentListProps) {
 
   return (
     <div className="w-full">
-      {comments.map((c) => (
-        <CommentItem key={c.id} {...c} />
+      {comments.map((comment) => (
+        <CommentItem key={comment.id} comment={comment} />
       ))}
     </div>
   );
