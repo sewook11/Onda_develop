@@ -22,7 +22,7 @@ const metaByRole: Record<Role, Record<ApplicationStatus, StatusLabel>> = {
     },
     rejected: {
       label: '거절',
-      className: 'bg-accnet-red text-white',
+      className: 'bg-accent-red text-white',
     },
   },
   leader: {

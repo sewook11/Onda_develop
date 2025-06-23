@@ -13,7 +13,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
   error?: string;
-  clasName: string;
+  className: string;
 }
 
 export interface ModalProps {

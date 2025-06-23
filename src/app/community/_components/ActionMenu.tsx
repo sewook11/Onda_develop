@@ -19,7 +19,6 @@ export default function ActionMenu({
     e.stopPropagation();
     setIsOpen((prev) => !prev);
   };
-
   const handleClick = (callback?: (id: number) => void) => (e:React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

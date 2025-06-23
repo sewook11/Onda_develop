@@ -4,6 +4,7 @@ export type FileData = {
     user_id?: number;
     file_url: string;
     file_type: "image" | "video" | "file";
+    category: "post" | "profile" | "meet" | "certificate" | "other";
     file_name?: string | null;
     file_size?: number;
     thumbnail?: string;

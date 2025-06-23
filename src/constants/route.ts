@@ -40,6 +40,10 @@ export const END_POINT = {
   POSTS: "/api/posts", // 게시글 목록 조회/생성
   POSTS_DETAIL: (id: number) => `/api/posts/${id}`, // 게시글 상세 조회/수정/삭제
 
+  // comments: 댓글 관련 api
+  COMMENTS: (postId: number) => `/api/posts/${postId}/comments`, // 댓글 목록 조회/생성
+  COMMENTS_DETAIL: (postId: number, commentId: number) => `/api/posts/${postId}/comments/${commentId}`, // 댓글 상세 조회/수정/삭제
+
   // users: 유저/인증 관련 api
   USERS_PASSWORD: "/api/users/check/password", // 비밀번호 확인
   USERS_EMAIL: "/api/users/verify/email", // 이메일 인증 링크 확인

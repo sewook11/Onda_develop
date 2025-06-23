@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { getOptions } from "@/apis/options";
-import { OptionResponse } from "@/apis/options";
+// import { OptionResponse } from "@/apis/options";
+import { useQuery } from "@tanstack/react-query";
 
 interface OptionItem {
   value: number;
@@ -8,30 +9,25 @@ interface OptionItem {
 }
 
 export default function useOptions() {
-  const [options, setOptions] = useState<OptionResponse | null>(null);
-
-  useEffect(() => {
-    const fetchOptions = async () => {
-      const data = await getOptions();
-      setOptions(data);
-    };
-
-    fetchOptions();
-  }, []);
+  const { data } = useQuery({
+    queryKey: ["options"],
+    queryFn: getOptions,
+    staleTime: 1000 * 60 * 10, 
+  });
 
   const categoryOptions: OptionItem[] =
-    options?.categories?.map((c) => ({
+    data?.categories?.map((c) => ({
       value: c.id,
       label: c.category_name,
     })) ?? [];
 
   const interestOptions: OptionItem[] =
-    options?.interests?.map((i) => ({
+    data?.interests?.map((i) => ({
       value: i.id,
       label: i.interest_name,
     })) ?? [];
 
-  const areaOptions = options?.areas ?? [];
+  const areaOptions = data?.areas ?? [];
 
   return { categoryOptions, interestOptions, areaOptions };
 }

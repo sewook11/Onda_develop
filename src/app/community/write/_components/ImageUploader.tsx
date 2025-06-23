@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
-  Control,
+  useFormContext,
   UseFormSetValue,
+  Control,
   useWatch,
 } from "react-hook-form";
-import { PostFormData } from "@/types/post";
+import { PostFormData } from "./PostForm";
 
 interface ImageUploaderProps {
   setValue: UseFormSetValue<PostFormData>;
   control: Control<PostFormData>;
-  initialFile?: string;
+  initialFile?: string; // 초기 이미지 URL
 }
 
 export default function ImageUploader({
@@ -18,16 +19,33 @@ export default function ImageUploader({
   control,
   initialFile,
 }: ImageUploaderProps) {
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const imageFile = useWatch({ name: "file", control });
+  const { register } = useFormContext<PostFormData>();
 
-  // 이미지 미리보기
+  const imageFile = useWatch({ name: "file", control });
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+  // 새 파일 업로드 시 미리보기 생성
   useEffect(() => {
-    if (imageFile && initialFile) {
+    let preview: string | null = null;
+
+    if (imageFile instanceof File) {
+      preview = URL.createObjectURL(imageFile);
+      setPreviewUrls([preview]);
+    }
+
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [imageFile]);
+
+    // 초기 이미지
+  useEffect(() => {
+    if (!imageFile && initialFile) {
       setPreviewUrls([initialFile]);
     }
-  }, [imageFile, initialFile]);
-
+  }, [initialFile, imageFile]);
 
   return (
     <div>
@@ -46,12 +64,12 @@ export default function ImageUploader({
           id="images"
           type="file"
           accept="image/*"
+          {...register("file")}
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0] ?? null;
             if (!file) return;
             setValue("file", file);
-            setPreviewUrls([URL.createObjectURL(file)]);
           }}
         />
         {previewUrls.length > 0 && imageFile && (

@@ -14,8 +14,8 @@ import { LoginRequiredModal } from "./write/_components/PostModal";
 export default function PostListPage() {
   // 게시글 데이터 및 페이지네이션
   const { searchParams } = useAppSearchParams();
-  const { posts } = useFilteredPosts(searchParams);
   const [page, setPage] = useState(1);
+  const { posts, totalCount } = useFilteredPosts(searchParams, page);
   const [totalPages, setTotalPages] = useState(1);
 
   const router = useRouter();
@@ -25,10 +25,10 @@ export default function PostListPage() {
     const { openModal } = useModalStore();
 
   useEffect(() => {
-    const postsPerPage = 5;
-    const pageCount = Math.ceil(posts.length / postsPerPage);
+    const postsPerPage = 10;
+    const pageCount = Math.ceil(totalCount / postsPerPage);
     setTotalPages(pageCount);
-  }, [posts]);
+  }, [totalCount]);
 
   const handleClick = () => {
     if (!access) {

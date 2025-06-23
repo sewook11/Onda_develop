@@ -13,7 +13,7 @@ export type Post = {
   updated_at?: Date | null;
   nickname: string;
   is_mine: boolean;
-  //   likes: number;
+  like_count?: number;
   //   is_liked: boolean;
 };
 
@@ -42,11 +42,36 @@ export type PostContent = {
 
 // 댓글 타입
 export type Comment = {
-  post_id: number;
-  comment_id: number;
+  id: number;
+  post: number;
+  user: number;
   nickname: string;
   content: string;
+  parent?: number | null;
   created_at: Date;
   updated_at?: Date;
-  is_author: boolean;
+  is_mine: boolean;
+  replies?: Comment[]; // 대댓글
 };
+
+// 댓글 생성 페이로드 타입
+export type CommentCreatePayload = {
+  postId: number;
+  content: string;
+  parent?: number | null; // 대댓글인 경우 부모 댓글 ID
+};
+
+export type CommentUpdatePayload = {
+  id: number;
+  postId: number;
+  content: string;
+  parent?: number | null; // 대댓글인 경우 부모 댓글 ID
+};
+
+// 댓글 응답 타입
+export interface CommentsResponse {
+  count: number;
+  next: number | null;
+  previous: number | null;
+  results: Comment[];
+}
