@@ -1,13 +1,10 @@
-import Button from "@/components/common/Button";
-import MultiCategoryFileUpload from "./MultiCategoryFileUpload";
-import { LeaderApplication } from "@/types/user";
-import { sampleUser } from "@/datas/sampleUser";
+import { LeaderApplication } from "@/types/leader";
+import CategoryFileList from "./CategoryFileList";
 
 type LeaderDetailProps = {
     leader: LeaderApplication;
 }
 const LeaderDetail = ({leader} : LeaderDetailProps) => {
-    const user = sampleUser;
     return (
         <div className="space-y-10">
             <div className="space-y-4">
@@ -15,16 +12,8 @@ const LeaderDetail = ({leader} : LeaderDetailProps) => {
                 <div className="text-sm">{leader.bio}</div>
             </div>
             <div className="space-y-4">
-                <MultiCategoryFileUpload readonly
-                    initialItems={leader.certificate.map((item) => ({
-                    category: item.type,
-                    file: item.file as string,
-                }))}
-                />
+            <CategoryFileList items={leader.certificates} />
             </div>
-            {user.isAdmin?<Button height="h-16" className="w-full text-sm font-bold">저장하기</Button>
-                :<Button color="gray"  height="h-16" className="w-full text-sm font-bold">삭제하기</Button>
-            }
         </div>
     );
 }

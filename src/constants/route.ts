@@ -16,9 +16,12 @@ export const END_POINT = {
   FILES_UPLOAD: "/api/files/upload",
 
   // leaders: 리더 관련 api
-  LEADERS_APPLY: "/api/leaders/apply",
-  LEADERS_DETAIL: (id: number) => `/api/leaders/apply/${id}`, // 리더 신청 상세 조회
-  LEADERS_STATUS: (id: number) => `/api/leaders/apply/${id}/status`, // 리더 신청 승인/거절 처리
+  LEADERS_APPLY: "/api/leader-applies",
+  LEADERS_DETAIL: (id: number) => `/api/leader-applies/${id}`, // 리더 신청 상세
+  LEADERS_DETAIL_MINE: `/api/leader-applies/mine`, // 리더 신청 상세(본인기준)
+  LEADERS_STATUS: (id: number) => `/api/leader-applies/${id}/status`, // 리더 신청 승인/거절 처리
+  LEADERS_METTINGS: (leader_id: number) => `/api/meets/leaders/${leader_id}`, //리더 모임 목록 조회
+  LEADERS_DELETE: (id: number) => `/api/leader-applies/${id}/delete`, // 리더 신청 삭제
 
   // meetings : 모임 관련 api
   MEETINGS_SUMMARY: (meet_id: number) => `/api/meetings/${meet_id}/reviews/summary`, // 후기 요약 조회

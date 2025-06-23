@@ -81,10 +81,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
       const { access_token, csrf_token } = res.data;
 
       const decoded: DecodedToken = jwtDecode(access_token);
-      const isAdmin =
-        decoded.role === "admin" ||
-        decoded.role === "leader" ||
-        decoded.role === "user";
+      const isAdmin = decoded.role === "admin"
 
       set({
         login: true,

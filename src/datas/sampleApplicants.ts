@@ -1,4 +1,4 @@
-import { ApplicationStatus } from '@/types/user';
+import { ApplicationStatus } from '@/types/leader';
 
 export const sampleApplicants = [
   {

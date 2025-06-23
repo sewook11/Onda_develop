@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { getStatusLabel } from '@/constants/leaderStatusLabel';
-import { ApplicationStatus } from '@/types/user';
+import { ApplicationStatus } from '@/types/leader';
 import { ChevronDown, Check } from 'lucide-react';
 import clsx from 'clsx';
 

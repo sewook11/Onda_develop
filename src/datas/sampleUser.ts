@@ -1,4 +1,4 @@
-import { LeaderApplication, User } from "@/types/user";
+import { LeaderApplication, User } from "@/types/leader";
 
 export const sampleUser: User = {
     id: 'u123',

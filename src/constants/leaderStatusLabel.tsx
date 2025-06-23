@@ -1,4 +1,4 @@
-import { ApplicationStatus } from '@/types/user';
+import { ApplicationStatus } from '@/types/leader';
 import { BadgeCheck, Ban, Loader } from 'lucide-react';
 import { ReactNode } from 'react';
 
