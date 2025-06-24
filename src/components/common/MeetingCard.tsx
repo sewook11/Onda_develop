@@ -5,12 +5,18 @@ import DefaultGatheringImage from "../common/DefaultMeetingImage";
 import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
 import { MeetingCardProps } from "@/types/meetings";
 import MeeringStatusButtons from "../../app/_components/MeetingStatusButton";
+import api from "@/apis/app";
+import { useRouter, usePathname } from "next/navigation";
 
 export const MeetingCard = ({
   item,
   isApplied = false,
   context,
 }: MeetingCardProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const isMyPage = pathname?.startsWith("/mypage");
+
   const {
     title,
     interest,
@@ -20,6 +26,7 @@ export const MeetingCard = ({
     image,
     contact,
     status: rawStatus,
+    meet_id,
   } = item;
 
   const { label: interestLabel, icon: interestIcon } = INTEREST_CATEGORY_MAP[
@@ -31,8 +38,25 @@ export const MeetingCard = ({
   const status: "모집중" | "모집 마감" =
     rawStatus === "모집 마감" ? "모집 마감" : "모집중";
 
+  const handleApply = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      await api.post(`/meets/apply/${meet_id}`);
+      alert("모임 신청이 완료되었습니다!");
+      router.refresh();
+    } catch (error) {
+      console.error("모임 신청 실패:", error);
+      alert("모임 신청에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
   return (
-    <div className="min-w-[320px] max-w-[420px] rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
+    <div className="rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
       {/*  */}
       <div className="flex gap-4 text-sm text-orange-400 font-semibold items-center mb-4">
         {interestIcon}
@@ -57,7 +81,7 @@ export const MeetingCard = ({
         )}
       </div>
       {/* 모임 정보 */}
-      <div className="font-bold text-md mb-2">{title}</div>
+      <div className="font-bold text-sm mb-2">{title}</div>
       <div className="text-gray-600 text-xs flex items-center mb-1">
         <Calendar size={16} className="mr-1" />
         {date} (
@@ -86,7 +110,8 @@ export const MeetingCard = ({
       <MeeringStatusButtons
         status={status}
         mode={context === "past" ? "past" : "default"}
-        meet_id={item.meet_id}
+        meet_id={meet_id}
+        onClickApply={isMyPage ? undefined : handleApply}
       />
     </div>
   );

@@ -1,21 +1,16 @@
-'use client';
-
-import React from 'react';
-
 interface SelectBoxProps {
   value: string | number | undefined;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: { label: string; value: string | number }[];
+  children: React.ReactNode;
   className?: string;
   placeholder?: string;
   label?: string;
 }
-
-export default function SelectBox({
+export function MeetingSelectBox({
   label,
   value,
   onChange,
-  options,
+  children,
   className = '',
   placeholder = '선택하세요',
 }: SelectBoxProps) {
@@ -31,11 +26,7 @@ export default function SelectBox({
         <option value="" disabled hidden>
           {placeholder}
         </option>
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
+        {children}
       </select>
     </div>
   );
