@@ -51,7 +51,6 @@ export default function KakaoCallbackPage() {
         console.log("👀 profile data:", profile.data);
         const { area, interests, digital_level } = profile.data;
         const isNewUser = !area || !interests?.length || !digital_level;
-
         // redirect
         if (isNewUser) {
           // 회원가입 폼에 미리 email, nickname 채워놓기
@@ -61,7 +60,7 @@ export default function KakaoCallbackPage() {
             email: decoded.email,
             nickname: decoded.nickname,
           }));
-          router.push("/");
+          router.push("/signup?kakao=1");
         } else {
           useAuthStore.getState().setKakaoUserSignedUp(true);
           router.push("/");
