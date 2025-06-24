@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import MeetImageUploader from './MeetImageUploader';
 import { AreaOption } from '@/app/signup/page';
 import { getAreaOptions } from '@/apis/options';
-import { getDigitalLevelOptions, getCategoryOptions } from '@/apis/meetingApi';
+import { getCategoryOptions, getDigitalOptions } from '@/apis/options';
 import TextInput from '@/components/common/TextInput';
 import ToggleButtonGroup from '@/components/common/ToggleButtonGroup';
 import Textarea from '@/components/common/Textarea';
@@ -48,7 +48,7 @@ export default function MeetForm() {
       setAreaOptions(data);
       const categoryOptions = await getCategoryOptions();
       setCategoryOptions(categoryOptions.results);
-      const digitalLevelOptions = await getDigitalLevelOptions();
+      const digitalLevelOptions = await getDigitalOptions();
       setDigitalLevelOptions(digitalLevelOptions.results);
     };
     fetchOptions();

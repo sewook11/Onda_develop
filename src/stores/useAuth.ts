@@ -1,15 +1,16 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import api from "@/apis/app";
-import { END_POINT } from "@/constants/route";
-import { jwtDecode } from "jwt-decode";
-import type { StateCreator } from "zustand";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import api from '@/apis/app';
+import { END_POINT } from '@/constants/route';
+import { jwtDecode } from 'jwt-decode';
+import type { StateCreator } from 'zustand';
 
-interface DecodedToken {
+export interface DecodedToken {
   email: string;
   nickname: string;
   name: string;
-  role: "user" | "admin" | "leader";
+  role: 'user' | 'admin' | 'leader';
+  user_id: number;
 }
 
 interface User {
@@ -22,8 +23,9 @@ interface User {
   selectedDistrict?: string | null;
   interest_ids?: number | null;
   area_id?: number | null;
-  role: "user" | "admin" | "leader";
+  role: 'user' | 'admin' | 'leader';
   isAdmin: boolean;
+  user_id: number;
 }
 
 interface AuthState {
@@ -59,19 +61,18 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   accessToken: null,
   csrfToken: null,
   isAdmin: false,
-  email: "",
-  password: "",
+  email: '',
+  password: '',
   isKakaoUserSignedUp: false,
-  setKakaoUserSignedUp: (value: boolean) =>
-    set(() => ({ isKakaoUserSignedUp: value })),
+  setKakaoUserSignedUp: (value: boolean) => set(() => ({ isKakaoUserSignedUp: value })),
 
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
   setAccessToken: (token: string) => set({ accessToken: token }),
   setCsrfToken: (token: string) => {
     set({ csrfToken: token });
-    console.log("setCsrfToken 토큰 실행됨");
-    console.log("token :", token);
+    console.log('setCsrfToken 토큰 실행됨');
+    console.log('token :', token);
   },
   setUser: (user: User) => {
     set({
@@ -86,7 +87,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
       const { access_token, csrf_token } = res.data;
 
       const decoded: DecodedToken = jwtDecode(access_token);
-      const isAdmin = decoded.role === "admin"
+      const isAdmin = decoded.role === 'admin';
 
       set({
         login: true,
@@ -99,13 +100,14 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
           nickname: decoded.nickname,
           role: decoded.role,
           isAdmin,
+          user_id: decoded.user_id,
         },
       });
 
-      localStorage.setItem("accessToken", access_token);
+      localStorage.setItem('accessToken', access_token);
       return true;
     } catch (err) {
-      console.error("로그인 실패:", err);
+      console.error('로그인 실패:', err);
       return false;
     }
   },
@@ -118,14 +120,14 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
       csrfToken: null,
       isAdmin: false,
     });
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem('accessToken');
   },
 
-  reset: () => set({ email: "", password: "" }),
+  reset: () => set({ email: '', password: '' }),
 });
 
 export const useAuthStore = create<AuthStore>()(
   persist(authStoreCreator, {
-    name: "auth-storage",
+    name: 'auth-storage',
   })
 );

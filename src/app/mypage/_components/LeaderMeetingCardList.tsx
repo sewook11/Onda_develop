@@ -1,32 +1,14 @@
-import Pagination from "@/components/Pagination";
-import LeaderMeetingCard, { LeaderMeetingCardProps } from "./LeaderMeetingCard";
-import { useState } from "react";
-import Button from "@/components/common/Button";
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import LeaderMeetingCard from './LeaderMeetingCard';
+import { useState } from 'react';
+import Button from '@/components/common/Button';
+import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { LeaderMeeting } from '@/types/meetings';
 
-type LeaderMeetingListProps = {
-  meetings: LeaderMeetingCardProps[];
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
-  perPage?: number;
-  showPagination?: boolean;
-};
-
-const LeaderMeetingList = ({
-  meetings,
-  currentPage = 1,
-  onPageChange,
-  perPage = 10,
-  showPagination = false,
-}: LeaderMeetingListProps) => {
+const LeaderMeetingList = ({ meetings }: { meetings: LeaderMeeting[] }) => {
   const router = useRouter();
-  const totalPages = Math.ceil(meetings.length / perPage);
-  const paginated = showPagination
-    ? meetings.slice((currentPage - 1) * perPage, currentPage * perPage)
-    : meetings.slice(0, 3); // 요약용 기본 3개
 
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState('');
 
   return (
     <div className="space-y-6 mb-5">
@@ -42,15 +24,12 @@ const LeaderMeetingList = ({
             <option value="모집중">모집중</option>
             <option value="완료">완료</option>
           </select>
-          <button
-            onClick={() => console.log("조회 클릭")}
-            className="w-16 h-10 text-xs p-0 rounded-md bg-primary"
-          >
+          <button onClick={() => console.log('조회 클릭')} className="w-16 h-10 text-xs p-0 rounded-md bg-primary">
             조회
           </button>
         </div>
         <Button
-          onClick={() => router.push("/meet/create")}
+          onClick={() => router.push('/meet/create')}
           className="text-white flex text-xs gap-1 font-semibold"
           color="accent"
           width="w-auto"
@@ -61,19 +40,8 @@ const LeaderMeetingList = ({
         </Button>
       </div>
       <div className="space-y-4">
-        {paginated.map((meeting, idx) => (
-          <LeaderMeetingCard key={idx} {...meeting} />
-        ))}
+        {meetings?.map((meeting: LeaderMeeting, idx: number) => <LeaderMeetingCard key={idx} meeting={meeting} />)}
       </div>
-
-      {/* 페이지네이션 */}
-      {showPagination && onPageChange && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
-      )}
     </div>
   );
 };
