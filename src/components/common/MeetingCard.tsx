@@ -72,6 +72,7 @@ export const MeetingCard = ({
       <div className="text-gray-600 text-xs flex items-center mb-1">
         <MapPin size={16} className="mr-1" />
         {area}
+        {area}
       </div>
       {isApplied && contact && (
         <div className="text-gray-600 text-xs flex items-center mb-1 break-all">
