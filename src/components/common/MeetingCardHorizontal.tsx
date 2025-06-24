@@ -18,7 +18,7 @@ export default function MeetingCardHorizontal({
     interest,
     date,
     time,
-    location,
+    area,
     image,
     contact,
     status: rawStatus,
@@ -77,7 +77,7 @@ export default function MeetingCardHorizontal({
 
             <div className="text-gray-600 text-xs flex items-center">
               <MapPin size={16} className="mr-1" />
-              {location}
+              {area}
             </div>
 
             {isApplied && contact && (

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface MeeringStatusButtonsProps {
-  status: "모집중" | "모집 마감";
+  status: string;
   onClickApply?: () => void;
   mode?: "default" | "past";
   meet_id?: number;

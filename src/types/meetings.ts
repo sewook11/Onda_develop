@@ -1,17 +1,20 @@
+import { FileData } from "./file";
+
 export interface MeetingCardProps {
   item: {
     meet_id: number;
     title: string;
-    interest: number;
+    interest?: number;
     date: string;
     time: string;
-    location: string;
+    area: string;
     image?: string;
+    file?: FileData;
     status: string;
     contact?: string;
   };
   isApplied?: boolean; // 신청한 모임인지 여부
-  context?: 'applied' | 'past';
+  context?: "applied" | "past";
 }
 
 export type Review = {
@@ -127,3 +130,23 @@ export type MeetDetail = {
   status: string;
   title: string;
 };
+
+export interface Meeting {
+  meet_id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  area: string;
+  digitalLevel: number;
+  interest: number;
+  date: string;
+  time: string;
+  contact?: string;
+  max_people: number;
+  current_people: number;
+  status: string;
+  file?: FileData;
+  application_deadline: string;
+  updated_at: string;
+  created_at: string;
+}
