@@ -26,20 +26,11 @@ interface InterestApiResponse {
 }
 
 export default function SignupPage() {
-  const { handleSubmit, setSignupData, signupData } = useSignupSubmit();
+  const { handleSubmit, setSignupData, signupData, areaInfo, setAreaInfo } = useSignupSubmit();
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
   const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
     results: [],
   });
-  const [areaInfo, setAreaInfo] = useState({
-    area_id: -1,
-    selectedSido: '',
-    selectedDistrict: '',
-  });
-
-  useEffect(() => {
-    console.log('areaInfo', areaInfo);
-  }, [areaInfo]);
 
   const { email, password, password_confirm, nickname, name, phone, birthYear, birthMonth, birthDay, agreement } =
     signupData;

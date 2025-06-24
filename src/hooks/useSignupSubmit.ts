@@ -43,6 +43,11 @@ export function useSignupSubmit() {
     isKakaoUserSignedUp: false,
   };
   const [signupData, setSignupData] = useState<SignupState>(initialSignupData);
+  const [areaInfo, setAreaInfo] = useState({
+    area_id: -1,
+    selectedSido: '',
+    selectedDistrict: '',
+  });
   const {
     email,
     password,
@@ -227,5 +232,7 @@ export function useSignupSubmit() {
     setSignupData,
     signupData,
     resetForm,
+    areaInfo,
+    setAreaInfo,
   };
 }
