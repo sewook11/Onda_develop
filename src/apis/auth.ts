@@ -28,16 +28,12 @@ export async function refreshAccessToken() {
   console.log("📦 기존 csrfToken:", csrfToken);
 
   try {
-    const response = await axios.post(
-      `${BASE_URL}/api/users/token/refresh`,
-      null,
-      {
-        headers: {
-          "X-CSRFToken": csrfToken || "", // 없으면 빈 문자열
-        },
-        withCredentials: true, // HttpOnly 쿠키 포함
-      }
-    );
+    const response = await axios.post(`${BASE_URL}/users/token/refresh`, null, {
+      headers: {
+        "X-CSRFToken": csrfToken || "", // 없으면 빈 문자열
+      },
+      withCredentials: true, // HttpOnly 쿠키 포함
+    });
 
     const { access_token, csrf_token: newCsrfToken } = response.data;
 
