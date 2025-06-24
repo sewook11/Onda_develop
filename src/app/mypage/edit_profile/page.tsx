@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import AreaSelector from "@/components/common/AreaSelector";
-import InterestSelector from "@/app/signup/_components/InterestSelector";
-import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector";
-import BirthDateInput from "@/app/signup/_components/BirthDateInput";
-import LabeledInput from "@/app/signup/_components/LabeledInput";
-import { useAuthStore } from "@/stores/useAuth";
-import api from "@/apis/app";
-import { END_POINT } from "@/constants/route";
-import { AreaOption } from "@/app/signup/page";
-import { getAreaOptions, getInterestOptions } from "@/apis/options";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import AreaSelector from '@/components/common/AreaSelector';
+import InterestSelector from '@/app/signup/_components/InterestSelector';
+import DigitalLevelSelector from '@/app/signup/_components/DigitalLevelSelector';
+import BirthDateInput from '@/app/signup/_components/BirthDateInput';
+import LabeledInput from '@/app/signup/_components/LabeledInput';
+import { useAuthStore } from '@/stores/useAuth';
+import api from '@/apis/app';
+import { END_POINT } from '@/constants/route';
+import { AreaOption } from '@/app/signup/page';
+import { getAreaOptions, getInterestOptions } from '@/apis/options';
+import { useRouter } from 'next/navigation';
 type AreaInfoType = {
   area_id: number;
   selectedSido: string;
@@ -22,38 +22,36 @@ export default function EditProfilePage() {
   const router = useRouter();
   const accessToken = useAuthStore((state) => state.accessToken);
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
-  const [interestOptions, setInterestOptions] = useState<
-    { id: number; interest_name: string }[]
-  >([]);
+  const [interestOptions, setInterestOptions] = useState<{ id: number; interest_name: string }[]>([]);
   const [areaInfo, setAreaInfo] = useState({
     area_id: -1,
-    selectedSido: "",
-    selectedDistrict: "",
+    selectedSido: '',
+    selectedDistrict: '',
   });
 
   const [form, setForm] = useState({
-    name: "",
-    nickname: "",
-    email: "",
-    phone: "",
-    birthYear: "",
-    birthMonth: "",
-    birthDay: "",
+    name: '',
+    nickname: '',
+    email: '',
+    phone: '',
+    birthYear: '',
+    birthMonth: '',
+    birthDay: '',
     area_id: -1,
-    selectedSido: "",
-    selectedDistrict: "",
+    selectedSido: '',
+    selectedDistrict: '',
     interests: [] as number[],
     digital_level: null as number | null,
   });
 
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
 
   useEffect(() => {
     if (!accessToken) {
-      router.replace("/login");
+      router.replace('/login');
     }
   }, [accessToken, router]);
 
@@ -61,12 +59,12 @@ export default function EditProfilePage() {
     e.preventDefault();
     if (showPasswordFields) {
       if (!currentPassword || !newPassword || !newPasswordConfirm) {
-        alert("비밀번호 항목을 모두 입력해주세요.");
+        alert('비밀번호 항목을 모두 입력해주세요.');
         return;
       }
 
       if (newPassword !== newPasswordConfirm) {
-        alert("새 비밀번호가 일치하지 않습니다.");
+        alert('새 비밀번호가 일치하지 않습니다.');
         return;
       }
     }
@@ -77,7 +75,7 @@ export default function EditProfilePage() {
         {
           name: form.name.trim(),
           nickname: form.nickname.trim(),
-          phone_number: form.phone.replace(/-/g, ""),
+          phone_number: form.phone.replace(/-/g, ''),
           date_of_birth: `${form.birthYear}-${form.birthMonth}-${form.birthDay}`,
           area_id: form.area_id,
           interests: form.interests,
@@ -95,11 +93,11 @@ export default function EditProfilePage() {
         }
       );
 
-      alert("회원정보가 성공적으로 수정되었습니다.");
-      router.replace("/mypage");
+      alert('회원정보가 성공적으로 수정되었습니다.');
+      router.replace('/mypage');
     } catch (error) {
-      console.error("회원정보 수정 실패:", error);
-      alert("회원정보 수정에 실패했습니다.");
+      console.error('회원정보 수정 실패:', error);
+      alert('회원정보 수정에 실패했습니다.');
     }
   };
   useEffect(() => {
@@ -109,7 +107,7 @@ export default function EditProfilePage() {
       });
       const profile = res.data;
 
-      const [y, m, d] = profile.date_of_birth.split("-");
+      const [y, m, d] = profile.date_of_birth.split('-');
       setForm((prev) => ({
         ...prev,
         name: profile.name,
@@ -120,15 +118,15 @@ export default function EditProfilePage() {
         birthMonth: m,
         birthDay: d,
         area: profile.area.id,
-        selectedSido: profile.area.full_path.split(" ")[0],
-        selectedDistrict: profile.area.full_path.split(" ")[1],
+        selectedSido: profile.area.full_path.split(' ')[0],
+        selectedDistrict: profile.area.full_path.split(' ')[1],
         digital_level: profile.digital_level?.id ?? null,
         interests: profile.interests.map((i: { id: number }) => i.id),
       }));
       setAreaInfo({
         area_id: profile.area.id,
-        selectedSido: profile.area.full_path.split(" ")[0],
-        selectedDistrict: profile.area.full_path.split(" ")[1],
+        selectedSido: profile.area.full_path.split(' ')[0],
+        selectedDistrict: profile.area.full_path.split(' ')[1],
       });
     };
 
@@ -143,14 +141,9 @@ export default function EditProfilePage() {
     fetchOptions();
   }, [accessToken]);
 
-  const handleAreaInfoChange: React.Dispatch<
-    React.SetStateAction<AreaInfoType>
-  > = (infoOrUpdater) => {
+  const handleAreaInfoChange: React.Dispatch<React.SetStateAction<AreaInfoType>> = (infoOrUpdater) => {
     // infoOrUpdater는 객체일 수도, 함수일 수도 있음
-    const newInfo =
-      typeof infoOrUpdater === "function"
-        ? infoOrUpdater(areaInfo)
-        : infoOrUpdater;
+    const newInfo = typeof infoOrUpdater === 'function' ? infoOrUpdater(areaInfo) : infoOrUpdater;
 
     setAreaInfo(newInfo);
     setForm((prev) => ({
@@ -164,10 +157,7 @@ export default function EditProfilePage() {
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원정보 수정</h1>
-      <form
-        className="space-y-6 w-full max-w-md mx-auto"
-        onSubmit={handleSubmit}
-      >
+      <form className="space-y-6 w-full max-w-md mx-auto" onSubmit={handleSubmit}>
         <LabeledInput
           label="이름"
           name="name"
@@ -182,14 +172,7 @@ export default function EditProfilePage() {
           onChange={(e) => setForm((p) => ({ ...p, nickname: e.target.value }))}
           required
         />
-        <LabeledInput
-          label="이메일"
-          name="email"
-          value={form.email}
-          onChange={() => {}}
-          readOnly
-          required
-        />
+        <LabeledInput label="이메일" name="email" value={form.email} onChange={() => {}} readOnly required />
         <div className="mt-4 text-left">
           <button
             type="button"
@@ -239,11 +222,7 @@ export default function EditProfilePage() {
           birthYear={form.birthYear}
           birthMonth={form.birthMonth}
           birthDay={form.birthDay}
-          setSignupData={(updated: {
-            birthYear: string;
-            birthMonth: string;
-            birthDay: string;
-          }) => {
+          setSignupData={(updated: { birthYear: string; birthMonth: string; birthDay: string }) => {
             setForm((prev) => ({
               ...prev,
               birthYear: updated.birthYear,
@@ -252,34 +231,16 @@ export default function EditProfilePage() {
             }));
           }}
         />
-        <AreaSelector
-          areaOptions={areaOptions}
-          areaInfo={areaInfo}
-          setAreaInfo={handleAreaInfoChange}
-          onSelect={(sido, district, areaId) => {
-            if (areaId) {
-              setForm((prev) => ({
-                ...prev,
-                area_id: areaId,
-                selectedSido: sido,
-                selectedDistrict: district,
-              }));
-            }
-          }}
-        />
+        <AreaSelector areaOptions={areaOptions} areaInfo={areaInfo} setAreaInfo={handleAreaInfoChange} />
 
         <InterestSelector
           interests={interestOptions}
           interest_ids={form.interests}
-          setInterestIds={(ids) =>
-            setForm((prev) => ({ ...prev, interests: ids }))
-          }
+          setInterestIds={(ids) => setForm((prev) => ({ ...prev, interests: ids }))}
         />
         <DigitalLevelSelector
           value={form.digital_level}
-          onChange={(val) =>
-            setForm((prev) => ({ ...prev, digital_level: val }))
-          }
+          onChange={(val) => setForm((prev) => ({ ...prev, digital_level: val }))}
         />
         <button
           type="submit"
@@ -290,7 +251,7 @@ export default function EditProfilePage() {
         <div className="flex gap-4 mt-4">
           <button
             type="button"
-            onClick={() => router.replace("/mypage")}
+            onClick={() => router.replace('/mypage')}
             className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded"
           >
             수정 취소

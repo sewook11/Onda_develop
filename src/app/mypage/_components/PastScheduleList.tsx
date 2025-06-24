@@ -9,7 +9,7 @@ import ReviewWriteModal from '@/app/meet/review/_components/ReviewWriteModal';
 
 export default function PastScheduleList() {
   const [isMobile, setIsMobile] = useState(false);
-  const { modals, modalData, closeModal } = useModalStore();
+  const { modals, closeModal } = useModalStore();
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,18 +29,17 @@ export default function PastScheduleList() {
             <MeetingCard key={meeting.meet_id} item={meeting} context="past" />
           )
         )}
+        {modals['reviewWrite'] && (
+          <ReviewWriteModal
+            modalKey="reviewWrite"
+            onClose={() => closeModal('reviewWrite')}
+            onSubmit={(rating, content) => {
+              console.log('후기 제출', rating, content);
+            }}
+            meetId={2}
+          />
+        )}
       </div>
-      
-      {modals["reviewWrite"] && modalData["reviewWrite"] && (
-  <ReviewWriteModal
-    modalKey="reviewWrite"
-    meetId={(modalData["reviewWrite"] as any).meet_id}
-    onClose={() => closeModal("reviewWrite")}
-    onSubmit={(rating, content) => {
-      console.log("후기 제출됨:", rating, content);
-    }}
-  />
-)}
     </section>
   );
 }
