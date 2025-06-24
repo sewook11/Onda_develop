@@ -35,7 +35,6 @@ export default function MeetDetailPage({ params }: { params: { meet_id: string }
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1 bg-gray-100 h-[300px] rounded-xl flex items-center justify-center text-sm text-gray-400">
           <Image src={meetDetail.file.file} alt={meetDetail.title} width={300} height={300} />
-          <div className="text-sm text-gray-500">{meetDetail.file.file_type}</div>
         </div>
 
         <div className="flex-1 flex flex-col gap-4">
