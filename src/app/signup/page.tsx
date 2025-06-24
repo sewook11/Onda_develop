@@ -36,36 +36,25 @@ export default function SignupPage() {
     selectedSido: '',
     selectedDistrict: '',
   });
-  // const [email, setEmail] = useState();
 
-  const {
-    email,
-    password,
-    password_confirm,
-    nickname,
-    name,
-    phone,
-    birthYear,
-    birthMonth,
-    birthDay,
-    agreement,
-    // toggleAgreement,
-  } = signupData;
+  useEffect(() => {
+    console.log('areaInfo', areaInfo);
+  }, [areaInfo]);
+
+  const { email, password, password_confirm, nickname, name, phone, birthYear, birthMonth, birthDay, agreement } =
+    signupData;
 
   useEffect(() => {
     const fetchAreaOptions = async () => {
       const data = await getAreaOptions();
       setAreaOptions(data);
     };
-    fetchAreaOptions();
-  }, []);
-
-  useEffect(() => {
     const fetchInterestOptions = async () => {
       const data = await getInterestOptions();
       setInterestOptions(data);
     };
     fetchInterestOptions();
+    fetchAreaOptions();
   }, []);
 
   const searchParams = useSearchParams();
@@ -87,7 +76,14 @@ export default function SignupPage() {
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원가입</h1>
       <div className="w-full flex justify-center mt-20">
-        <form id="signupForm" onSubmit={handleSubmit} className="space-y-6 w-full max-w-md">
+        <form
+          id="signupForm"
+          onSubmit={(e) => {
+            console.log('areainfo', areaInfo);
+            handleSubmit(e, areaInfo.area_id);
+          }}
+          className="space-y-6 w-full max-w-md"
+        >
           <LabeledInput
             label="이름"
             name="name"
@@ -218,7 +214,7 @@ export default function SignupPage() {
                 id="agreement"
               />
               <label htmlFor="agreement" className="leading-snug break-words text-gray-700">
-                [필수] ‘개인정보 수집 및 이용’, ‘서비스 이용 약관’ 등에 모두 동의합니다.
+                [필수] &apos;개인정보 수집 및 이용&apos;, &apos;서비스 이용 약관&apos; 등에 모두 동의합니다.
               </label>
             </div>
 

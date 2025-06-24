@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { MeetingCard } from "@/components/common/MeetingCard";
-import { dummyMeetings } from "@/datas/meetings";
-import MeetingCardHorizontal from "@/components/common/MeetingCardHorizontal";
-import { useModalStore } from "@/stores/useModalStore";
-import ReviewWriteModal from "@/app/meet/review/_components/ReviewWriteModal";
-import { useRouter } from "next/navigation";
-import api from "@/apis/app";
-import { Meeting } from "@/types/meetings";
+import React, { useState, useEffect } from 'react';
+import { MeetingCard } from '@/components/common/MeetingCard';
+import { useModalStore } from '@/stores/useModalStore';
+import ReviewWriteModal from '@/app/meet/review/_components/ReviewWriteModal';
+import { useRouter } from 'next/navigation';
+import api from '@/apis/app';
+import { Meeting } from '@/types/meetings';
 
 export default function PastScheduleList() {
-  const [isMobile, setIsMobile] = useState(false);
   const [pastScheduleList, setPastScheduleList] = useState<Meeting[]>([]);
   const { modals, closeModal } = useModalStore();
   const router = useRouter();
@@ -19,9 +16,9 @@ export default function PastScheduleList() {
   useEffect(() => {
     const fetchAppliedMeetings = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem('accessToken');
         if (!token) {
-          router.push("/login");
+          router.push('/login');
           return;
         }
         const response = await api.get(`/meets?status=false`);
@@ -29,8 +26,8 @@ export default function PastScheduleList() {
         console.log(pastScheduleList);
         router.refresh();
       } catch (error) {
-        console.error("지난 모임 조회 실패:", error);
-        alert("지난 모임 조회에 실패했습니다. 다시 시도해주세요.");
+        console.error('지난 모임 조회 실패:', error);
+        alert('지난 모임 조회에 실패했습니다. 다시 시도해주세요.');
       }
     };
     fetchAppliedMeetings();
@@ -60,12 +57,12 @@ export default function PastScheduleList() {
           )
           // )
         )}
-        {modals["reviewWrite"] && (
+        {modals['reviewWrite'] && (
           <ReviewWriteModal
             modalKey="reviewWrite"
-            onClose={() => closeModal("reviewWrite")}
+            onClose={() => closeModal('reviewWrite')}
             onSubmit={(rating, content) => {
-              console.log("후기 제출", rating, content);
+              console.log('후기 제출', rating, content);
             }}
             meetId={2}
           />
