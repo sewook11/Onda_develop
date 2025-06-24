@@ -46,6 +46,11 @@ export default function EditProfilePage() {
     digital_level: null as number | null,
   });
 
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+
   useEffect(() => {
     if (!accessToken) {
       router.replace("/login");
@@ -54,6 +59,17 @@ export default function EditProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (showPasswordFields) {
+      if (!currentPassword || !newPassword || !newPasswordConfirm) {
+        alert("비밀번호 항목을 모두 입력해주세요.");
+        return;
+      }
+
+      if (newPassword !== newPasswordConfirm) {
+        alert("새 비밀번호가 일치하지 않습니다.");
+        return;
+      }
+    }
 
     try {
       await api.patch(
@@ -66,6 +82,11 @@ export default function EditProfilePage() {
           area_id: form.area_id,
           interests: form.interests,
           digital_level: form.digital_level,
+          ...(showPasswordFields && {
+            current_password: currentPassword,
+            new_password: newPassword,
+            new_password_confirm: newPasswordConfirm,
+          }),
         },
         {
           headers: {
@@ -169,6 +190,44 @@ export default function EditProfilePage() {
           readOnly
           required
         />
+        <div className="mt-4 text-left">
+          <button
+            type="button"
+            onClick={() => setShowPasswordFields((prev) => !prev)}
+            className="text-base text-orange-500 underline"
+          >
+            비밀번호 변경
+          </button>
+        </div>
+        {showPasswordFields && (
+          <div className="space-y-4">
+            <LabeledInput
+              label="현재 비밀번호"
+              name="currentPassword"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              type="password"
+              required
+            />
+            <LabeledInput
+              label="새 비밀번호"
+              name="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              type="password"
+              required
+            />
+            <LabeledInput
+              label="새 비밀번호 확인"
+              name="newPasswordConfirm"
+              value={newPasswordConfirm}
+              onChange={(e) => setNewPasswordConfirm(e.target.value)}
+              type="password"
+              required
+            />
+          </div>
+        )}
+
         <LabeledInput
           label="전화번호"
           name="phone"
