@@ -1,22 +1,19 @@
-'use client';
-import AppliedScheduleList from './_components/AppliedScheduleList';
-import PastScheduleList from './_components/PastScheduleList';
-import { useAuthStore } from '@/stores/useAuth';
-import { useRouter } from 'next/navigation';
-import UserProfile from './_components/UserProfile';
-import ReviewList from './_components/ReviewList';
-import { sampleReviews } from '@/datas/sampleReivew';
-import MoreLinkButton from '@/components/common/Buttons/MoreLinkButton';
-import LeaderMeetingList from './_components/LeaderMeetingCardList';
-import ApplicantTable from '../leader/_components/ApplicantTable';
-import { useViewModeStore } from '@/stores/useViewModeStore';
-import { useEffect, useState } from 'react';
-import { END_POINT } from '@/constants/route';
-import api from '@/apis/app';
-import { LeaderMeeting } from '@/types/meetings';
+"use client";
+import AppliedScheduleList from "./_components/AppliedScheduleList";
+import PastScheduleList from "./_components/PastScheduleList";
+import { useAuthStore } from "@/stores/useAuth";
+import { useRouter } from "next/navigation";
+import UserProfile from "./_components/UserProfile";
+import ReviewList from "./_components/ReviewList";
+import MoreLinkButton from "@/components/common/Buttons/MoreLinkButton";
+import ApplicantTable from "../leader/_components/ApplicantTable";
+import { useViewModeStore } from "@/stores/useViewModeStore";
+import { useLeaderMeetingsById, useLeaderMeetingsReviews } from "@/hooks/useLeader";
+import LeaderMeetingCardList from "./_components/LeaderMeetingCardList";
+
 
 export default function Mypage() {
-  const { user } = useAuthStore();
+  const { user, profile } = useAuthStore();
   const { viewMode } = useViewModeStore();
   const [leaderMeetings, setLeaderMeetings] = useState<LeaderMeeting[]>([]);
   const router = useRouter();
@@ -34,6 +31,11 @@ export default function Mypage() {
 
   const displayNickname = user?.nickname;
 
+  const { data: meetingData } = useLeaderMeetingsById({id: profile?.id, page: 1, size: 3});
+  //const meetingIds: number[] = meetingData?.data?.map((m) => m.id) ?? [];
+  //const { data: allReviews } = useReviewsByMeetingIds(meetingIds);
+  const { data: reviewData } = useLeaderMeetingsReviews({ page: 1, size: 3 });
+
   const handleBtn = () => {
     router.push('/meet/search');
   };
@@ -50,12 +52,13 @@ export default function Mypage() {
           {viewMode === 'leader' && (
             <>
               <div>
-                <LeaderMeetingList meetings={leaderMeetings} />
-                <MoreLinkButton href="/mypage/reviews">전체 보기</MoreLinkButton>
+                <LeaderMeetingCardList meetings={meetingData?.data || []} />
+                <MoreLinkButton href="/mypage/mymeet">전체 보기</MoreLinkButton>
+
               </div>
               <div>
-                <ReviewList reviews={sampleReviews} />
-                <MoreLinkButton href="/mypage/reviews">전체 보기</MoreLinkButton>
+                <ReviewList reviews={reviewData?.data ?? []} />
+                <MoreLinkButton href="/mypage/mymeet/reviews">전체 보기</MoreLinkButton>
               </div>
             </>
           )}
