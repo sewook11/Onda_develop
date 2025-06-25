@@ -69,8 +69,33 @@ export function useDeleteLeader() {
 
 //나의 리더 신청 상세 조회
 export function useMyLeaderApplication() {
-  return useQuery<LeaderApplicationDetail>({
-    queryKey: ['myLeader'],
-    queryFn: getMyLeaderApplication,
+    return useQuery<LeaderApplicationDetail>({
+      queryKey: ['myLeader'],
+      queryFn: getMyLeaderApplication,
+    });
+}
+
+// 리더기준 나의 모임 조회
+export function useLeaderMeetingsById(
+  { id, size = 10, page = 1 }: { id?: number; size?: number; page?: number },
+  enabled: boolean = true
+) {
+  return useQuery({
+    queryKey: ['leaderMeetings', id, page, size],
+    queryFn: () => getLeaderMeetingById(id!, size, page),
+    enabled: enabled && typeof id === 'number',
+  });
+}
+
+
+// 리더기준 나의 모임 리뷰 조회
+export function useLeaderMeetingsReviews(
+  { page = 1, size = 10 }: { page?: number; size?: number },
+  enabled: boolean = true
+) {
+  return useQuery({
+    queryKey: ['leaderReviews', page, size],
+    queryFn: () => getReviewsLeaderMeeting(page, size),
+    enabled: enabled && !!page && !!size,
   });
 }
