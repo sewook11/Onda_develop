@@ -57,7 +57,7 @@ export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps)
         value={filters.area}
         onChange={(e) => handleChange('area', e.target.value)}
         placeholder="지역"
-        options={areaOptions.map((area) => ({
+        options={areaOptions?.map((area) => ({
           label: area.area_name,
           value: String(area.id),
         }))}

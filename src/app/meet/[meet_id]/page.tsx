@@ -6,17 +6,27 @@ import { MeetDetail } from '@/types/meetings';
 import Image from 'next/image';
 //import { Calendar, MapPin } from "lucide-react";
 
-export default function MeetDetailPage({ params }: { params: { id: string } }) {
-  const meetId = params.id;
-
+export default function MeetDetailPage({ params }: { params: Promise<{ meet_id: string }> }) {
+  const [meetId, setMeetId] = useState<string>('');
   const [meetDetail, setMeetDetail] = useState<MeetDetail | null>(null);
 
+  // params를 비동기로 해결
   useEffect(() => {
-    async function fetchMeetDetail() {
-      const response = await getMeetDetail(Number(meetId));
-      setMeetDetail(response);
+    params.then((resolvedParams) => {
+      setMeetId(resolvedParams.meet_id);
+    });
+  }, [params]);
+
+  // meetId가 설정된 후 데이터 가져오기
+  useEffect(() => {
+    if (meetId) {
+      async function fetchMeetDetail() {
+        const response = await getMeetDetail(Number(meetId));
+        console.log(response)
+        setMeetDetail(response);
+      }
+      fetchMeetDetail();
     }
-    fetchMeetDetail();
   }, [meetId]);
 
   if (!meetDetail) return <div className="text-center py-20">로딩 중...</div>;
@@ -34,7 +44,7 @@ export default function MeetDetailPage({ params }: { params: { id: string } }) {
       {/* 이미지 + 리더정보 */}
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1 bg-gray-100 h-[300px] rounded-xl flex items-center justify-center text-sm text-gray-400">
-          <Image src={meetDetail.file.file} alt={meetDetail.title} width={300} height={300} />
+          <Image src={meetDetail.file?.file} alt={meetDetail.title} width={300} height={300} />
         </div>
 
         <div className="flex-1 flex flex-col gap-4">
