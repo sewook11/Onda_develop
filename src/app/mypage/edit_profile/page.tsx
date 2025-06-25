@@ -12,6 +12,9 @@ import { END_POINT } from "@/constants/route";
 import { AreaOption } from "@/app/signup/page";
 import { getAreaOptions, getInterestOptions } from "@/apis/options";
 import { useRouter } from "next/navigation";
+import FinalConfirmModal from "./_components/FinalConfirmModal";
+import ConfirmModal from "./_components/ConfirmModal";
+
 type AreaInfoType = {
   area_id: number;
   selectedSido: string;
@@ -50,7 +53,11 @@ export default function EditProfilePage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
-
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showFinalConfirmModal, setShowFinalConfirmModal] = useState(false);
+  const [withdrawPassword, setWithdrawPassword] = useState("");
+  const isKakaoUser = useAuthStore((state) => state.isKakaoUserSignedUp);
+  console.log("isKakaoUser", isKakaoUser);
   useEffect(() => {
     if (!accessToken) {
       router.replace("/login");
@@ -103,6 +110,44 @@ export default function EditProfilePage() {
       alert("회원정보 수정에 실패했습니다.");
     }
   };
+
+  // 회원 탈퇴 처리 함수
+  const handleWithdraw = async () => {
+    try {
+      await api.delete(END_POINT.USERS_PROFILE, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      alert("회원 탈퇴가 완료되었습니다.");
+      useAuthStore.getState().clear();
+      router.replace("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCheckPassword = async () => {
+    try {
+      await api.post(
+        END_POINT.USERS_PASSWORD,
+        {
+          password: withdrawPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setShowPasswordModal(false); // 비밀번호 확인 모달 닫기
+      setShowFinalConfirmModal(true); // 최종 확인 모달 열기
+    } catch (err) {
+      console.error(err);
+      alert("비밀번호가 일치하지 않습니다. 다시 시도해주세요.");
+    }
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await api.get(END_POINT.USERS_PROFILE, {
@@ -191,15 +236,17 @@ export default function EditProfilePage() {
           readOnly
           required
         />
-        <div className="mt-4 text-left">
-          <button
-            type="button"
-            onClick={() => setShowPasswordFields((prev) => !prev)}
-            className="text-base text-orange-500 underline"
-          >
-            비밀번호 변경
-          </button>
-        </div>
+        {!isKakaoUser && (
+          <div className="mt-4 text-left">
+            <button
+              type="button"
+              onClick={() => setShowPasswordFields((prev) => !prev)}
+              className="text-base text-orange-500 underline"
+            >
+              비밀번호 변경
+            </button>
+          </div>
+        )}
         {showPasswordFields && (
           <div className="space-y-4">
             <LabeledInput
@@ -272,22 +319,47 @@ export default function EditProfilePage() {
             setForm((prev) => ({ ...prev, digital_level: val }))
           }
         />
-        <button
-          type="submit"
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded mt-10"
-        >
-          수정 완료
-        </button>
         <div className="flex gap-4 mt-4">
+          <button
+            type="submit"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded mt-10"
+          >
+            수정 완료
+          </button>
           <button
             type="button"
             onClick={() => router.replace("/mypage")}
-            className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded"
+            className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded mt-10"
           >
             수정 취소
           </button>
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            if (isKakaoUser) {
+              setShowFinalConfirmModal(true);
+            } else {
+              setShowPasswordModal(true);
+            }
+          }}
+          className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3"
+        >
+          회원 탈퇴
+        </button>
       </form>
+      <ConfirmModal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        onConfirm={handleCheckPassword}
+        password={withdrawPassword}
+        setPassword={setWithdrawPassword}
+      />
+      <FinalConfirmModal
+        isOpen={showFinalConfirmModal}
+        onClose={() => setShowFinalConfirmModal(false)}
+        onWithdraw={handleWithdraw}
+      />
     </main>
   );
 }

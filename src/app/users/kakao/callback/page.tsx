@@ -71,7 +71,8 @@ function KakaoCallbackContent() {
         router.push('/login'); // 실패할 경우 로그인 페이지로
       }
     })();
-  }, [auth, code, router, setSignupData, state]);
+  }, [code, state, router, auth, setSignupData]);
+
 
   return (
     <div className="flex justify-center items-center h-screen">

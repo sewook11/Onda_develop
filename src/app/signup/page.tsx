@@ -1,14 +1,15 @@
-'use client';
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import AreaSelector from '@/components/common/AreaSelector';
-import InterestSelector from '@/app/signup/_components/InterestSelector';
-import DigitalLevelSelector from '@/app/signup/_components/DigitalLevelSelector';
-import { useSignupSubmit } from '@/hooks/useSignupSubmit';
-import LabeledInput from '@/app/signup/_components/LabeledInput';
-import BirthDateInput from '@/app/signup/_components/BirthDateInput';
-import { getAreaOptions, getInterestOptions } from '@/apis/options';
-import { useAuthStore } from '@/stores/useAuth';
+"use client";
+// import { useSignupStore } from '@/stores/useSignUpStore';
+import AreaSelector from "@/components/common/AreaSelector";
+import InterestSelector from "@/app/signup/_components/InterestSelector";
+import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector";
+import { useSignupSubmit } from "@/hooks/useSignupSubmit";
+import LabeledInput from "@/app/signup/_components/LabeledInput";
+import BirthDateInput from "@/app/signup/_components/BirthDateInput";
+import { useEffect, useState } from "react";
+import { getAreaOptions, getInterestOptions } from "@/apis/options";
+import { useSearchParams } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuth";
 
 export type AreaOption = {
   area_name: string;
@@ -24,15 +25,26 @@ interface InterestApiResponse {
   results: Interest[];
 }
 
-function SignupContent() {
-  const { handleSubmit, setSignupData, signupData, areaInfo, setAreaInfo } = useSignupSubmit();
+export default function SignupPage() {
+  const { handleSubmit, setSignupData, signupData, areaInfo, setAreaInfo } =
+    useSignupSubmit();
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
   const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
     results: [],
   });
 
-  const { email, password, password_confirm, nickname, name, phone, birthYear, birthMonth, birthDay, agreement } =
-    signupData;
+  const {
+    email,
+    password,
+    password_confirm,
+    nickname,
+    name,
+    phone,
+    birthYear,
+    birthMonth,
+    birthDay,
+    agreement,
+  } = signupData;
 
   useEffect(() => {
     const fetchAreaOptions = async () => {
@@ -51,13 +63,13 @@ function SignupContent() {
   const authUser = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    const kakao = searchParams.get('kakao');
-    if (kakao === '1' && authUser) {
+    const kakao = searchParams.get("kakao");
+    if (kakao === "1" && authUser) {
       setSignupData((prev) => ({
         ...prev,
         isKakaoUser: true,
-        email: authUser.email ?? '',
-        nickname: authUser.nickname ?? '',
+        email: authUser.email ?? "",
+        nickname: authUser.nickname ?? "",
       }));
     }
   }, [searchParams, authUser, setSignupData]);
@@ -69,7 +81,7 @@ function SignupContent() {
         <form
           id="signupForm"
           onSubmit={(e) => {
-            console.log('areainfo', areaInfo);
+            console.log("areainfo", areaInfo);
             handleSubmit(e, areaInfo.area_id);
           }}
           className="space-y-6 w-full max-w-md"
@@ -78,7 +90,9 @@ function SignupContent() {
             label="이름"
             name="name"
             value={name}
-            onChange={(e) => setSignupData((prev) => ({ ...prev, name: e.target.value }))}
+            onChange={(e) =>
+              setSignupData((prev) => ({ ...prev, name: e.target.value }))
+            }
             placeholder="이름"
             required
           />
@@ -119,72 +133,92 @@ function SignupContent() {
                 label="이메일"
                 name="email"
                 value={email}
-                onChange={(e) => setSignupData((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setSignupData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 placeholder="이메일"
                 required
               />
             </>
           )}
-          <LabeledInput
-            label="비밀번호"
-            name="password"
-            value={password}
-            onChange={(e) =>
-              setSignupData((prev) => ({
-                ...prev,
-                password: e.target.value,
-              }))
-            }
-            placeholder="비밀번호"
-            type="password"
-            required
-          />
-          <LabeledInput
-            label="비밀번호 확인"
-            name="password_confirm"
-            value={password_confirm}
-            onChange={(e) =>
-              setSignupData((prev) => ({
-                ...prev,
-                password_confirm: e.target.value,
-              }))
-            }
-            placeholder="비밀번호 확인"
-            type="password"
-            required
-          />
+          {!signupData.isKakaoUser && (
+            <>
+              <LabeledInput
+                label="비밀번호"
+                name="password"
+                value={password}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                placeholder="비밀번호"
+                type="password"
+                required
+              />
+              <LabeledInput
+                label="비밀번호 확인"
+                name="password_confirm"
+                value={password_confirm}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    password_confirm: e.target.value,
+                  }))
+                }
+                placeholder="비밀번호 확인"
+                type="password"
+                required
+              />
+            </>
+          )}
           <LabeledInput
             label="전화번호"
             name="phone"
             value={phone}
-            onChange={(e) => setSignupData((prev) => ({ ...prev, phone: e.target.value }))}
+            onChange={(e) =>
+              setSignupData((prev) => ({ ...prev, phone: e.target.value }))
+            }
             placeholder="전화번호"
             required
           />
           <div>
             <label className="text-xs font-bold text-gray-700">지역</label>
             <div className="mt-3">
-              <AreaSelector areaOptions={areaOptions} areaInfo={areaInfo} setAreaInfo={setAreaInfo} />
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-gray-700">관심사(중복가능)</label>
-            <div className="mt-3">
-              <InterestSelector
-                interests={interestOptions.results ?? []}
-                interest_ids={signupData.interest_ids}
-                setInterestIds={(ids) => setSignupData((prev) => ({ ...prev, interest_ids: ids }))}
+              <AreaSelector
+                areaOptions={areaOptions}
+                areaInfo={areaInfo}
+                setAreaInfo={setAreaInfo}
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700">디지털 친숙도</label>
+            <label className="text-xs font-bold text-gray-700">
+              관심사(중복가능)
+            </label>
+            <div className="mt-3">
+              <InterestSelector
+                interests={interestOptions.results ?? []}
+                interest_ids={signupData.interest_ids}
+                setInterestIds={(ids) =>
+                  setSignupData((prev) => ({ ...prev, interest_ids: ids }))
+                }
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-gray-700">
+              디지털 친숙도
+            </label>
             <div className="mt-3">
               <DigitalLevelSelector
                 value={signupData.digitalLevel_id}
-                onChange={(val) => setSignupData((prev) => ({ ...prev, digitalLevel_id: val }))}
+                onChange={(val) =>
+                  setSignupData((prev) => ({ ...prev, digitalLevel_id: val }))
+                }
               />
             </div>
           </div>
@@ -203,8 +237,12 @@ function SignupContent() {
                 className="accent-orange-600 w-4 h-4"
                 id="agreement"
               />
-              <label htmlFor="agreement" className="leading-snug break-words text-gray-700">
-                [필수] &apos;개인정보 수집 및 이용&apos;, &apos;서비스 이용 약관&apos; 등에 모두 동의합니다.
+              <label
+                htmlFor="agreement"
+                className="leading-snug break-words text-gray-700"
+              >
+                [필수] &apos;개인정보 수집 및 이용&apos;, &apos;서비스 이용
+                약관&apos; 등에 모두 동의합니다.
               </label>
             </div>
 
