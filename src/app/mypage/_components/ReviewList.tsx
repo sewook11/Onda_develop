@@ -1,12 +1,14 @@
 import Pagination from '@/components/Pagination';
-import ReviewCard, { ReviewCardProps } from './ReviewCard';
+import { Review } from '@/types/meetings';
+import ReviewCard from './ReviewCard';
 
 type ReviewListProps = {
-    reviews: ReviewCardProps[];
+    reviews: Review[];
     currentPage?: number;
     onPageChange?: (page: number) => void;
     perPage?: number;
     showPagination?: boolean;
+    totalCount?: number;
 };
   
 
@@ -16,8 +18,9 @@ const ReviewList = ({
     onPageChange,
     perPage = 5,
     showPagination = false,
+    totalCount,
   }: ReviewListProps) => {
-    const totalPages = Math.ceil(reviews.length / perPage);
+    const totalPages = Math.ceil((totalCount ?? reviews.length) / perPage);
     const paginated = showPagination
       ? reviews.slice((currentPage - 1) * perPage, currentPage * perPage)
       : reviews.slice(0, 3);

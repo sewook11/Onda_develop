@@ -41,15 +41,14 @@ export default function AppliedScheduleList() {
         }
         const response = await api.get(`/meets/users`);
         setApplySchedule(response.data.results);
-        console.log(applySchedule);
-        router.refresh();
       } catch (error) {
         console.error('신청한 모임 조회 실패:', error);
         alert('신청한 모임 조회에 실패했습니다. 다시 시도해주세요.');
       }
     };
+  
     fetchAppliedMeetings();
-  }, [applySchedule, router]);
+  }, [router]); 
 
   if (applySchedule.length === 0) {
     return (
@@ -73,7 +72,7 @@ export default function AppliedScheduleList() {
             //     isApplied
             //   />
             // ) : (
-            <MeetingCard key={meeting.user_id} item={meeting} isApplied />
+            <MeetingCard key={meeting.id} item={meeting} isApplied />
           )
           // )
         )}

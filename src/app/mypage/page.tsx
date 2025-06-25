@@ -5,34 +5,28 @@ import { useAuthStore } from '@/stores/useAuth';
 import { useRouter } from 'next/navigation';
 import UserProfile from './_components/UserProfile';
 import ReviewList from './_components/ReviewList';
-import { sampleReviews } from '@/datas/sampleReivew';
 import MoreLinkButton from '@/components/common/Buttons/MoreLinkButton';
-import LeaderMeetingList from './_components/LeaderMeetingCardList';
+import LeaderMeetingList from './_components/LeaderMeetingList';
 import ApplicantTable from '../leader/_components/ApplicantTable';
 import { useViewModeStore } from '@/stores/useViewModeStore';
-import { useEffect, useState } from 'react';
-import { END_POINT } from '@/constants/route';
-import api from '@/apis/app';
-import { LeaderMeeting } from '@/types/meetings';
+import { useLeaderMeetingsById, useLeaderMeetingsReviews } from '@/hooks/useLeader';
 
 export default function Mypage() {
-  const { user } = useAuthStore();
+  const { user, profile } = useAuthStore();
   const { viewMode } = useViewModeStore();
-  const [leaderMeetings, setLeaderMeetings] = useState<LeaderMeeting[]>([]);
   const router = useRouter();
-  useEffect(() => {
-    async function fetchLeaderMeetings() {
-      console.log('user?.user_id', user?.user_id);
-      if (user?.user_id) {
-        const response = await api.get(END_POINT.LEADER_MEETINGS(user?.user_id));
-        console.log('리더모임', response.data);
-        setLeaderMeetings(response.data.results);
-      }
-    }
-    fetchLeaderMeetings();
-  }, [user?.user_id]);
-
+  
   const displayNickname = user?.nickname;
+  const isLeader = user?.role === "leader";
+
+  const { data: meetingData } = useLeaderMeetingsById(
+    { user_id: profile?.id, page: 1, size: 3 },
+    isLeader
+  );
+  const { data: reviewData } = useLeaderMeetingsReviews(
+    { page: 1, size: 3 },
+    isLeader
+  );
 
   const handleBtn = () => {
     router.push('/meet/search');
@@ -50,12 +44,12 @@ export default function Mypage() {
           {viewMode === 'leader' && (
             <>
               <div>
-                <LeaderMeetingList meetings={leaderMeetings} />
-                <MoreLinkButton href="/mypage/reviews">전체 보기</MoreLinkButton>
+                <LeaderMeetingList meetings={meetingData?.data || []} />
+                <MoreLinkButton href="/mypage/mymeet">전체 보기</MoreLinkButton>
               </div>
               <div>
-                <ReviewList reviews={sampleReviews} />
-                <MoreLinkButton href="/mypage/reviews">전체 보기</MoreLinkButton>
+                <ReviewList reviews={reviewData?.data ?? []} />
+                <MoreLinkButton href="/mypage/mymeet/reviews">전체 보기</MoreLinkButton>
               </div>
             </>
           )}

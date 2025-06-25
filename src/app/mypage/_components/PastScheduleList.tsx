@@ -23,15 +23,13 @@ export default function PastScheduleList() {
         }
         const response = await api.get(`/meets?status=false`);
         setPastScheduleList(response.data.results);
-        console.log(pastScheduleList);
-        router.refresh();
       } catch (error) {
         console.error('지난 모임 조회 실패:', error);
         alert('지난 모임 조회에 실패했습니다. 다시 시도해주세요.');
       }
     };
     fetchAppliedMeetings();
-  }, [pastScheduleList, router]);
+  }, [router]);
 
   // useEffect(() => {
   //   const handleResize = () => {

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 export interface Profile {
+  id: number;
   email: string;
   name: string;
   nickname: string;

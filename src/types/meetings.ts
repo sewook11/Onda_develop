@@ -20,13 +20,20 @@ export interface MeetingCardProps {
 
 export type Review = {
   id: number;
-  user_id: number;
-  meet_id: number;
+  nickname: string;
   rating: number;
   content: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  meet_title: string;
+  meet_date: string;
+  meet_location: string;
+}
+
+export type ReviewResponse = {
+  average_rating: number;
+  reviews: Review[];
 };
+
 export interface MeetFormData {
   title: string;
   description: string;

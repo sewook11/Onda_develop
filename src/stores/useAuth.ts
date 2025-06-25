@@ -4,6 +4,7 @@ import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
 import { jwtDecode } from "jwt-decode";
 import type { StateCreator } from "zustand";
+import { Profile } from "@/app/mypage/_components/UserProfile";
 
 export interface DecodedToken {
   email: string;
@@ -30,6 +31,7 @@ interface User {
 
 interface AuthState {
   user: User | null;
+  profile: Profile | null;
   login: boolean;
   accessToken: string | null;
   csrfToken: string | null;
@@ -38,6 +40,7 @@ interface AuthState {
   isAdmin: boolean;
   email: string;
   password: string;
+  setProfile: (profile: Profile) => void;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   isKakaoUserSignedUp: boolean;
@@ -59,6 +62,7 @@ type AuthStore = AuthState & AuthActions;
 const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   user: null,
   login: false,
+  profile: null,
   accessToken: null,
   csrfToken: null,
   isAdmin: false,
@@ -67,7 +71,8 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   isKakaoUserSignedUp: false,
   setKakaoUserSignedUp: (value: boolean) =>
     set(() => ({ isKakaoUserSignedUp: value })),
-
+  
+  setProfile: (profile) => set({ profile }),
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
   setAccessToken: (token: string) => set({ accessToken: token }),
