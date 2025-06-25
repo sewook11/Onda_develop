@@ -1,11 +1,17 @@
-import { ApplicationStatus, Leader, LeaderApplicationDetail, LeaderApplicationRequest, SLeader, SLeaderApplicationDetail, transformSLeaderApplicationDetail, transformSLeaderToLeader } from "@/types/leader";
-import api from "./app";
-import { END_POINT } from "@/constants/route";
+import {
+  ApplicationStatus,
+  Leader,
+  LeaderApplicationDetail,
+  LeaderApplicationRequest,
+  SLeader,
+  SLeaderApplicationDetail,
+  transformSLeaderApplicationDetail,
+  transformSLeaderToLeader,
+} from '@/types/leader';
+import api from './app';
+import { END_POINT } from '@/constants/route';
 
-export async function getLeaderApplicants(
-  page: number,
-  size: number
-): Promise<{ data: Leader[]; totalCount: number }> {
+export async function getLeaderApplicants(page: number, size: number): Promise<{ data: Leader[]; totalCount: number }> {
   const res = await api.get<{
     count: number;
     next: string | null;
@@ -20,7 +26,6 @@ export async function getLeaderApplicants(
     totalCount: res.data.count,
   };
 }
-
 
 export async function getLeaderById(id: number): Promise<LeaderApplicationDetail> {
   const { data } = await api.get<SLeaderApplicationDetail>(END_POINT.LEADERS_DETAIL(id));
@@ -40,15 +45,14 @@ export async function createLeader(payload: LeaderApplicationRequest): Promise<L
 }
 
 export async function updateLeaderStatus(id: number, payload: ApplicationStatus): Promise<LeaderApplicationDetail> {
-  const { data } = await api.patch<LeaderApplicationDetail>(END_POINT.LEADERS_STATUS(id),
-    { status: payload });
+  const { data } = await api.patch<LeaderApplicationDetail>(END_POINT.LEADERS_STATUS(id), { status: payload });
   return data;
 }
 
-export async function deleteLeader(id: number): Promise<void> {
-  await api.delete(END_POINT.LEADERS_DELETE(id));
-}
+// export async function deleteLeader(id: number): Promise<void> {
+//   await api.delete(END_POINT.LEADERS_DELETE(id));
+// }
 
 export async function getLeaderMeetingById(id: number): Promise<void> {
-  await api.get(END_POINT.LEADERS_METTINGS(id));
+  await api.get(END_POINT.LEADER_MEETINGS(id));
 }

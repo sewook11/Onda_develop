@@ -19,13 +19,15 @@ export const END_POINT = {
   LEADERS_APPLY: '/leaders/apply',
   LEADERS_DETAIL: (id: number) => `/leaders/apply/${id}`, // 리더 신청 상세 조회
   LEADERS_STATUS: (id: number) => `/leaders/apply/${id}/status`, // 리더 신청 승인/거절 처리
+  LEADERS_DETAIL_MINE: `/leaders-applies/mine`,
+  LEADERS_DELETE: (id: number) => `/leaders-apply/${id}/delete`, // 리더 신청 삭제
 
   // meetings : 모임 관련 api
   MEETINGS_SUMMARY: (meet_id: number) => `/meetings/${meet_id}/reviews/summary`, // 후기 요약 조회
   MEETINGS_REVIEWS: (id: number) => `/reviews/${id}`, // 리뷰 상세 조회/수정/삭제
   MEETINGS: '/meets/', // 모임 생성/조회
   MEETINGS_DETAIL: (meet_id: number) => `/meets/${meet_id}`, // 모임 상세 조회/수정/삭제
-  MEETINGS_APPLY: (meet_id: number) => `/meets/apply/${meet_id}`, // 모임 신청
+  MEETINGS_APPLY: (meet_id: number | string | undefined) => `/meets/apply/${meet_id}`, // 모임 신청
   MEETINGS_USER: (user_id: number) => `/meets/apply/${user_id}`, // 유저별 모임 목록
   LEADER_MEETINGS: (user_id: number) => `/meets/leaders/${user_id}`, // 리더별 모임 목록
 

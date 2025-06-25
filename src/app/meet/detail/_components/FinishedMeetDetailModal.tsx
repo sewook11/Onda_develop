@@ -5,7 +5,6 @@ import { Star } from 'lucide-react';
 import Button from '@/components/common/Button';
 import DefaultMeetingImage from '@/components/common/DefaultMeetingImage';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import api from '@/apis/app';
 
 interface FinishedMeetDetailModalProps {
@@ -33,10 +32,6 @@ const FinishedMeetDetailModal = ({ data }: FinishedMeetDetailModalProps) => {
       alert('후기 삭제에 실패했습니다.');
     }
   };
-
-  useEffect(() => {
-    console.log('modalData', data);
-  }, []);
 
   return (
     <Modal

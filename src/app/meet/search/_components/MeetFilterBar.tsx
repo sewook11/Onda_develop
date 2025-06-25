@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import SelectBox from "@/components/common/SelectBox";
-import { MeetingSelectBox } from "../../create/_components/MeetingSelectBox";
-import { getAreaOptions, getCategoryOptions, getDigitalOptions } from "@/apis/options";
+import React, { useEffect, useState } from 'react';
+import SelectBox from '@/components/common/SelectBox';
+import { MeetingSelectBox } from '../../create/_components/MeetingSelectBox';
+import { getAreaOptions, getCategoryOptions, getDigitalOptions } from '@/apis/options';
 
 interface Filters {
   category: string;
@@ -16,20 +16,19 @@ interface MeetFilterBarProps {
   onChange: (filters: Filters) => void;
 }
 
-
 export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps) {
   const handleChange = (key: keyof Filters, value: string) => {
     onChange({ ...filters, [key]: value });
   };
 
-  const [areaOptions, setAreaOptions] = useState<{ id: number; name: string }[]>([]);
+  const [areaOptions, setAreaOptions] = useState<{ id: number; area_name: string }[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<{ id: number; category_name: string }[]>([]);
   const [digitalLevelOptions, setDigitalLevelOptions] = useState<{ id: number; display: string }[]>([]);
 
   useEffect(() => {
     const fetchOptions = async () => {
       const area = await getAreaOptions();
-      setAreaOptions(area);
+      setAreaOptions(area.results);
 
       const category = await getCategoryOptions();
       setCategoryOptions(category.results);
@@ -45,7 +44,7 @@ export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps)
       <MeetingSelectBox
         placeholder="카테고리"
         value={filters.category}
-        onChange={(e) => handleChange("category", e.target.value)}
+        onChange={(e) => handleChange('category', e.target.value)}
       >
         {categoryOptions.map((option) => (
           <option key={option.id} value={String(option.id)}>
@@ -56,7 +55,7 @@ export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps)
 
       <SelectBox
         value={filters.area}
-        onChange={(e) => handleChange("area", e.target.value)}
+        onChange={(e) => handleChange('area', e.target.value)}
         placeholder="지역"
         options={areaOptions.map((area) => ({
           label: area.area_name,
@@ -68,7 +67,7 @@ export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps)
       <MeetingSelectBox
         placeholder="디지털 난이도"
         value={filters.digitalLevel}
-        onChange={(e) => handleChange("digitalLevel", e.target.value)}
+        onChange={(e) => handleChange('digitalLevel', e.target.value)}
       >
         {digitalLevelOptions?.map((option) => (
           <option key={option.id} value={String(option.id)}>

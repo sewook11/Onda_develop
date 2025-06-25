@@ -11,8 +11,6 @@ export const getMeetingInfo = async (params: {
   area?: string;
   digital_level?: string;
 }) => {
-  const { data } = await api.get("/meets", { params });
+  const { data } = await api.get('/meets', { params });
   return data;
 };
-
-

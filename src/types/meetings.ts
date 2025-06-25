@@ -1,20 +1,21 @@
-import { FileData } from "./file";
+import { FileData } from './file';
 
 export interface MeetingCardProps {
   item: {
-    meet_id: number;
+    id?: number | string | undefined;
+    meet_id?: number;
     title: string;
     interest?: number;
     date: string;
-    time: string;
+    time?: string;
     area: string;
     image?: string;
-    file?: FileData;
+    file?: FileData | null;
     status: string;
     contact?: string;
   };
   isApplied?: boolean; // 신청한 모임인지 여부
-  context?: "applied" | "past";
+  context?: 'applied' | 'past';
 }
 
 export type Review = {

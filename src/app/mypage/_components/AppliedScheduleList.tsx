@@ -49,14 +49,7 @@ export default function AppliedScheduleList() {
       }
     };
     fetchAppliedMeetings();
-
-    // const handleResize = () => {
-    //   setIsMobile(window.innerWidth < 768);
-    // };
-    // handleResize();
-    // window.addEventListener("resize", handleResize);
-    // return () => window.removeEventListener("resize", handleResize);
-  }, [router]);
+  }, [applySchedule, router]);
 
   if (applySchedule.length === 0) {
     return (

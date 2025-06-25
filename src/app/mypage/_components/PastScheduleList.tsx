@@ -31,7 +31,7 @@ export default function PastScheduleList() {
       }
     };
     fetchAppliedMeetings();
-  }, [router]);
+  }, [pastScheduleList, router]);
 
   // useEffect(() => {
   //   const handleResize = () => {
