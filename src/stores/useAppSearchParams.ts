@@ -1,21 +1,20 @@
+import { SelectedArea } from "@/app/community/_components/AreaDropdown";
+import { Option } from "@/types/post";
 import { create } from "zustand";
 
 export type SearchParams = {
-  category: number;
-  interest: number;
-  area: {
-    parentId: number;
-    childId: number;
-  };
+  category: Option;
+  interest: Option;
+  area: SelectedArea;
   keyword: string;
 };
 
 const defaultParams: SearchParams = {
-  category: 0,
-  interest: 0,
+  category: { id: 0, name: "카테고리" },
+  interest: { id: 0, name: "관심사" },
   area: {
-    parentId: 0,
-    childId: 0,
+    parentId: { id: 0, name: "시/도" },
+    childId: { id: 0, name: "구" },
   },
   keyword: "",
 };

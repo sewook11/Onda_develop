@@ -7,6 +7,7 @@ import { useAppSearchParams } from "@/stores/useAppSearchParams";
 import { useOptionStore } from "@/stores/useOptionStore";
 import { useEffect } from "react";
 import DropdownInput from "./DropdownInput";
+import { Option } from "@/types/post";
 
 export default function PostSearch() {
   const { searchParams, updateParams } = useAppSearchParams();
@@ -16,10 +17,10 @@ export default function PostSearch() {
     fetchOptions();
   }, [fetchOptions]);
 
-  const categoryOptions =
+  const categoryOptions: Option[] =
     options?.categories?.map((opt) => ({
-      value: opt.id,
-      label: opt.category_name,
+      id: opt.id,
+      name: opt.category_name,
     })) ?? [];
 
   return (

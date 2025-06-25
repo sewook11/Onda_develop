@@ -1,9 +1,9 @@
 import React from "react";
 import PostCard from "./PostCard";
-import { PostWithFile } from "@/types/post";
+import { Post } from "@/types/post";
 
 interface PostListProps {
-  posts: PostWithFile[];
+  posts: Post[];
 }
 
 export default function PostList({posts} : PostListProps) {
@@ -14,7 +14,6 @@ export default function PostList({posts} : PostListProps) {
         <PostCard
           key={post.id}
           post={post}
-          file={post.fileData}
         />
       ))}
     </div>
