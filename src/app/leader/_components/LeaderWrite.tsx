@@ -19,11 +19,14 @@ const LeaderWrite = () => {
       return;
     }
 
+    const certificate_type = certificates.map((item) => item.certificate_type);
+
     console.log('전송할 데이터:', { bio, certificates });
 
     try {
       await createLeader.mutateAsync({
         bio,
+        certificate_type,
         certificates,
       });
       alert('신청이 완료되었습니다.');

@@ -1,19 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApplicationStatus, Leader, LeaderApplicationDetail, LeaderApplicationRequest } from '@/types/leader';
-import { createLeader, deleteLeader, getLeaderApplicants, getLeaderById, getLeaderMeetingById, getMyLeaderApplication, getReviewsLeaderMeeting, updateLeaderStatus } from '@/apis/leader';
-import { getReviewsByMeetId } from '@/apis/review';
+import { createLeader, deleteLeader, getLeaderApplicants, getLeaderById, getMyLeaderApplication, updateLeaderStatus } from '@/apis/leader';
 
 type LeaderApplicantResponse = {
     data: Leader[];
     totalCount: number;
-};
-
+  };
+  
 export function useLeaderApplicants(page: number, size: number) {
   return useQuery<LeaderApplicantResponse>({
     queryKey: ['leaderApplicants', page, size],
     queryFn: () => getLeaderApplicants(page, size),
   });
 }
+
 
 // 리더 신청 상세 조회
 export function useLeaderDetail(id: number) {
@@ -67,30 +67,4 @@ export function useMyLeaderApplication() {
       queryKey: ['myLeader'],
       queryFn: getMyLeaderApplication,
     });
-}
-
-// 리더기준 나의 모임 조회
-export function useLeaderMeetingsById({ id, size = 10, page = 1, }: { id?: number; size?: number; page?: number;}) {
-  return useQuery({
-    queryKey: ['leaderMeetings', id, page, size],
-    queryFn: () => getLeaderMeetingById(id!, size, page),
-    enabled: typeof id === 'number',
-  });
-}
-
-// 리더기준 나의 모임 리뷰 조회
-export function useLeaderMeetingsReviews({ page = 1, size = 10,}: { page?: number; size?: number;}) {
-  return useQuery({
-    queryKey: ['leaderReviews', page, size],
-    queryFn: () => getReviewsLeaderMeeting(page, size),
-    enabled: !!page && !!size, 
-  });
-}
-
-export function useReviewsByMeetingId({ meetId, size = 10, page = 1, }: { meetId?: number; size?: number; page?: number;}) {
-  return useQuery({
-    queryKey: ['reviews', meetId, page, size],
-    queryFn: () => getReviewsByMeetId(meetId!, size, page),
-    enabled: typeof meetId === 'number',
-  });
-}
+  }

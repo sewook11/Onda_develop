@@ -17,37 +17,15 @@ export interface MeetingCardProps {
   context?: "applied" | "past";
 }
 
-export type Meeting = {
-  id: number;
-  title: string;
-  description: string;
-  area: string;
-  date: string;
-  file: FileData;
-  max_people: number;
-  current_people: number;
-  application_deadline: string;
-  status: string;
-  sesstion_count: number;
-  meet_rating: number;
-}
-
 export type Review = {
   id: number;
-  nickname: string;
+  user_id: number;
+  meet_id: number;
   rating: number;
   content: string;
-  created_at: string;
-  meet_title: string;
-  meet_date: string;
-  meet_location: string;
-}
-
-export type ReviewResponse = {
-  average_rating: number;
-  reviews: Review[];
+  created_at: Date;
+  updated_at: Date;
 };
-
 export interface MeetFormData {
   title: string;
   description: string;

@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 export interface Profile {
-  id: number;
   email: string;
   name: string;
   nickname: string;
@@ -34,10 +33,9 @@ export interface Profile {
 }
 
 const UserProfile = () => {
-
-  const { profile, setProfile } = useAuthStore();
   const route = useRouter();
   const { viewMode, toggleViewMode } = useViewModeStore();
+  const [profile, setProfile] = useState<Profile | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
   const role = useAuthStore((s) => s.user?.role);
   const isLeader = role === 'leader';
@@ -52,14 +50,13 @@ const UserProfile = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setProfile(res.data); // 전역 저장
+        setProfile(res.data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchProfile();
-  }, [accessToken, setProfile]);
-  
+  }, [accessToken]);
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
