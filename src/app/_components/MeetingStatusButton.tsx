@@ -10,14 +10,14 @@ interface MeeringStatusButtonsProps {
   status: string;
   onClickApply?: () => void;
   mode?: "default" | "past";
-  meet_id?: number;
+  id?: number;
 }
 
 export default function MeeringStatusButtons({
   status,
   onClickApply,
   mode = "default",
-  meet_id,
+  id,
 }: MeeringStatusButtonsProps) {
   const { openModal, closeModal, modals } = useModalStore();
   const pathname = usePathname();
@@ -75,7 +75,7 @@ export default function MeeringStatusButtons({
               </button>
             )}
 
-            <Link href={`/meet/${meet_id}`}>
+            <Link href={`/meet/${id}`}>
               <button className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition">
                 상세 보기
               </button>

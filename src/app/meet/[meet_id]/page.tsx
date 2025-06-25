@@ -6,8 +6,8 @@ import { MeetDetail } from '@/types/meetings';
 import Image from 'next/image';
 //import { Calendar, MapPin } from "lucide-react";
 
-export default function MeetDetailPage({ params }: { params: { meet_id: string } }) {
-  const meetId = params.meet_id;
+export default function MeetDetailPage({ params }: { params: { id: string } }) {
+  const meetId = params.id;
 
   const [meetDetail, setMeetDetail] = useState<MeetDetail | null>(null);
 

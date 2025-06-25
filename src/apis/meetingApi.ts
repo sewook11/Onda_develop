@@ -1,7 +1,7 @@
 import api from '@/apis/app';
 
-export async function getMeetDetail(meet_id: number) {
-  const response = await api.get(`/meets/${meet_id}`);
+export async function getMeetDetail(id: number) {
+  const response = await api.get(`/meets/${id}`);
   return response.data;
 }
 

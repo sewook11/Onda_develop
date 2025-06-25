@@ -7,7 +7,7 @@ import api from '@/apis/app';
 import { FileData } from '@/types/file';
 
 interface Meeting {
-  meet_id: number;
+  id: number;
   user_id: number;
   title: string;
   description: string;

@@ -2,11 +2,13 @@ import React from "react";
 import { Calendar, MapPin, MessageSquareIcon } from "lucide-react";
 import Image from "next/image";
 import DefaultGatheringImage from "../common/DefaultMeetingImage";
-import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
+
+//import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
 import { MeetingCardProps } from "@/types/meetings";
 import MeeringStatusButtons from "../../app/_components/MeetingStatusButton";
 import api from "@/apis/app";
 import { useRouter, usePathname } from "next/navigation";
+import { END_POINT } from "@/constants/route";
 
 export const MeetingCard = ({
   item,
@@ -17,9 +19,9 @@ export const MeetingCard = ({
   const pathname = usePathname();
   const isMyPage = pathname?.startsWith("/mypage");
 
-  const { title, date, time, area, file, contact, status, meet_id } = item;
+  const { title, date, time, area, file, contact, status, id } = item;
+  console.log(id)
   console.log(file);
-
   const handleApply = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -28,7 +30,7 @@ export const MeetingCard = ({
         return;
       }
 
-      await api.post(`/meets/apply/${meet_id}`);
+      await api.post(END_POINT.MEETINGS_APPLY(id));
       alert("모임 신청이 완료되었습니다!");
       router.refresh();
     } catch (error) {
@@ -92,7 +94,7 @@ export const MeetingCard = ({
       <MeeringStatusButtons
         status={status}
         mode={context === "past" ? "past" : "default"}
-        meet_id={meet_id}
+        id={id}
         onClickApply={isMyPage ? undefined : handleApply}
       />
     </div>
