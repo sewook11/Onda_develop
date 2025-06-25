@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Providers from "./providers";
+import ReviewDetailModal from "./mypage/_components/ReviewDetailModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,9 +23,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <body
@@ -35,6 +36,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </Providers>
+        <ReviewDetailModal />
       </body>
     </html>
   );

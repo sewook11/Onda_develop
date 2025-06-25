@@ -4,13 +4,13 @@ import api from "@/apis/app";
 import { END_POINT } from "@/constants/route";
 import { jwtDecode } from "jwt-decode";
 import type { StateCreator } from "zustand";
+import { Profile } from "@/app/mypage/_components/UserProfile";
 
-export interface DecodedToken {
+interface DecodedToken {
   email: string;
   nickname: string;
   name: string;
   role: "user" | "admin" | "leader";
-  user_id: number;
 }
 
 interface User {
@@ -25,16 +25,15 @@ interface User {
   area_id?: number | null;
   role: "user" | "admin" | "leader";
   isAdmin: boolean;
-  user_id: number;
 }
 
 interface AuthState {
   user: User | null;
+  profile: Profile | null;
+  setProfile: (profile: Profile) => void;
   login: boolean;
   accessToken: string | null;
   csrfToken: string | null;
-  setAccessToken: (token: string) => void;
-  setCsrfToken: (token: string) => void;
   isAdmin: boolean;
   email: string;
   password: string;
@@ -43,7 +42,6 @@ interface AuthState {
   isKakaoUserSignedUp: boolean;
   setKakaoUserSignedUp: (value: boolean) => void;
   reset: () => void;
-  clear: () => void;
 }
 
 interface AuthActions {
@@ -59,6 +57,8 @@ type AuthStore = AuthState & AuthActions;
 const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   user: null,
   login: false,
+  profile: null,
+  setProfile: (profile) => set({ profile }),
   accessToken: null,
   csrfToken: null,
   isAdmin: false,
@@ -71,11 +71,8 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
   setAccessToken: (token: string) => set({ accessToken: token }),
-  setCsrfToken: (token: string) => {
-    set({ csrfToken: token });
-    console.log("setCsrfToken 토큰 실행됨");
-    console.log("token :", token);
-  },
+  setCsrfToken: (token: string) => set({ csrfToken: token }),
+
   setUser: (user: User) => {
     set({
       user,
@@ -89,7 +86,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
       const { access_token, csrf_token } = res.data;
 
       const decoded: DecodedToken = jwtDecode(access_token);
-      const isAdmin = decoded.role === "admin";
+      const isAdmin = decoded.role === "admin"
 
       set({
         login: true,
@@ -102,9 +99,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
           nickname: decoded.nickname,
           role: decoded.role,
           isAdmin,
-          user_id: decoded.user_id,
         },
-        isKakaoUserSignedUp: false,
       });
 
       localStorage.setItem("accessToken", access_token);
@@ -127,45 +122,10 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   },
 
   reset: () => set({ email: "", password: "" }),
-
-  clear: () =>
-    set({
-      user: null,
-      login: false,
-      accessToken: null,
-      csrfToken: null,
-      isAdmin: false,
-      email: "",
-      password: "",
-      isKakaoUserSignedUp: false,
-    }),
 });
 
-// export const useAuthStore = create<AuthStore>()(
-//   persist(authStoreCreator, {
-//     name: "auth-storage",
-//   })
-// );
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
 export const useAuthStore = create<AuthStore>()(
   persist(authStoreCreator, {
     name: "auth-storage",
-    partialize: (state) => {
-      const {
-        setUser,
-        setLogin,
-        setLogout,
-        setAccessToken,
-        setCsrfToken,
-        setEmail,
-        setPassword,
-        setKakaoUserSignedUp,
-        reset,
-        clear,
-        ...persisted
-      } = state;
-      return persisted;
-    },
   })
 );

@@ -35,7 +35,7 @@ export default function MeetingListSection() {
             }}
           >
             {dummyMeetings.map((item) => (
-              <SwiperSlide key={item.id}>
+              <SwiperSlide key={item.meet_id}>
                 <MeetingCard item={item} />
               </SwiperSlide>
             ))}

@@ -1,12 +1,16 @@
 "use client";
 
-import { Option } from "@/types/post";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
+interface Option {
+  value?: number;
+  label: string;
+}
+
 interface DropdownInput {
-  value?: Option;
-  onChange: (value: Option) => void;
+  value?: number;
+  onChange: (value: number) => void;
   options: Option[];
   placeholder?: string;
   className?: string;
@@ -21,6 +25,8 @@ export default function DropdownInput({
 }: DropdownInput) {
   const [open, setOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
+
+  const selected = options.find((opt) => opt.value === value);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -40,8 +46,8 @@ export default function DropdownInput({
           className="flex items-center justify-between w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-sm"
           onClick={() => setOpen((prev) => !prev)}
         >
-          <span className={value ? "text-black" : "text-gray-600"}>
-            {value ? value.name : placeholder}
+          <span className={selected ? "text-black" : "text-gray-600"}>
+            {selected ? selected.label : placeholder}
           </span>
           {open ? <ChevronUp /> : <ChevronDown />}
         </button>
@@ -50,14 +56,16 @@ export default function DropdownInput({
           <ul className="text-sm absolute z-10 w-full bg-white border mt-1 rounded-md shadow-md max-h-60 overflow-auto">
             {options.map((opt) => (
               <li
-                className={`px-2 py-4 m-1 hover:bg-gray-200 cursor-pointer rounded-md ${value?.id === opt?.id ? "bg-gray-100 font-medium" : ""}`}
-                key={opt.id}
+                className={`px-2 py-4 m-1 hover:bg-gray-200 cursor-pointer rounded-md ${value === opt.value ? "bg-gray-100 font-medium" : ""}`}
+                key={opt.value}
                 onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
+                  if (typeof opt.value === "number") {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }
                 }}
               >
-                {opt.name}
+                {opt.label}
               </li>
             ))}
           </ul>

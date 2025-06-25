@@ -9,19 +9,14 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const { accessToken, csrfToken } = useAuthStore.getState();
-
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const token = useAuthStore.getState().accessToken;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-
-  if (csrfToken) {
-    config.headers["X-CSRFToken"] = csrfToken;
-  }
-
   return config;
 });
 
+// 액세스 토큰 만료 시 리프레시
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -34,16 +29,14 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // ⭐ refreshAccessToken 내에서 상태 리셋하지 않도록 조절
         const newAccessToken = await refreshAccessToken();
         useAuthStore.getState().setAccessToken(newAccessToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        return api(originalRequest);
+        return api(originalRequest); // 재요청
       } catch (err) {
-        console.error("리프레시 실패 ❌", err);
-        // ❗ 여기서만 상태 리셋
+        console.error("리프레시 실패 : ", err);
         useAuthStore.getState().setLogout?.();
         return Promise.reject(err);
       }

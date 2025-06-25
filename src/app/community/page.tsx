@@ -10,20 +10,19 @@ import { useFilteredPosts } from "@/hooks/useFilteredPosts";
 import { useAuthStore } from "@/stores/useAuth";
 import { useModalStore } from "@/stores/useModalStore";
 import { LoginRequiredModal } from "./write/_components/PostModal";
-import PostCardSkeleton from "./_components/PostCardSkeleton";
 
 export default function PostListPage() {
   // 게시글 데이터 및 페이지네이션
   const { searchParams } = useAppSearchParams();
   const [page, setPage] = useState(1);
-  const { isLoading, posts, totalCount } = useFilteredPosts(searchParams, page);
+  const { posts, totalCount } = useFilteredPosts(searchParams, page);
   const [totalPages, setTotalPages] = useState(1);
 
   const router = useRouter();
   const { accessToken } = useAuthStore();
   const access = accessToken;
 
-  const { openModal } = useModalStore();
+    const { openModal } = useModalStore();
 
   useEffect(() => {
     const postsPerPage = 10;
@@ -33,7 +32,7 @@ export default function PostListPage() {
 
   const handleClick = () => {
     if (!access) {
-      openModal("LoginRequiredModal");
+      openModal("LoginRequiredModal")
     } else {
       router.push("/community/write");
     }
@@ -47,7 +46,7 @@ export default function PostListPage() {
       </div>
       <PostSearch />
       <section className="w-full my-10">
-        {isLoading ? <PostCardSkeleton /> : <PostList posts={posts} />}
+        <PostList posts={posts} />
         <Pagination
           currentPage={page}
           totalPages={totalPages}

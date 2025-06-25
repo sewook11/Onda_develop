@@ -2,13 +2,14 @@ import { END_POINT } from "@/constants/route";
 import api from "./app";
 import { Post } from "@/types/post";
 
+
 // Post 업로드
 export interface PostCreatePayload {
   title: string;
   content: string;
-  area_id?: number | null;
-  category_id?: number;
-  interest_id?: number | null;
+  area?: number | null;
+  category?: number;
+  interest?: number | null;
   file?: number | null;
 }
 export interface PostCreateResponse {

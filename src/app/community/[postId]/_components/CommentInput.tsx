@@ -5,7 +5,7 @@ interface CommentInputProps {
   initialValue?: string;
   onSubmit: (content: string) => void;
   mode?: "create" | "edit";
-  onCancel?: () => void; 
+  onCancel?: () => void; // 수정 취소할 경우
 }
 
 export default function CommentInput({

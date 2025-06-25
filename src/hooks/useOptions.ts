@@ -1,8 +1,12 @@
 // import { useEffect, useState } from "react";
 import { getOptions } from "@/apis/options";
-import { Option } from "@/types/post";
 // import { OptionResponse } from "@/apis/options";
 import { useQuery } from "@tanstack/react-query";
+
+interface OptionItem {
+  value: number;
+  label: string;
+}
 
 export default function useOptions() {
   const { data } = useQuery({
@@ -11,16 +15,16 @@ export default function useOptions() {
     staleTime: 1000 * 60 * 10, 
   });
 
-  const categoryOptions: Option[] =
+  const categoryOptions: OptionItem[] =
     data?.categories?.map((c) => ({
-      id: c.id,
-      name: c.category_name,
+      value: c.id,
+      label: c.category_name,
     })) ?? [];
 
-  const interestOptions: Option[] =
+  const interestOptions: OptionItem[] =
     data?.interests?.map((i) => ({
-      id: i.id,
-      name: i.interest_name,
+      value: i.id,
+      label: i.interest_name,
     })) ?? [];
 
   const areaOptions = data?.areas ?? [];

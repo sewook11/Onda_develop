@@ -2,13 +2,12 @@
 
 import { Area } from "@/types/options";
 import { useEffect, useRef, useState } from "react";
-import useClickOutside from "../../../hooks/useClickOutside";
+import useClickOutside from "./useClickOutside";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Option } from "@/types/post";
 
 export interface SelectedArea {
-  parentId: Option;
-  childId: Option;
+  parentId: number;
+  childId: number;
 }
 
 interface AreaDropdownProps {
@@ -35,8 +34,8 @@ export default function AreaDropdown({
 
   useEffect(() => {
     if (value) {
-      setSelectedParentId(value.parentId.id);
-      setSelectedChildId(value.childId.id);
+      setSelectedParentId(value.parentId);
+      setSelectedChildId(value.childId);
     }
   }, [value]);
 
@@ -51,18 +50,6 @@ export default function AreaDropdown({
     selectedParent && selectedChild
       ? `${selectedParent.area_name} ${selectedChild.area_name}`
       : placeholder;
-
-  const handleChange = (childId: number, parent: Area) => {
-    const child = parent.children?.find((c) => c.id === childId);
-    if (!child) return;
-
-    onChange({
-      parentId: { id: parent.id, name: parent.area_name },
-      childId: { id: child.id, name: child.area_name },
-    });
-    setSelectedChildId(child.id);
-    setOpen(false);
-  };
 
   return (
     <div className={`${className}`}>
@@ -116,7 +103,14 @@ export default function AreaDropdown({
                     <button
                       key={c.id}
                       type="button"
-                      onClick={() => handleChange(c.id, selectedParent!)}
+                      onClick={() => {
+                        setSelectedChildId(c.id);
+                        onChange({
+                          parentId: selectedParentId!,
+                          childId: c.id,
+                        });
+                        setOpen(false);
+                      }}
                       className={`w-full text-left px-3 py-2 rounded ${
                         selectedChild?.area_name === c.area_name
                           ? "border-orange-500 bg-orange-100 font-bold text-orange-600"

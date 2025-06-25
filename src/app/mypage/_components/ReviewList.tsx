@@ -1,8 +1,9 @@
 import Pagination from '@/components/Pagination';
-import ReviewCard, { ReviewCardProps } from './ReviewCard';
+import { Review } from '@/types/meetings';
+import ReviewCard from './ReviewCard';
 
 type ReviewListProps = {
-    reviews: ReviewCardProps[];
+    reviews: Review[];
     currentPage?: number;
     onPageChange?: (page: number) => void;
     perPage?: number;

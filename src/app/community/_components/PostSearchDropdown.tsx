@@ -4,8 +4,6 @@ import { useAppSearchParams } from "@/stores/useAppSearchParams";
 import { OptionResponse } from "@/apis/options";
 import DropdownInput from "./DropdownInput";
 import AreaDropdown from "./AreaDropdown";
-import { Option } from "@/types/post";
-import { Area } from "@/types/options";
 
 interface PostSearchDropdownProps {
   options: OptionResponse | null;
@@ -19,13 +17,13 @@ export default function PostSearchDropdown({
 
   const handleToggle = () => setShowDetail((prev) => !prev);
 
-  const interestOptions: Option[] =
+  const interestOptions =
     options?.interests?.map((opt) => ({
-      id: opt.id,
-      name: opt.interest_name,
+      value: opt.id,
+      label: opt.interest_name,
     })) ?? [];
 
-  const areaOptions: Area[] = (options?.areas ?? []).map((opt) => ({
+  const areaOptions = (options?.areas ?? []).map((opt) => ({
     id: opt.id,
     area_name: opt.area_name,
     children:
@@ -42,18 +40,19 @@ export default function PostSearchDropdown({
         <div className="flex flex-wrap gap-4">
           <DropdownInput
             value={searchParams.interest}
-            onChange={(value) => updateParams("interest", value)}
+            onChange={(val) => updateParams("interest", val)}
             options={interestOptions}
             placeholder="관심사"
             className="w-[250px]"
           />
-          <AreaDropdown
+          <AreaDropdown 
             options={areaOptions}
             value={searchParams.area}
             onChange={(value) => updateParams("area", value)}
             placeholder="지역"
             className="flex-grow"
           />
+
         </div>
       )}
       {/* 버튼 영역 */}

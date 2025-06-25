@@ -10,7 +10,7 @@ export interface DeleteModalData {
 }
 
 export interface DeleteModalProps {
-  onDelete: (data: DeleteModalData) => void;
+  onDelete?: (data: DeleteModalData) => void;
 }
 
 export default function DeleteModal({ onDelete }: DeleteModalProps) {
@@ -19,7 +19,7 @@ export default function DeleteModal({ onDelete }: DeleteModalProps) {
 
   const handleDelete = () => {
     if (!data) return;
-    onDelete(data);
+    onDelete?.(data);
     closeModal("DeleteModal");
   };
 

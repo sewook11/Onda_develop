@@ -1,9 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import SelectBox from '@/components/common/SelectBox';
-import { MeetingSelectBox } from '../../create/_components/MeetingSelectBox';
-import { getAreaOptions, getCategoryOptions, getDigitalOptions } from '@/apis/options';
+import React from "react";
+import SelectBox from "@/components/common/SelectBox";
 
 interface Filters {
   category: string;
@@ -21,60 +19,41 @@ export default function MeetFilterBar({ filters, onChange }: MeetFilterBarProps)
     onChange({ ...filters, [key]: value });
   };
 
-  const [areaOptions, setAreaOptions] = useState<{ id: number; area_name: string }[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<{ id: number; category_name: string }[]>([]);
-  const [digitalLevelOptions, setDigitalLevelOptions] = useState<{ id: number; display: string }[]>([]);
-
-  useEffect(() => {
-    const fetchOptions = async () => {
-      const area = await getAreaOptions();
-      setAreaOptions(area.results);
-
-      const category = await getCategoryOptions();
-      setCategoryOptions(category.results);
-
-      const digital = await getDigitalOptions();
-      setDigitalLevelOptions(digital.results);
-    };
-    fetchOptions();
-  }, []);
-
   return (
     <div className="flex flex-wrap md:flex-nowrap items-center gap-3 mb-6">
-      <MeetingSelectBox
-        placeholder="카테고리"
-        value={filters.category}
-        onChange={(e) => handleChange('category', e.target.value)}
-      >
-        {categoryOptions.map((option) => (
-          <option key={option.id} value={String(option.id)}>
-            {option.category_name}
-          </option>
-        ))}
-      </MeetingSelectBox>
-
       <SelectBox
-        value={filters.area}
-        onChange={(e) => handleChange('area', e.target.value)}
-        placeholder="지역"
-        options={areaOptions?.map((area) => ({
-          label: area.area_name,
-          value: String(area.id),
-        }))}
+        value={filters.category}
+        onChange={(e) => handleChange("category", e.target.value)}
+        placeholder="카테고리"
+        options={[
+          { label: "디지털 기초", value: "디지털 기초" },
+          { label: "문화예술", value: "문화예술" },
+          { label: "사교/친목도모", value: "사교/친목도모" },
+        ]}
         className="min-w-[160px]"
       />
-
-      <MeetingSelectBox
-        placeholder="디지털 난이도"
+      <SelectBox
+        value={filters.area}
+        onChange={(e) => handleChange("area", e.target.value)}
+        placeholder="지역"
+        options={[
+          { label: "서울", value: "서울" },
+          { label: "부산", value: "부산" },
+          { label: "인천", value: "인천" },
+        ]}
+        className="min-w-[160px]"
+      />
+      <SelectBox
         value={filters.digitalLevel}
-        onChange={(e) => handleChange('digitalLevel', e.target.value)}
-      >
-        {digitalLevelOptions?.map((option) => (
-          <option key={option.id} value={String(option.id)}>
-            {option.display}
-          </option>
-        ))}
-      </MeetingSelectBox>
+        onChange={(e) => handleChange("digitalLevel", e.target.value)}
+        placeholder="디지털 난이도"
+        options={[
+          { label: "하", value: "하" },
+          { label: "중", value: "중" },
+          { label: "상", value: "상" },
+        ]}
+        className="min-w-[160px]"
+      />
       <button
         type="submit"
         className="bg-primary text-white text-sm rounded-md px-4 h-[44px] min-w-[72px] hover:bg-primary-light active:bg-primary-deep"
