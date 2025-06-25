@@ -33,16 +33,7 @@ export default function Mypage() {
   }, [user?.user_id]);
 
   const displayNickname = user?.nickname;
-  const isLeader = user?.role === "leader";
 
-  const { data: meetingData } = useLeaderMeetingsById(
-    { id: profile?.id, page: 1, size: 3 },
-    isLeader
-  );
-  const { data: reviewData } = useLeaderMeetingsReviews(
-    { page: 1, size: 3 },
-    isLeader
-  );
   const handleBtn = () => {
     router.push('/meet/search');
   };
