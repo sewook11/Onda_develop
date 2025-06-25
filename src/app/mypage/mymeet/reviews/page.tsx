@@ -8,7 +8,7 @@ const MyMeetingReviewPage = () => {
 
   return (
     <main className="px-10 py-12 max-w-5xl mx-auto space-y-10">
-      <ReviewList reviews={reviewData?.data || []} />
+      <ReviewList reviews={reviewData?.data || []} showPagination={true} />
     </main>
   );
 };

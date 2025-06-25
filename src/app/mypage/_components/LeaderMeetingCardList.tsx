@@ -14,6 +14,7 @@ type LeaderMeetingListProps = {
   onPageChange?: (page: number) => void;
   perPage?: number;
   showPagination?: boolean;
+  totalCount?: number;
 };
 
 const LeaderMeetingCardList = ({
@@ -22,6 +23,7 @@ const LeaderMeetingCardList = ({
   onPageChange,
   perPage = 10,
   showPagination = false,
+  totalCount,
 }: LeaderMeetingListProps) => {
   const router = useRouter();
   const [status, setStatus] = useState("");
@@ -32,7 +34,7 @@ const LeaderMeetingCardList = ({
     return meetings.filter((m) => m.status === filteredStatus);
   }, [meetings, filteredStatus]);
 
-  const totalPages = Math.ceil(filteredMeetings.length / perPage);
+  const totalPages = Math.ceil((totalCount ?? meetings.length) / perPage);
   const paginated = showPagination
     ? filteredMeetings.slice((currentPage - 1) * perPage, currentPage * perPage)
     : filteredMeetings.slice(0, 3);
