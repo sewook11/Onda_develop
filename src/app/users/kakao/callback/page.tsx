@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DecodedToken, useAuthStore } from '@/stores/useAuth';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { useSignupSubmit } from '@/hooks/useSignupSubmit';
 import { END_POINT } from '@/constants/route';
 import api from '@/apis/app';
 
-export default function KakaoCallbackPage() {
+function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get('code');
@@ -77,5 +77,19 @@ export default function KakaoCallbackPage() {
     <div className="flex justify-center items-center h-screen">
       <p className="text-lg">카카오 로그인 처리 중...</p>
     </div>
+  );
+}
+
+export default function KakaoCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-lg">로딩 중...</p>
+        </div>
+      }
+    >
+      <KakaoCallbackContent />
+    </Suspense>
   );
 }

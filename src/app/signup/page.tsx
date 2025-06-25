@@ -1,14 +1,13 @@
 'use client';
-// import { useSignupStore } from '@/stores/useSignUpStore';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AreaSelector from '@/components/common/AreaSelector';
 import InterestSelector from '@/app/signup/_components/InterestSelector';
 import DigitalLevelSelector from '@/app/signup/_components/DigitalLevelSelector';
 import { useSignupSubmit } from '@/hooks/useSignupSubmit';
 import LabeledInput from '@/app/signup/_components/LabeledInput';
 import BirthDateInput from '@/app/signup/_components/BirthDateInput';
-import { useEffect, useState } from 'react';
 import { getAreaOptions, getInterestOptions } from '@/apis/options';
-import { useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/useAuth';
 
 export type AreaOption = {
@@ -25,7 +24,7 @@ interface InterestApiResponse {
   results: Interest[];
 }
 
-export default function SignupPage() {
+function SignupContent() {
   const { handleSubmit, setSignupData, signupData, areaInfo, setAreaInfo } = useSignupSubmit();
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
   const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
@@ -220,5 +219,19 @@ export default function SignupPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full max-w-[1280px] px-16 py-12 mx-auto">
+        <div className="w-full flex justify-center items-center h-screen">
+          <p className="text-lg">로딩 중...</p>
+        </div>
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 }
