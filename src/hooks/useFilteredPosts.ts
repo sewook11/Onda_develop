@@ -7,10 +7,10 @@ export function useFilteredPosts(searchParams: SearchParams, page: number) {
   const { data, isLoading } = useFetchPostList(page);
 
   const hasFilter =
-    searchParams.category ||
-    searchParams.interest ||
-    searchParams.area?.childId ||
-    searchParams.keyword;
+    !!searchParams.category?.id ||
+    !!searchParams.interest?.id ||
+    !!searchParams.area?.childId.id ||
+    !!searchParams.keyword?.trim();
 
   const filtered = useMemo<Post[]>(() => {
     const posts = data?.results ?? [];
@@ -18,22 +18,22 @@ export function useFilteredPosts(searchParams: SearchParams, page: number) {
 
     return posts.filter((post) => {
       const filteredCategory =
-        !searchParams.category || post.category === searchParams.category;
+        searchParams.category?.id === 0 ||
+        post.category.id === searchParams.category.id;
 
       const filteredInterest =
-        !searchParams.interest || post.interest === searchParams.interest;
+        searchParams.interest?.id === 0 ||
+        post.interest?.id === searchParams.interest.id;
 
       const filteredArea =
-        !searchParams.area?.childId || post.area === searchParams.area.childId;
+        searchParams.area?.childId?.id === 0 ||
+        post.area?.id === searchParams.area.childId.id;
 
       const filteredKeyword =
         !searchParams.keyword || post.title.includes(searchParams.keyword);
 
       return (
-        filteredCategory &&
-        filteredInterest &&
-        filteredArea &&
-        filteredKeyword
+        filteredCategory && filteredInterest && filteredArea && filteredKeyword
       );
     });
   }, [data, searchParams, hasFilter]);

@@ -24,6 +24,7 @@ const LeaderDetailPage = () => {
   const handleSave = () => {
     if (!currentStatus) return;
 
+    console.log(currentStatus)
     updateStatus(currentStatus, {
       onSuccess: () => {
         alert('상태가 성공적으로 저장되었습니다.');

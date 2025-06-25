@@ -2,13 +2,13 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import Button from "@/components/common/Button";
-import { Post } from "@/types/post";
+import { Option, Post } from "@/types/post";
 import { useEffect } from "react";
 import ImageUploader from "./ImageUploader";
 import DropdownInput from "../../_components/DropdownInput";
 import useOptions from "@/hooks/useOptions";
 import AreaDropdown from "../../_components/AreaDropdown";
-import { FileData } from "@/types/file";
+import { PostFile } from "@/types/file";
 
 interface PostFormProps {
   initialValue?: Post;
@@ -20,13 +20,13 @@ interface PostFormProps {
 export interface PostFormData {
   title: string;
   content: string;
-  category?: number;
-  interest?: number;
+  category?: Option;
+  interest?: Option;
   area?: {
-    parentId: number;
-    childId: number;
+    parentId: Option;
+    childId: Option;
   };
-  file?: FileData | File | null;
+  file?: PostFile | File | null;
 }
 
 export default function PostForm({
@@ -64,7 +64,7 @@ export default function PostForm({
   // 기존 게시글이 없는 경우 데이터폼 초기화
   useEffect(() => {
     if (initialValue) {
-      const childId = initialValue.area;
+      const childId = initialValue.area?.id;
 
       // childId를 통해 parentId를 찾음
       const parent = areaOptions.find((p) =>
@@ -75,8 +75,10 @@ export default function PostForm({
       const areaValue =
         parent && childId != null
           ? {
-              parentId: parent.id,
-              childId,
+              parentId: { id: parent.id, name: parent.area_name },
+              childId: parent.children?.find(
+                (child) => child.id === childId
+              ) ?? { id: 0, name: "" },
             }
           : undefined;
 
@@ -153,11 +155,7 @@ export default function PostForm({
         <ImageUploader
           setValue={setValue}
           control={control}
-          initialFile={
-            typeof initialValue?.file === "string"
-              ? initialValue.file
-              : undefined
-          }
+          initialFile={initialValue?.file ?? undefined}
         />
 
         <div className="flex gap-4 justify-center w-full">

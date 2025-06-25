@@ -1,20 +1,20 @@
-import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type MoreLinkButtonProps =
   | { href: string; onClick?: never; children: React.ReactNode }
   | { href?: never; onClick: () => void; children: React.ReactNode };
 
 const MoreLinkButton = ({ href, onClick, children }: MoreLinkButtonProps) => {
-  const baseStyle =
-    'inline-flex items-center text-base font-medium text-gray-600 hover:text-black';
+  const baseStyle = 'inline-flex items-center text-base font-medium text-gray-600 hover:text-black';
+  const router = useRouter();
 
   if (href) {
     return (
-      <Link href={href} className={baseStyle}>
+      <div className={baseStyle} onClick={() => router.push(href)}>
         {children}
         <ChevronRight size={18} strokeWidth={2} className="ml-1 text-gray-600" />
-      </Link>
+      </div>
     );
   }
 

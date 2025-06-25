@@ -1,52 +1,32 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import { getMeetDetail } from '@/apis/meetingApi';
+import React, { useEffect, useState } from 'react';
+import { MeetDetail } from '@/types/meetings';
+import Image from 'next/image';
 //import { Calendar, MapPin } from "lucide-react";
 
-interface MeetDetail {
-  id: number;
-  title: string;
-  category: string;
-  leaderName: string;
-  leaderInterest: string;
-  date: string;
-  time: string;
-  totalSessions: number;
-  deadline: string;
-  currentPeople: number;
-  maxPeople: number;
-  location: string;
-  description: string;
-  method: string;
-  digitalLevel: string;
-}
-
-export default function MeetDetailPage({ params }: { params: { meet_id: string } }) {
-  const meetId = params.meet_id;
-
+export default function MeetDetailPage({ params }: { params: Promise<{ meet_id: string }> }) {
+  const [meetId, setMeetId] = useState<string>('');
   const [meetDetail, setMeetDetail] = useState<MeetDetail | null>(null);
 
+  // params를 비동기로 해결
   useEffect(() => {
-    const dummyData: MeetDetail = {
-      id: Number(meetId),
-      title: "디지털의 기초, 실생활에서 100% 활용하기",
-      category: "디지털 학습",
-      leaderName: "공학도님",
-      leaderInterest: "명상, 등산",
-      date: "25.6.14(토)",
-      time: "오전 11:00 ~ 오후 13:00",
-      totalSessions: 4,
-      deadline: "2025-06-10",
-      currentPeople: 8,
-      maxPeople: 10,
-      location: "서울특별시 어쩌구 저쩌구",
-      description:
-        "스마트폰이 어렵게만 느껴졌던 분들께 딱 맞는 디지털 입문 강의! 카카오톡 사용법부터 사진 찍기, 유튜브 보기, 은행 앱 사용까지 차근차근 알려드립니다. 혼자서도 일상을 편리하게 누릴 수 있는 실전 중심 수업으로 디지털 세상을 즐기는 시니어로 성장해보세요.",
-      method: "온라인",
-      digitalLevel: "하",
-    };
+    params.then((resolvedParams) => {
+      setMeetId(resolvedParams.meet_id);
+    });
+  }, [params]);
 
-    setMeetDetail(dummyData);
+  // meetId가 설정된 후 데이터 가져오기
+  useEffect(() => {
+    if (meetId) {
+      async function fetchMeetDetail() {
+        const response = await getMeetDetail(Number(meetId));
+        console.log(response)
+        setMeetDetail(response);
+      }
+      fetchMeetDetail();
+    }
   }, [meetId]);
 
   if (!meetDetail) return <div className="text-center py-20">로딩 중...</div>;
@@ -64,30 +44,30 @@ export default function MeetDetailPage({ params }: { params: { meet_id: string }
       {/* 이미지 + 리더정보 */}
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1 bg-gray-100 h-[300px] rounded-xl flex items-center justify-center text-sm text-gray-400">
-          모임 이미지 영역
+          <Image src={meetDetail.file?.file} alt={meetDetail.title} width={300} height={300} />
         </div>
 
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
-              {/* 리더 이미지 */}
+              <Image src={meetDetail.leader.file.file} alt={meetDetail.leader.nickname} width={64} height={64} />
             </div>
             <div className="flex flex-col">
               <div className="text-sm text-blue-600 font-semibold">인기 리더</div>
-              <div className="text-lg font-bold">{meetDetail.leaderName}</div>
-              <div className="text-sm text-gray-500"># 관심분야 : {meetDetail.leaderInterest}</div>
+              <div className="text-lg font-bold">{meetDetail.leader.nickname}</div>
+              <div className="text-sm text-gray-500"># 관심분야 : {meetDetail.leader.bio}</div>
             </div>
           </div>
 
-         <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
             {/* <Calendar size={16} /> */}
-            <span>{meetDetail.date}</span>
+            <span>{meetDetail.schedule[0]}</span>
           </div>
 
-          <div className="text-sm text-gray-600">{meetDetail.time}</div>
+          <div className="text-sm text-gray-600">{meetDetail.schedule[1]}</div>
 
           <div className="border border-gray-300 rounded-md p-2 text-center text-sm font-semibold">
-            총 {meetDetail.totalSessions} 회
+            총 {meetDetail.session_count} 회
           </div>
         </div>
       </div>
@@ -98,7 +78,12 @@ export default function MeetDetailPage({ params }: { params: { meet_id: string }
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
         <div>
           <label className="block text-sm text-gray-600 mb-1">모집 마감일</label>
-          <input type="text" className="w-full border rounded-md p-2" value={meetDetail.deadline} readOnly />
+          <input
+            type="text"
+            className="w-full border rounded-md p-2"
+            value={meetDetail.application_deadline}
+            readOnly
+          />
         </div>
 
         <div>
@@ -106,7 +91,7 @@ export default function MeetDetailPage({ params }: { params: { meet_id: string }
           <input
             type="text"
             className="w-full border rounded-md p-2"
-            value={`${meetDetail.currentPeople} / ${meetDetail.maxPeople}`}
+            value={`${meetDetail.current_people} / ${meetDetail.max_people}`}
             readOnly
           />
         </div>
@@ -132,12 +117,16 @@ export default function MeetDetailPage({ params }: { params: { meet_id: string }
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm text-gray-600 mb-1">진행 방법</label>
-          <div className="border border-primary text-primary rounded-md py-2 text-center">{meetDetail.method}</div>
+          <div className="border border-primary text-primary rounded-md py-2 text-center">
+            {meetDetail.category.category_name}
+          </div>
         </div>
 
         <div>
           <label className="block text-sm text-gray-600 mb-1">디지털 난이도</label>
-          <div className="border border-primary text-primary rounded-md py-2 text-center">{meetDetail.digitalLevel}</div>
+          <div className="border border-primary text-primary rounded-md py-2 text-center">
+            {meetDetail.digital_level.display}
+          </div>
         </div>
       </div>
     </main>

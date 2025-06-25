@@ -6,7 +6,7 @@ import DigitalLevelSelector from "@/app/signup/_components/DigitalLevelSelector"
 import { useSignupSubmit } from "@/hooks/useSignupSubmit";
 import LabeledInput from "@/app/signup/_components/LabeledInput";
 import BirthDateInput from "@/app/signup/_components/BirthDateInput";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { getAreaOptions, getInterestOptions } from "@/apis/options";
 import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuth";
@@ -25,18 +25,13 @@ interface InterestApiResponse {
   results: Interest[];
 }
 
-export default function SignupPage() {
-  const { handleSubmit, setSignupData, signupData } = useSignupSubmit();
+function SignupContent() {
+  const { handleSubmit, setSignupData, signupData, areaInfo, setAreaInfo } =
+    useSignupSubmit();
   const [areaOptions, setAreaOptions] = useState<AreaOption[]>([]);
   const [interestOptions, setInterestOptions] = useState<InterestApiResponse>({
     results: [],
   });
-  const [areaInfo, setAreaInfo] = useState({
-    area_id: -1,
-    selectedSido: "",
-    selectedDistrict: "",
-  });
-  // const [email, setEmail] = useState();
 
   const {
     email,
@@ -49,7 +44,6 @@ export default function SignupPage() {
     birthMonth,
     birthDay,
     agreement,
-    // toggleAgreement,
   } = signupData;
 
   useEffect(() => {
@@ -57,15 +51,12 @@ export default function SignupPage() {
       const data = await getAreaOptions();
       setAreaOptions(data);
     };
-    fetchAreaOptions();
-  }, []);
-
-  useEffect(() => {
     const fetchInterestOptions = async () => {
       const data = await getInterestOptions();
       setInterestOptions(data);
     };
     fetchInterestOptions();
+    fetchAreaOptions();
   }, []);
 
   const searchParams = useSearchParams();
@@ -82,15 +73,17 @@ export default function SignupPage() {
       }));
     }
   }, [searchParams, authUser, setSignupData]);
-  console.log("handleSubmit");
+
   return (
     <main className="w-full max-w-[1280px] px-16 py-12 mx-auto">
       <h1 className="text-xl font-bold mb-10">회원가입</h1>
-
       <div className="w-full flex justify-center mt-20">
         <form
           id="signupForm"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            console.log("areainfo", areaInfo);
+            handleSubmit(e, areaInfo.area_id);
+          }}
           className="space-y-6 w-full max-w-md"
         >
           <LabeledInput
@@ -148,34 +141,38 @@ export default function SignupPage() {
               />
             </>
           )}
-          <LabeledInput
-            label="비밀번호"
-            name="password"
-            value={password}
-            onChange={(e) =>
-              setSignupData((prev) => ({
-                ...prev,
-                password: e.target.value,
-              }))
-            }
-            placeholder="비밀번호"
-            type="password"
-            required
-          />
-          <LabeledInput
-            label="비밀번호 확인"
-            name="password_confirm"
-            value={password_confirm}
-            onChange={(e) =>
-              setSignupData((prev) => ({
-                ...prev,
-                password_confirm: e.target.value,
-              }))
-            }
-            placeholder="비밀번호 확인"
-            type="password"
-            required
-          />
+          {!signupData.isKakaoUser && (
+            <>
+              <LabeledInput
+                label="비밀번호"
+                name="password"
+                value={password}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                placeholder="비밀번호"
+                type="password"
+                required
+              />
+              <LabeledInput
+                label="비밀번호 확인"
+                name="password_confirm"
+                value={password_confirm}
+                onChange={(e) =>
+                  setSignupData((prev) => ({
+                    ...prev,
+                    password_confirm: e.target.value,
+                  }))
+                }
+                placeholder="비밀번호 확인"
+                type="password"
+                required
+              />
+            </>
+          )}
           <LabeledInput
             label="전화번호"
             name="phone"
@@ -193,25 +190,6 @@ export default function SignupPage() {
                 areaOptions={areaOptions}
                 areaInfo={areaInfo}
                 setAreaInfo={setAreaInfo}
-                onSelect={(sido, district) => {
-                  const matched = areaOptions
-                    .find((a) => a.area_name === sido)
-                    ?.children.find((d) => d.area_name === district);
-
-                  if (matched) {
-                    setAreaInfo((prev) => ({
-                      ...prev,
-                      area_id: matched.id,
-                      selectedSido: sido,
-                      selectedDistrict: district,
-                    }));
-
-                    setSignupData((prev) => ({
-                      ...prev,
-                      area_id: matched.id,
-                    }));
-                  }
-                }}
               />
             </div>
           </div>
@@ -263,8 +241,8 @@ export default function SignupPage() {
                 htmlFor="agreement"
                 className="leading-snug break-words text-gray-700"
               >
-                [필수] ‘개인정보 수집 및 이용’, ‘서비스 이용 약관’ 등에 모두
-                동의합니다.
+                [필수] &apos;개인정보 수집 및 이용&apos;, &apos;서비스 이용
+                약관&apos; 등에 모두 동의합니다.
               </label>
             </div>
 
@@ -279,5 +257,21 @@ export default function SignupPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-[1280px] px-16 py-12 mx-auto">
+          <div className="w-full flex justify-center items-center h-screen">
+            <p className="text-lg">로딩 중...</p>
+          </div>
+        </div>
+      }
+    >
+      <SignupContent />
+    </Suspense>
   );
 }

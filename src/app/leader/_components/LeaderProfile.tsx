@@ -16,20 +16,19 @@ type LeaderProfileProps = {
 const LeaderProfile = ({ leader, currentStatus, setCurrentStatus }: LeaderProfileProps) => {
     const { user } = useAuthStore();
     const { label, className, icon } = getStatusLabel(currentStatus, 'leader');
-
-    console.log("리더:", leader)
     
     return (
         <div className="flex items-center space-x-4 p-4 justify-between">
             <div className="flex items-center gap-5">
-                <div className="w-48 h-48 rounded-full overflow-hidden border bg-gray-100 flex items-center justify-center">
+                <div className="w-40 h-40 rounded-full overflow-hidden border bg-gray-100 flex items-center justify-center">
                     {leader?.profileImage ? (
                     <Image
-                        src={leader.profileImage.original}
+                        src={leader.profileImage}
                         alt="프로필 이미지"
-                        className="w-full h-full object-cover"
-                        width={208}
-                        height={208}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                        priority
                     />
                     ) : (
                     <UserRound className="text-gray-400 w-20 h-20" />

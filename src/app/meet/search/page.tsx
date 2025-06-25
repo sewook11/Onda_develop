@@ -1,33 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import MeetSearchBar from "@/app/meet/search/_components/MeetSearchBar";
-import MeetFilterBar from "@/app/meet/search/_components/MeetFilterBar";
-import MeetCardList from "@/app/meet/search/_components/MeetCardList";
+import React, { useState } from 'react';
+import MeetSearchBar from '@/app/meet/search/_components/MeetSearchBar';
+import MeetFilterBar from '@/app/meet/search/_components/MeetFilterBar';
+import MeetCardList from '@/app/meet/search/_components/MeetCardList';
 
 export default function MeetSearchPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
-    category: "",
-    area: "",
-    digitalLevel: "",
+    category: '',
+    area: '',
+    digitalLevel: '',
   });
-
-  const handleSearch = () => {
-    console.log("검색어:", searchQuery);
-    console.log("필터:", filters);
-    // 나중에 이 위치에 api 요청 붙일 예정
-  };
 
   return (
     <main className="max-w-7xl mx-auto p-6">
       <h1 className="text-xl font-bold text-main mb-6">모임 검색</h1>
 
-      <MeetSearchBar
-        value={searchQuery}
-        onChange={setSearchQuery}
-        onSearch={handleSearch}
-      />
+      <MeetSearchBar value={searchQuery} onChange={setSearchQuery} onSearch={() => {}} />
 
       <MeetFilterBar filters={filters} onChange={setFilters} />
 

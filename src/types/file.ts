@@ -1,8 +1,7 @@
-
 export type FileData = {
     id: number;
     user_id?: number;
-    file_url: string;
+    file: string;
     file_type: "image" | "video" | "file";
     category: "post" | "profile" | "meet" | "certificate" | "other";
     file_name?: string | null;
@@ -11,4 +10,5 @@ export type FileData = {
     uploaded_at?: Date;
 }
 
-export type FileCategory = 'post' | 'profile' | 'meet' | 'certificate' | 'other';
+export type PostFile = Omit<FileData, "category">;
+

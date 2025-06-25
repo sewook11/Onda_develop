@@ -1,36 +1,37 @@
 "use client";
-import { FileData } from "./file";
+import { PostFile } from "./file";
+
+export type Option = {
+  id: number;
+  name: string;
+}
 
 export type Post = {
   id: number;
   title: string;
   content: string;
-  category: number;
-  area?: number | null;
-  interest?: number | null;
-  file?: number | null;
-  created_at: Date;
-  updated_at?: Date | null;
+  category: Option;
+  area?: Option | null;
+  interest?: Option | null;
+  file?: PostFile | null;
+  created_at: string;
+  updated_at?: string | null;
   nickname: string;
   is_mine: boolean;
   like_count?: number;
   //   is_liked: boolean;
 };
 
-export type PostWithFile = Post & {
-  fileData?: FileData | null;
-}
-
-export type PostIds = {
+export type PostOptions = {
   id: number;
-  category: number;
-  area?: number | null;
-  interest?: number | null;
+  category: Option;
+  area?: Option | null;
+  interest?: Option | null;
 };
 
 export type PostAuthor = {
-  created_at: Date;
-  updated_at?: Date | null;
+  created_at: string;
+  updated_at?: string | null;
   nickname: string;
   is_mine: boolean;
 };
@@ -48,8 +49,8 @@ export type Comment = {
   nickname: string;
   content: string;
   parent?: number | null;
-  created_at: Date;
-  updated_at?: Date;
+  created_at: string;
+  updated_at?: string;
   is_mine: boolean;
   replies?: Comment[]; // 대댓글
 };

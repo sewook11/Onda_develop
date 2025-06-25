@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
-import { ArrowLeftRight, Camera, SquarePen, UserRound } from "lucide-react";
-import Image from "next/image";
-import ProfileImageModal from "./ProfileImageModal";
-import { useViewModeStore } from "@/stores/useViewModeStore";
-import { useAuthStore } from "@/stores/useAuth";
-import { useEffect, useState, useRef } from "react";
-import api from "@/apis/app";
-import { END_POINT } from "@/constants/route";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import { ArrowLeftRight, Camera, SquarePen, UserRound } from 'lucide-react';
+import Image from 'next/image';
+import ProfileImageModal from './ProfileImageModal';
+import { useViewModeStore } from '@/stores/useViewModeStore';
+import { useAuthStore } from '@/stores/useAuth';
+import { useEffect, useState, useRef } from 'react';
+import api from '@/apis/app';
+import { END_POINT } from '@/constants/route';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export interface Profile {
-  id: number;
   email: string;
   name: string;
   nickname: string;
@@ -34,13 +33,12 @@ export interface Profile {
 }
 
 const UserProfile = () => {
-
-  const { profile, setProfile } = useAuthStore();
   const route = useRouter();
   const { viewMode, toggleViewMode } = useViewModeStore();
+  const [profile, setProfile] = useState<Profile | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
   const role = useAuthStore((s) => s.user?.role);
-  const isLeader = role === "leader";
+  const isLeader = role === 'leader';
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showOptions, setShowOptions] = useState(false);
 
@@ -52,14 +50,13 @@ const UserProfile = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setProfile(res.data); // 전역 저장
+        setProfile(res.data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchProfile();
-  }, [accessToken, setProfile]);
-  
+  }, [accessToken]);
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,21 +64,21 @@ const UserProfile = () => {
     if (!file || !accessToken) return;
 
     const formData = new FormData();
-    formData.append("category", "profile");
-    formData.append("file", file);
+    formData.append('category', 'profile');
+    formData.append('file', file);
 
     try {
       const uploadRes = await api.post(END_POINT.FILES_UPLOAD, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-      console.log("uploadRes:", uploadRes.data);
+      console.log('uploadRes:', uploadRes.data);
 
       const uploadId = uploadRes.data.ids?.[0];
       if (!uploadId) {
-        console.error("업로드된 파일 ID가 없습니다.");
+        console.error('업로드된 파일 ID가 없습니다.');
         return;
       }
 
@@ -104,17 +101,16 @@ const UserProfile = () => {
       setProfile(profileRes.data);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        console.error("응답 상태:", err.response?.status);
-        console.error("응답 메시지:", err.response?.data); // 여기가 핵심!
+        console.error('응답 상태:', err.response?.status);
+        console.error('응답 메시지:', err.response?.data); // 여기가 핵심!
       } else {
-        console.error("기타 에러:", err);
+        console.error('기타 에러:', err);
       }
     }
   };
   // 파일 삭제
   const handleDeleteImage = async () => {
-    if (!accessToken || !profile?.file || typeof profile.file !== "object")
-      return;
+    if (!accessToken || !profile?.file || typeof profile.file !== 'object') return;
 
     try {
       await api.delete(END_POINT.FILES_DELETE, {
@@ -133,7 +129,7 @@ const UserProfile = () => {
       setProfile(res.data);
       setShowOptions(false);
     } catch (err) {
-      console.error("이미지 삭제 실패:", err);
+      console.error('이미지 삭제 실패:', err);
     }
   };
 
@@ -144,7 +140,7 @@ const UserProfile = () => {
         <h3 className="text-lg font-semibold">{profile?.name}님</h3>
         <button
           className="text-gray-500 hover:text-black ml-3"
-          onClick={() => route.push("/mypage/edit_profile")}
+          onClick={() => route.push('/mypage/edit_profile')}
           aria-label="프로필 수정"
         >
           <SquarePen />
@@ -171,9 +167,7 @@ const UserProfile = () => {
         <div className="relative w-52 h-52">
           {/* 프로필 이미지 */}
           <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 relative">
-            {profile?.file &&
-            typeof profile.file === "object" &&
-            profile.file.file ? (
+            {profile?.file && typeof profile.file === 'object' && profile.file.file ? (
               <Image
                 src={profile.file.file}
                 alt="프로필 이미지"
@@ -190,7 +184,7 @@ const UserProfile = () => {
           <button
             className="absolute bottom-2 right-2 z-50 w-10 h-10 bg-white border rounded-full p-1 shadow-md flex items-center justify-center hover:bg-gray-100"
             onClick={() => {
-              if (profile?.file && typeof profile.file === "object") {
+              if (profile?.file && typeof profile.file === 'object') {
                 setShowOptions(true);
               } else {
                 fileInputRef.current?.click();
@@ -201,13 +195,7 @@ const UserProfile = () => {
           </button>
 
           {/* 숨겨진 파일 input */}
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleImageUpload}
-          />
+          <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
         </div>
 
         {/* 정보 */}
@@ -218,22 +206,20 @@ const UserProfile = () => {
           </p>
           <p>
             <span className="font-semibold mr-2">전화번호</span>
-            {profile?.phone_number ?? "-"}
+            {profile?.phone_number ?? '-'}
           </p>
           <p>
             <span className="font-semibold mr-2">생년월일</span>
-            {profile?.date_of_birth
-              ? new Date(profile.date_of_birth).toLocaleDateString("ko-KR")
-              : "-"}
+            {profile?.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString('ko-KR') : '-'}
           </p>
           <p>
             <span className="font-semibold mr-2">디지털난이도</span>
-            {profile?.digital_level?.display ?? "-"}
+            {profile?.digital_level?.display ?? '-'}
           </p>
 
           <p>
             <span className="font-semibold mr-2">관심 분야</span>
-            {profile?.interests?.map((i) => i.interest_name).join(", ")}
+            {profile?.interests?.map((i) => i.interest_name).join(', ')}
           </p>
         </div>
 
@@ -244,7 +230,7 @@ const UserProfile = () => {
             className="flex items-center ml-auto px-3 py-1 border rounded-full text-xs text-gray-600 hover:bg-gray-100"
           >
             <ArrowLeftRight size={16} className="mr-1" />
-            {viewMode === "leader" ? "일반 유저로 전환" : "리더 유저로 전환"}
+            {viewMode === 'leader' ? '일반 유저로 전환' : '리더 유저로 전환'}
           </button>
         )}
       </div>
