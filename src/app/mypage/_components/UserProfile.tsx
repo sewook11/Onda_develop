@@ -163,65 +163,67 @@ const UserProfile = () => {
       )}
 
       {/* 프로필 영역 */}
-      <div className="flex items-center space-x-6">
-        {/* 이미지 */}
-        <div className="relative w-52 h-52">
-          {/* 프로필 이미지 */}
-          <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 relative">
-            {profile?.file && typeof profile.file === 'object' && profile.file.file ? (
-              <Image
-                src={profile.file.file}
-                alt="프로필 이미지"
-                className="w-full h-full object-cover"
-                width={208}
-                height={208}
-              />
-            ) : (
-              <UserRound className="text-gray-400 w-20 h-20 absolute inset-0 m-auto" />
-            )}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-10">
+          {/* 이미지 */}
+          <div className="relative w-52 h-52">
+            {/* 프로필 이미지 */}
+            <div className="w-52 h-52 rounded-full overflow-hidden border bg-gray-100 relative">
+              {profile?.file && typeof profile.file === 'object' && profile.file.file ? (
+                <Image
+                  src={profile.file.file}
+                  alt="프로필 이미지"
+                  className="w-full h-full object-cover"
+                  width={208}
+                  height={208}
+                />
+              ) : (
+                <UserRound className="text-gray-400 w-20 h-20 absolute inset-0 m-auto" />
+              )}
+            </div>
+
+            {/* 업로드 버튼 */}
+            <button
+              className="absolute bottom-2 right-2 z-50 w-10 h-10 bg-white border rounded-full p-1 shadow-md flex items-center justify-center hover:bg-gray-100"
+              onClick={() => {
+                if (profile?.file && typeof profile.file === 'object') {
+                  setShowOptions(true);
+                } else {
+                  fileInputRef.current?.click();
+                }
+              }}
+            >
+              <Camera size={20} />
+            </button>
+
+            {/* 숨겨진 파일 input */}
+            <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
           </div>
 
-          {/* 업로드 버튼 */}
-          <button
-            className="absolute bottom-2 right-2 z-50 w-10 h-10 bg-white border rounded-full p-1 shadow-md flex items-center justify-center hover:bg-gray-100"
-            onClick={() => {
-              if (profile?.file && typeof profile.file === 'object') {
-                setShowOptions(true);
-              } else {
-                fileInputRef.current?.click();
-              }
-            }}
-          >
-            <Camera size={20} />
-          </button>
+          {/* 정보 */}
+          <div className="flex flex-col space-y-3 text-sm text-gray-800">
+            <p>
+              <span className="font-semibold mr-2">이메일</span>
+              {profile?.email}
+            </p>
+            <p>
+              <span className="font-semibold mr-2">전화번호</span>
+              {profile?.phone_number ?? '-'}
+            </p>
+            <p>
+              <span className="font-semibold mr-2">생년월일</span>
+              {profile?.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString('ko-KR') : '-'}
+            </p>
+            <p>
+              <span className="font-semibold mr-2">디지털난이도</span>
+              {profile?.digital_level?.display ?? '-'}
+            </p>
 
-          {/* 숨겨진 파일 input */}
-          <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
-        </div>
-
-        {/* 정보 */}
-        <div className="flex flex-col space-y-3 text-sm text-gray-800">
-          <p>
-            <span className="font-semibold mr-2">이메일</span>
-            {profile?.email}
-          </p>
-          <p>
-            <span className="font-semibold mr-2">전화번호</span>
-            {profile?.phone_number ?? '-'}
-          </p>
-          <p>
-            <span className="font-semibold mr-2">생년월일</span>
-            {profile?.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString('ko-KR') : '-'}
-          </p>
-          <p>
-            <span className="font-semibold mr-2">디지털난이도</span>
-            {profile?.digital_level?.display ?? '-'}
-          </p>
-
-          <p>
-            <span className="font-semibold mr-2">관심 분야</span>
-            {profile?.interests?.map((i) => i.interest_name).join(', ')}
-          </p>
+            <p>
+              <span className="font-semibold mr-2">관심 분야</span>
+              {profile?.interests?.map((i) => i.interest_name).join(', ')}
+            </p>
+          </div>
         </div>
 
         {/* 보기 모드 전환 버튼 */}

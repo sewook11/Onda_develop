@@ -16,6 +16,7 @@ type LeaderProfileProps = {
 const LeaderProfile = ({ leader, currentStatus, setCurrentStatus }: LeaderProfileProps) => {
     const { user } = useAuthStore();
     const { label, className, icon } = getStatusLabel(currentStatus, 'leader');
+
     
     return (
         <div className="flex items-center space-x-4 p-4 justify-between">
@@ -25,10 +26,9 @@ const LeaderProfile = ({ leader, currentStatus, setCurrentStatus }: LeaderProfil
                     <Image
                         src={leader.profileImage}
                         alt="프로필 이미지"
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                        priority
+                        className="w-full h-full object-cover"
+                        width={160}
+                        height={160}
                     />
                     ) : (
                     <UserRound className="text-gray-400 w-20 h-20" />

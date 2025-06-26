@@ -62,10 +62,11 @@ export function useDeleteLeader() {
 }
 
 //나의 리더 신청 상세 조회
-export function useMyLeaderApplication() {
+export function useMyLeaderApplication(enabled: boolean = true) {
     return useQuery<LeaderApplicationDetail>({
       queryKey: ['myLeader'],
       queryFn: getMyLeaderApplication,
+      enabled: enabled
     });
 }
 

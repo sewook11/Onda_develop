@@ -72,22 +72,24 @@ const LeaderMeetingList = ({
         </Button>
       </div>
 
-      <div className="space-y-4">
-        {paginated.length === 0 ? (
-          <p className="text-sm text-gray-500">해당 상태의 모임이 없습니다.</p>
-        ) : (
-          paginated.map((meeting) => (
-            <LeaderMeetingCard key={meeting.id} {...meeting} />
-          ))
-        )}
-      </div>
+      {meetings.length === 0 ? (
+        <p className="text-xs text-gray-600">등록된 모임이 없습니다.</p>
+      ) : (
+        <>
+          <div className="space-y-4">
+            {paginated.map((meeting) => (
+              <LeaderMeetingCard key={meeting.id} {...meeting} />
+            ))}
+          </div>
 
-      {showPagination && onPageChange && totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
+          {showPagination && onPageChange && totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
+          )}
+        </>
       )}
     </div>
   );

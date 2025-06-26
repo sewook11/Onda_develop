@@ -10,7 +10,7 @@ export type SLeader = {
     user_phone: string;
     user_birthdate?: string;
     user_interests?: string[];
-    user_profileimage?: ProfileImage;
+    user_profile_image?: ProfileImage;
     status: ApplicationStatus;
     created_at: string;
     updated_at: string;
@@ -38,7 +38,7 @@ export function transformSLeaderToLeader(s: SLeader): Leader {
       status: s.status,
       birth: s.user_birthdate ? new Date(s.user_birthdate) : undefined,
       interests: s.user_interests,
-      profileImage: s.user_profileimage?.thumbnail ?? '',
+      profileImage: s.user_profile_image?.original ?? '',
       createdAt: new Date(s.created_at),
       updatedAt: new Date(s.updated_at),
     };
@@ -80,7 +80,7 @@ export function transformSLeaderApplicationDetail(s: SLeaderApplicationDetail): 
       status: s.status,
       birth: s.user_birthdate ? new Date(s.user_birthdate) : undefined,
       interests: s.user_interests,
-      profileImage: s.user_profileimage?.thumbnail ?? '',
+      profileImage: s.user_profile_image?.original ?? '',
       createdAt: new Date(s.created_at),
       updatedAt: new Date(s.updated_at),
       bio: s.bio,

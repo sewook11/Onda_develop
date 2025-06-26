@@ -48,7 +48,7 @@ export default function AppliedScheduleList() {
     };
   
     fetchAppliedMeetings();
-  }, [router, applySchedule]);
+  }, [router]);
 
   if (applySchedule.length === 0) {
     return (

@@ -13,8 +13,11 @@ const LeaderPage = () => {
   const { user } = useAuthStore();
   const router = useRouter();
 
-  const { data: myLeader, isLoading, isError, } = useMyLeaderApplication();
+  const isLeader = user?.role === "leader";
+
+  const { data: myLeader, isLoading, isError, } = useMyLeaderApplication(isLeader);
   const { mutate: deleteLeaderMutate } = useDeleteLeader();
+
 
   const handleDelete = () => {
     if (!myLeader) return;
