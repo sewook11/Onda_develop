@@ -7,7 +7,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import FinishedMeetDetailModal from '../meet/detail/_components/FinishedMeetDetailModal';
 import ReviewWriteModal from '../meet/review/_components/ReviewWriteModal';
 
-
 interface MeetingStatusButtonProps {
   status: string;
   onClickApply?: () => void;
