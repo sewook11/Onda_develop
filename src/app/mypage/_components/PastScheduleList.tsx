@@ -9,6 +9,17 @@ import api from "@/apis/app";
 import { Meeting } from "@/types/meetings";
 import { useAuthStore } from "@/stores/useAuth";
 
+interface Review {
+  id: number;
+  nickname: string;
+  rating: number;
+  content: string;
+  created_at: string;
+  meet_title: string;
+  meet_date: string;
+  meet_location: string;
+}
+
 export default function PastScheduleList() {
   const [pastScheduleList, setPastScheduleList] = useState<Meeting[]>([]);
   const { modals, closeModal } = useModalStore();
@@ -22,15 +33,44 @@ export default function PastScheduleList() {
           router.push("/login");
           return;
         }
-        const response = await api.get(`/meets?status=false`);
-        setPastScheduleList(response.data.results);
+
+        const [appliedRes, pastRes, reviewRes] = await Promise.all([
+          api.get("/meets/users", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }),
+          api.get("/meets?status=false"),
+          api.get("/users/reviews", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }),
+        ]);
+
+        const appliedMeetings: Meeting[] = appliedRes.data.results;
+        const pastMeetings: Meeting[] = pastRes.data.results;
+        const reviews: Review[] = reviewRes.data.results;
+
+        const appliedIds = new Set(appliedMeetings.map((m) => m.meet_id));
+        const reviewsSet = new Set(
+          reviews.map((r) => `${r.meet_title}_${r.meet_date}`)
+        );
+
+        const filtered = pastMeetings.filter(
+          (m) =>
+            appliedIds.has(m.meet_id) && !reviewsSet.has(`${m.title}_${m.date}`)
+        );
+
+        console.log("✅ 신청한 모임 ID:", [...appliedIds]);
+        console.log("✅ 지난 모임 응답:", pastMeetings);
+        console.log("✅ 필터링 결과:", filtered);
+
+        setPastScheduleList(filtered);
       } catch (error) {
         console.error("지난 모임 조회 실패:", error);
         alert("지난 모임 조회에 실패했습니다. 다시 시도해주세요.");
       }
     };
+
     fetchAppliedMeetings();
-  }, [router]);
+  }, [router, accessToken]);
 
   return (
     <section className="px-4 py-6">

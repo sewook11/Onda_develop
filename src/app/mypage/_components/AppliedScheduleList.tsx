@@ -8,7 +8,7 @@ import { FileData } from "@/types/file";
 import { useAuthStore } from "@/stores/useAuth";
 
 interface Meeting {
-  id: number;
+  meet_id: number;
   user_id: number;
   title: string;
   description: string;
@@ -76,16 +76,8 @@ export default function AppliedScheduleList() {
       <div className="md:grid-cols-3 md:grid flex flex-col gap-7">
         {applySchedule.map(
           (meeting) => (
-            // isMobile ? (
-            //   <MeetingCardHorizontal
-            //     key={meeting.meet_id}
-            //     item={meeting}
-            //     isApplied
-            //   />
-            // ) : (
-            <MeetingCard key={meeting.id} item={meeting} isApplied />
+            <MeetingCard key={meeting.meet_id} item={meeting} isApplied />
           )
-          // )
         )}
       </div>
     </section>

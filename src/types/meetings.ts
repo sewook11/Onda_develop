@@ -180,4 +180,5 @@ export interface Meeting {
   application_deadline: string;
   updated_at: string;
   created_at: string;
+  has_review: boolean;
 }
