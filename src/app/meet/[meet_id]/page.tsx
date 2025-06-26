@@ -59,6 +59,7 @@ export default function MeetDetailPage({
             수정
           </button>
         )}
+        
       </div>
       {/* 이미지 + 리더정보 */}
       <div className="flex flex-col md:flex-row gap-6">

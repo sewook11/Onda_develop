@@ -6,7 +6,7 @@ import api from '@/apis/app';
 
 interface ReviewWriteModalProps {
   modalKey: string;
-  meetId: number;
+  meetId: number | string;
   onClose: () => void;
   onSubmit?: (rating: number, content: string) => void;
 }

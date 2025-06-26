@@ -1,41 +1,39 @@
 'use client';
 
-import { useModalStore } from '@/stores/useModalStore';
-import FinishedMeetDetailModal from '../meet/detail/_components/FinishedMeetDetailModal';
-import ReviewWriteModal from '../meet/review/_components/ReviewWriteModal';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { FinishedMeetDetailModalProps } from '../meet/detail/_components/FinishedMeetDetailModal';
 
-interface MeeringStatusButtonsProps {
+interface MeetingStatusButtonProps {
   status: string;
   onClickApply?: () => void;
   mode?: 'default' | 'past';
-  id?: number | string | undefined;
+  id?: number | string;
+  onClickDetail?: () => void;
+  onClickReview?: () => void;
 }
 
-export default function MeeringStatusButtons({
+export default function MeetingStatusButton({
   status,
   onClickApply,
   mode = 'default',
   id,
 }: MeeringStatusButtonsProps) {
-  const { openModal, closeModal, modals } = useModalStore();
+  const { openModal, closeModal, modals, modalData  } = useModalStore();
   const pathname = usePathname();
   const isMyPage = pathname?.startsWith('/mypage');
 
-  const dummyData = {
-    title: '걷기 & 대화 모임',
-    date: '2025-06-04',
-    location: '서울특별시 어쩌구 저쩌구',
-    descrlption: '가볍게 함께 걸으며\n건강도 챙기고 이웃과 마음을 나눠요',
-    image: null,
-    leaderName: '리더 이름',
-    leaderImage: null,
-  };
-
   const modalKey = mode === 'past' ? 'finishedMeetDetail' : 'meetDetail';
 
-  const openhandler = () => openModal(modalKey);
+  const openhandler = () => {
+    if (!id) {
+      console.warn('meet_id 누락');
+      return;
+    }
+
+    openModal(modalKey, { meet_id: id });
+  };
+
   const closehandler = () => closeModal(modalKey);
 
   return (
@@ -43,15 +41,18 @@ export default function MeeringStatusButtons({
       <div className="flex gap-2">
         {mode === 'past' ? (
           <>
+            {/* 후기 작성 버튼 */}
             <button
               className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition"
-              onClick={() => openModal('reviewWrite')}
+              onClick={onClickReview}
             >
               후기작성
             </button>
+
+            {/* 상세보기 버튼 */}
             <button
               className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
-              onClick={openhandler}
+              onClick={onClickDetail}
             >
               상세보기
             </button>
@@ -72,6 +73,7 @@ export default function MeeringStatusButtons({
               </button>
             )}
 
+            {/* 기본 상세보기는 링크 이동 */}
             <Link href={`/meet/${id}`}>
               <button className="flex-1 border border-orange-500 text-orange-500 p-2 rounded-md hover:bg-orange-50 transition">
                 상세 보기
@@ -81,9 +83,12 @@ export default function MeeringStatusButtons({
         )}
       </div>
 
-      {/* 과거 모임용 모달 */}
+      {/* 과거 모임용 상세 모달 */}
       {mode === 'past' && modals['finishedMeetDetail'] && (
-        <FinishedMeetDetailModal data={dummyData} onClose={closehandler} />
+      <FinishedMeetDetailModal
+  data={modalData.finishedMeetDetail as FinishedMeetDetailModalProps['data']}
+  onClose={closehandler}
+/>
       )}
 
       {/* 후기 작성 모달 */}
@@ -94,7 +99,7 @@ export default function MeeringStatusButtons({
           onSubmit={(rating, content) => {
             console.log('후기 제출', rating, content);
           }}
-          meetId={2}
+          meetId={Number(id)}
         />
       )}
     </>

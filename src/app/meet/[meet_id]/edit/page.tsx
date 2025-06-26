@@ -22,6 +22,8 @@ import {
 } from "@/types/meetings";
 import { useParams, useRouter } from "next/navigation";
 import { getMeetDetail } from "@/apis/meetingApi";
+import { useAuthStore } from "@/stores/useAuth";
+import { MeetDetail } from "@/types/meetings";
 
 export default function EditPage() {
   const [formData, setFormData] = useState<MeetFormData | null>(null);
@@ -38,10 +40,12 @@ export default function EditPage() {
   const [digitalLevelOptions, setDigitalLevelOptions] = useState<
     digitalLevelOption[]
   >([]);
+  const [meetDetail, setMeetDetail] = useState<MeetDetail | null>(null);
   console.log(previewImageUrl);
   const params = useParams();
   const router = useRouter();
   const meetId = params.meet_id;
+  const { user } = useAuthStore();
 
   // 옵션 데이터 불러오기
   useEffect(() => {
@@ -99,6 +103,7 @@ export default function EditPage() {
 
       setImageId(detail.file?.id || null);
       setPreviewImageUrl(detail.file?.file || null);
+      setMeetDetail(detail); // 삭제 권한 판단용
     };
 
     fetchMeet();
@@ -115,6 +120,19 @@ export default function EditPage() {
     await api.put(`/meets/${meetId}`, submitData);
     alert("수정이 완료되었습니다.");
     router.push(`/meet/${meetId}`);
+  };
+
+  // 삭제 함수 추가
+  const handleDelete = async () => {
+    alert("정말 삭제하시겠습니까?");
+    try {
+      await api.delete(`/meets/${meetId}`);
+      alert("모임이 삭제되었습니다.");
+      router.push("/meet");
+    } catch (error) {
+      console.error("삭제 실패", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
   };
 
   if (!formData) return <div className="text-center py-20">로딩 중...</div>;
@@ -290,6 +308,18 @@ export default function EditPage() {
           <Button type="submit" width="w-full" height="h-[44px]">
             모임 수정하기
           </Button>
+
+          {(user?.nickname === meetDetail?.leader?.nickname ||
+            user?.role === "admin") && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-500 text-white hover:bg-red-600 w-full h-[44px] font-bold rounded-md transition text-sm"
+            >
+              모임 삭제하기
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => router.push(`/meet/${meetId}`)}
