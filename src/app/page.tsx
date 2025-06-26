@@ -2,7 +2,7 @@ import BannerSection from "@/app/_components/BannerSection";
 import HeroSection from "@/app/_components/HeroSection";
 import MainBannerSection from "@/app/_components/MainBannerSection";
 import MeetingListSection from "@/app/_components/MeetingListSection";
-import StartSurveySection from "@/app/_components/StartSurveySection";
+// import StartSurveySection from "@/app/_components/StartSurveySection";
 
 export default function Home() {
   return (
@@ -11,7 +11,7 @@ export default function Home() {
       <MainBannerSection />
       <BannerSection />
       <MeetingListSection />
-      <StartSurveySection />
+      {/* <StartSurveySection /> */}
     </main>
   );
 }

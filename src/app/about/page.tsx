@@ -154,7 +154,12 @@ export default function AboutUsPage() {
             언제든 온:다에 문의하세요
           </h2>
           <div className="flex flex-col gap-6 justify-center items-center">
-            <button className="flex gap-4 items-center justify-center text-md rounded-lg bg-[#FEE500] p-4 hover:bg-[#f9e15a] active:bg-[#fed74a]">
+            <a
+              href="https://pf.kakao.com/_your_channel_id/chat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex gap-4 items-center justify-center text-md rounded-lg bg-[#FEE500] p-4 hover:bg-[#f9e15a] active:bg-[#fed74a]"
+            >
               <Image
                 src={KakaoIcon}
                 width={24}
@@ -162,7 +167,7 @@ export default function AboutUsPage() {
                 alt="kakao 아이콘"
               />
               카카오톡에 문의하기
-            </button>
+            </a>
             <button className="flex gap-4 items-center text-md rounded-lg border border-gray-300 p-4 hover:bg-gray-200 active:bg-gray-300">
               <Image
                 src={PhoneIcon}

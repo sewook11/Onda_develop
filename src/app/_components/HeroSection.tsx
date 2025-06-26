@@ -19,8 +19,8 @@ export default function HeroSection() {
             그리고 사람을 잇다
           </h1>
           <div className="flex gap-4">
-            <Button onClick={() => router.push("/#")}>시작하기</Button>
-            <Button color="gray" variant="outline" onClick={() => router.push("/#")}>
+            <Button onClick={() => router.push("/login")}>시작하기</Button>
+            <Button color="gray" variant="outline" onClick={() => router.push("/leader")}>
               리더 신청
             </Button>
           </div>
