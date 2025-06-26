@@ -6,20 +6,8 @@ import MeetCardList from "@/app/meet/search/_components/MeetCardList";
 import DropdownInput from "@/app/community/_components/DropdownInput";
 import TextInput from "@/components/common/TextInput";
 import { Search } from "lucide-react";
-import { MeetingFilter } from "@/types/meetings";
-
-// 모임 상태
-type StatusOption = {
-  id: number;
-  name: string;
-  value: boolean | undefined;
-};
-
-export const STATUS_OPTION: StatusOption[] = [
-  { id: 0, name: "전체", value: undefined },
-  { id: 1, name: "모집중", value: true },
-  { id: 2, name: "마감", value: false },
-];
+import { MeetingFilter, StatusOption } from "@/types/meetings";
+import { STATUS_OPTION } from "@/constants/meeting";
 
 export default function MeetSearchPage() {
   const [searchQuery, setSearchQuery] = useState("");

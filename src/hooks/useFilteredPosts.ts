@@ -9,7 +9,7 @@ export function useFilteredPosts(searchParams: SearchParams, page: number) {
   const hasFilter =
     !!searchParams.category?.id ||
     !!searchParams.interest?.id ||
-    !!searchParams.area?.parentId.id ||
+    !!searchParams.area?.parentId?.id ||
     !!searchParams.area?.childId?.id ||
     !!searchParams.keyword?.trim();
 

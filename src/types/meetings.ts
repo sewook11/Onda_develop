@@ -1,12 +1,26 @@
-import { SelectedArea } from '@/app/community/_components/AreaDropdown';
-import { FileData } from './file';
-import { Option } from './post';
+import { SelectedArea } from "@/app/community/_components/AreaDropdown";
+import { FileData } from "./file";
+import { Option } from "./post";
+
+// 모임 상태
+export type StatusOption = {
+  id: number;
+  name: string;
+  value: boolean | undefined;
+};
 
 export interface MeetingFilter {
   interest: Option | undefined;
   area: SelectedArea | undefined;
   digitalLevel: Option | undefined;
   status: boolean | undefined;
+}
+
+export interface MeetingResponse {
+  results: Meeting[];
+  count: number;
+  next: string | null;
+  previous: string | null;
 }
 
 export interface MeetingCardProps {
@@ -36,7 +50,7 @@ export type Review = {
   meet_title: string;
   meet_date: string;
   meet_location: string;
-}
+};
 
 export type ReviewResponse = {
   average_rating: number;

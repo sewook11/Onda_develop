@@ -11,12 +11,12 @@ import { Option } from "@/types/post";
 import { MeetingFilter } from "@/types/meetings";
 import AreaDropdown from "@/app/community/_components/AreaDropdown";
 import { Area } from "@/types/options";
+import { DEFAULT_MEETING_FILTER } from "@/constants/meeting";
 
 interface MeetFilterBarProps {
   filters: MeetingFilter;
   onChange: (filters: MeetingFilter) => void;
 }
-
 export default function MeetFilterBar({
   filters,
   onChange,
@@ -29,15 +29,8 @@ export default function MeetFilterBar({
     onChange({ ...filters, [key]: value });
   };
 
-  const defaultFilters: MeetingFilter = {
-    interest: undefined,
-    digitalLevel: undefined,
-    area: { parentId: undefined, childId: undefined },
-    status: undefined,
-  };
-
   const resetFilter = () => {
-    onChange(defaultFilters);
+    onChange(DEFAULT_MEETING_FILTER);
   };
 
   useEffect(() => {
