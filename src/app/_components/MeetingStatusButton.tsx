@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { FinishedMeetDetailModalProps } from '../meet/detail/_components/FinishedMeetDetailModal';
+import { useModalStore } from '@/stores/useModalStore';
+import FinishedMeetDetailModal from '../meet/detail/_components/FinishedMeetDetailModal';
+import ReviewWriteModal from '../meet/review/_components/ReviewWriteModal';
+
 
 interface MeetingStatusButtonProps {
   status: string;
@@ -18,7 +22,7 @@ export default function MeetingStatusButton({
   onClickApply,
   mode = 'default',
   id,
-}: MeeringStatusButtonsProps) {
+}: MeetingStatusButtonProps) {
   const { openModal, closeModal, modals, modalData  } = useModalStore();
   const pathname = usePathname();
   const isMyPage = pathname?.startsWith('/mypage');
@@ -44,7 +48,7 @@ export default function MeetingStatusButton({
             {/* 후기 작성 버튼 */}
             <button
               className="flex-1 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition"
-              onClick={onClickReview}
+              onClick={openhandler}
             >
               후기작성
             </button>
@@ -52,7 +56,7 @@ export default function MeetingStatusButton({
             {/* 상세보기 버튼 */}
             <button
               className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition"
-              onClick={onClickDetail}
+              onClick={openhandler}
             >
               상세보기
             </button>

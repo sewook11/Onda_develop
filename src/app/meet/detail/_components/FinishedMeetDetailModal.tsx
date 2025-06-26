@@ -18,28 +18,29 @@ export interface FinishedMeetDetailModalProps {
     image?: string | null;
     leaderName?: string;
     leaderImage?: string | null;
+    modalKey?: string;
   };
   onClose: () => void;
 }
 
-const FinishedMeetDetailModal = ({ modalKey, meetId }: FinishedMeetDetailModalProps) => {
+const FinishedMeetDetailModal = ({data }: FinishedMeetDetailModalProps) => {
   const [meetDetail, setMeetDetail] = useState<MeetDetail | null>(null);
 
   useEffect(() => {
     //모달 데터 불러오기
-    if (meetId) {
+    if (data?.meet_id) {
       async function fetchMeetDetail() {
-        const response = await getMeetDetail(Number(meetId));
+        const response = await getMeetDetail(Number(data?.meet_id));
         setMeetDetail(response);
-        console.log('모달 출력', meetId, response);
+        console.log('모달 출력', data?.meet_id, response);
       }
       fetchMeetDetail();
     }
-  }, [meetId]);
+  }, [data?.meet_id]);
 
   return (
     <Modal
-      modalKey={modalKey}
+      modalKey={data?.modalKey || 'finished-meet-detail'}
       className="md:w-1/2 w-full max-w-[90%] sm:max-w-md md:max-w-xl lg:max-w-2xl px-4 py-6 rounded-2xl"
     >
       {meetDetail ? (

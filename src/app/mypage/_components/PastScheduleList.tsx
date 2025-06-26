@@ -1,18 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { MeetingCard } from '@/components/common/MeetingCard';
-import { useRouter } from 'next/navigation';
-import api from '@/apis/app';
-import { Meeting } from '@/types/meetings';
-import { useModalStore } from '@/stores/useModalStore';
-import FinishedMeetDetailModal from '@/app/meet/detail/_components/FinishedMeetDetailModal';
-import ReviewWriteModal from '@/app/meet/review/_components/ReviewWriteModal';
+import React, { useState, useEffect } from "react";
+import { MeetingCard } from "@/components/common/MeetingCard";
+import { useModalStore } from "@/stores/useModalStore";
+import ReviewWriteModal from "@/app/meet/review/_components/ReviewWriteModal";
+import { useRouter } from "next/navigation";
+import api from "@/apis/app";
+import { Meeting } from "@/types/meetings";
+import { useAuthStore } from "@/stores/useAuth";
+
+interface Review {
+  id: number;
+  nickname: string;
+  rating: number;
+  content: string;
+  created_at: string;
+  meet_title: string;
+  meet_date: string;
+  meet_location: string;
+}
 
 export default function PastScheduleList() {
   const [pastScheduleList, setPastScheduleList] = useState<Meeting[]>([]);
+  const { modals, closeModal } = useModalStore();
   const router = useRouter();
-  const { modals, closeModal, modalData } = useModalStore();
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
     const fetchAppliedMeetings = async () => {
@@ -32,23 +44,19 @@ export default function PastScheduleList() {
           }),
         ]);
 
-        const appliedMeetings: Meeting[] = appliedRes.data.results;
-        const pastMeetings: Meeting[] = pastRes.data.results;
-        const reviews: Review[] = reviewRes.data.results;
+        const appliedMeetings: Meeting[] = appliedRes?.data?.results;
+        const pastMeetings: Meeting[] = pastRes?.data?.results;
+        const reviews: Review[] = reviewRes?.data?.results;
 
-        const appliedIds = new Set(appliedMeetings.map((m) => m.meet_id));
+        const appliedIds = new Set(appliedMeetings.map((m) => m?.id));
         const reviewsSet = new Set(
-          reviews.map((r) => `${r.meet_title}_${r.meet_date}`)
+          reviews?.map((r) => `${r?.meet_title}_${r?.meet_date}`)
         );
 
-        const filtered = pastMeetings.filter(
+        const filtered = pastMeetings?.filter(
           (m) =>
-            appliedIds.has(m.meet_id) && !reviewsSet.has(`${m.title}_${m.date}`)
+            appliedIds.has(m?.id) && !reviewsSet.has(`${m?.title}_${m?.date}`)
         );
-
-        console.log("✅ 신청한 모임 ID:", [...appliedIds]);
-        console.log("✅ 지난 모임 응답:", pastMeetings);
-        console.log("✅ 필터링 결과:", filtered);
 
         setPastScheduleList(filtered);
       } catch (error) {
@@ -58,40 +66,24 @@ export default function PastScheduleList() {
     };
 
     fetchAppliedMeetings();
-  }, []);
-
+  }, [router, accessToken]);
   return (
     <section className="px-4 py-6">
-      <h2 className="text-lg font-bold mb-4">지난 모임</h2>
       <div className="md:grid-cols-3 md:grid flex flex-col gap-4">
-        {pastScheduleList.map((meeting, idx) => (
-          <MeetingCard key={meeting.meet_id ?? `fallback-${idx}`} item={meeting} context="past" />
+        {pastScheduleList.map((meeting) => (
+          <MeetingCard key={meeting.id} item={meeting} context="past" />
         ))}
+        {modals["reviewWrite"] && (
+          <ReviewWriteModal
+            modalKey="reviewWrite"
+            onClose={() => closeModal("reviewWrite")}
+            // onSubmit={(rating, content) => {
+            //   console.log("후기 제출", rating, content);
+            // }}
+            meetId={2}
+          />
+        )}
       </div>
-
-      {/* 모달 렌더링 */}
-      {Object.keys(modals).map((modalKey) => {
-        if (modalKey.startsWith('finishedMeetDetail-') && modals[modalKey]) {
-          const meetId = modalData[modalKey]?.meetId;
-          return <FinishedMeetDetailModal key={modalKey} modalKey={modalKey} meetId={meetId ?? 0} />;
-        }
-        if (modalKey.startsWith('reviewWrite-') && modals[modalKey]) {
-          const meetId = modalData[modalKey]?.meetId;
-          return (
-            <ReviewWriteModal
-              key={modalKey}
-              modalKey={modalKey}
-              onClose={() => closeModal(modalKey)}
-              onSubmit={(rating, content) => {
-                console.log('후기 제출', rating, content);
-                closeModal(modalKey);
-              }}
-              meetId={meetId ?? 0}
-            />
-          );
-        }
-        return null;
-      })}
     </section>
   );
 }

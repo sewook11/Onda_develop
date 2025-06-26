@@ -25,7 +25,7 @@ interface User {
   interest_ids?: number | null;
   area_id?: number | null;
   role: "user" | "admin" | "leader";
-  // isAdmin: boolean;
+  isAdmin?: boolean;
   user_id: number;
 }
 
