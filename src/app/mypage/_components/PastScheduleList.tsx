@@ -1,44 +1,37 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { MeetingCard } from '@/components/common/MeetingCard';
-import { useModalStore } from '@/stores/useModalStore';
-import ReviewWriteModal from '@/app/meet/review/_components/ReviewWriteModal';
-import { useRouter } from 'next/navigation';
-import api from '@/apis/app';
-import { Meeting } from '@/types/meetings';
+import React, { useState, useEffect } from "react";
+import { MeetingCard } from "@/components/common/MeetingCard";
+import { useModalStore } from "@/stores/useModalStore";
+import ReviewWriteModal from "@/app/meet/review/_components/ReviewWriteModal";
+import { useRouter } from "next/navigation";
+import api from "@/apis/app";
+import { Meeting } from "@/types/meetings";
+import { useAuthStore } from "@/stores/useAuth";
 
 export default function PastScheduleList() {
   const [pastScheduleList, setPastScheduleList] = useState<Meeting[]>([]);
   const { modals, closeModal } = useModalStore();
   const router = useRouter();
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
     const fetchAppliedMeetings = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          router.push('/login');
+        if (!accessToken) {
+          router.push("/login");
           return;
         }
         const response = await api.get(`/meets?status=false`);
         setPastScheduleList(response.data.results);
       } catch (error) {
-        console.error('지난 모임 조회 실패:', error);
-        alert('지난 모임 조회에 실패했습니다. 다시 시도해주세요.');
+        console.error("지난 모임 조회 실패:", error);
+        alert("지난 모임 조회에 실패했습니다. 다시 시도해주세요.");
       }
     };
     fetchAppliedMeetings();
   }, [router]);
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsMobile(window.innerWidth < 768);
-  //   };
-  //   handleResize();
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
   return (
     <section className="px-4 py-6">
       <div className="md:grid-cols-3 md:grid flex flex-col gap-4">
@@ -55,12 +48,12 @@ export default function PastScheduleList() {
           )
           // )
         )}
-        {modals['reviewWrite'] && (
+        {modals["reviewWrite"] && (
           <ReviewWriteModal
             modalKey="reviewWrite"
-            onClose={() => closeModal('reviewWrite')}
+            onClose={() => closeModal("reviewWrite")}
             onSubmit={(rating, content) => {
-              console.log('후기 제출', rating, content);
+              console.log("후기 제출", rating, content);
             }}
             meetId={2}
           />

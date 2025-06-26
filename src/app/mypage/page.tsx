@@ -1,23 +1,28 @@
-'use client';
-import AppliedScheduleList from './_components/AppliedScheduleList';
-import PastScheduleList from './_components/PastScheduleList';
-import { useAuthStore } from '@/stores/useAuth';
-import { useRouter } from 'next/navigation';
-import UserProfile from './_components/UserProfile';
-import ReviewList from './_components/ReviewList';
-import MoreLinkButton from '@/components/common/Buttons/MoreLinkButton';
-import LeaderMeetingList from './_components/LeaderMeetingList';
-import ApplicantTable from '../leader/_components/ApplicantTable';
-import { useViewModeStore } from '@/stores/useViewModeStore';
-import { useLeaderMeetingsById, useLeaderMeetingsReviews } from '@/hooks/useLeader';
+"use client";
+import AppliedScheduleList from "./_components/AppliedScheduleList";
+import PastScheduleList from "./_components/PastScheduleList";
+import { useAuthStore } from "@/stores/useAuth";
+import { useRouter } from "next/navigation";
+import UserProfile from "./_components/UserProfile";
+import ReviewList from "./_components/ReviewList";
+import MoreLinkButton from "@/components/common/Buttons/MoreLinkButton";
+import LeaderMeetingList from "./_components/LeaderMeetingList";
+import ApplicantTable from "../leader/_components/ApplicantTable";
+import { useViewModeStore } from "@/stores/useViewModeStore";
+import {
+  useLeaderMeetingsById,
+  useLeaderMeetingsReviews,
+} from "@/hooks/useLeader";
 
 export default function Mypage() {
   const { user, profile } = useAuthStore();
   const { viewMode } = useViewModeStore();
   const router = useRouter();
-  
+
   const displayNickname = user?.nickname;
   const isLeader = user?.role === "leader";
+  const isAdmin = user?.role === "admin";
+  // const isUser = user?.role === "user";
 
   const { data: meetingData } = useLeaderMeetingsById(
     { user_id: profile?.id, page: 1, size: 3 },
@@ -29,19 +34,19 @@ export default function Mypage() {
   );
 
   const handleBtn = () => {
-    router.push('/meet/search');
+    router.push("/meet/search");
   };
   return (
     <main className="py-12 max-w-5xl mx-auto space-y-16">
       <UserProfile />
       {/* 관리자 */}
 
-      {user?.isAdmin && <ApplicantTable />}
+      {isAdmin && <ApplicantTable />}
       {/* 관리자 외 유저/리더 */}
-      {!user?.isAdmin && (
+      {!isAdmin && (
         <>
           {/* 리더 */}
-          {viewMode === 'leader' && (
+          {viewMode === "leader" && (
             <>
               <div>
                 <LeaderMeetingList meetings={meetingData?.data || []} />
@@ -51,19 +56,28 @@ export default function Mypage() {
               </div>
               <div>
                 <ReviewList reviews={reviewData?.data ?? []} />
+<<<<<<< fix/#173-fix_kakao_mypage_scheduleList
+                <MoreLinkButton href="/mypage/mymeet/reviews">
+                  전체 보기
+                </MoreLinkButton>
+              </div>
+=======
                 {reviewData?.totalCount !== 0 && (
                   <MoreLinkButton href="/mypage/mymeet/reviews">전체 보기</MoreLinkButton>
                 )}
                 </div>
+>>>>>>> develop
             </>
           )}
 
           {/* 일반 유저 */}
-          {viewMode === 'user' && (
+          {viewMode === "user" && (
             <>
               {displayNickname && (
                 <div className="w-full flex justify-center mb-6">
-                  <p className="font-bold text-lg text-center">{displayNickname}님의 신청 모임, 일정들을 확인하세요.</p>
+                  <p className="font-bold text-lg text-center">
+                    {displayNickname}님의 신청 모임, 일정들을 확인하세요.
+                  </p>
                 </div>
               )}
               <AppliedScheduleList />

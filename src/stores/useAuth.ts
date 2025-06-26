@@ -25,7 +25,7 @@ interface User {
   interest_ids?: number | null;
   area_id?: number | null;
   role: "user" | "admin" | "leader";
-  isAdmin: boolean;
+  // isAdmin: boolean;
   user_id: number;
 }
 
@@ -71,7 +71,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   isKakaoUserSignedUp: false,
   setKakaoUserSignedUp: (value: boolean) =>
     set(() => ({ isKakaoUserSignedUp: value })),
-  
+
   setProfile: (profile) => set({ profile }),
   setEmail: (email: string) => set({ email }),
   setPassword: (password: string) => set({ password }),
@@ -84,7 +84,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
   setUser: (user: User) => {
     set({
       user,
-      isAdmin: !!user?.isAdmin,
+      // isAdmin: !!user?.isAdmin,
     });
   },
 
@@ -106,7 +106,7 @@ const authStoreCreator: StateCreator<AuthStore> = (set) => ({
           name: decoded.name,
           nickname: decoded.nickname,
           role: decoded.role,
-          isAdmin,
+          // isAdmin,
           user_id: decoded.user_id,
         },
         isKakaoUserSignedUp: false,

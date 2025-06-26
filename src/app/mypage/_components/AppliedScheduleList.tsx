@@ -5,6 +5,7 @@ import { MeetingCard } from "@/components/common/MeetingCard";
 import { useRouter } from "next/navigation";
 import api from "@/apis/app";
 import { FileData } from "@/types/file";
+import { useAuthStore } from "@/stores/useAuth";
 
 interface Meeting {
   id: number;
@@ -30,25 +31,33 @@ export default function AppliedScheduleList() {
   const [applySchedule, setApplySchedule] = useState<Meeting[]>([]);
   console.log(applySchedule);
   const router = useRouter();
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
+    if (!accessToken) return;
+
     const fetchAppliedMeetings = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
+        console.log("accessToken:", accessToken);
+        if (!accessToken) {
           router.push("/login");
           return;
         }
-        const response = await api.get(`/meets/users`);
+        const response = await api.get(`/meets/users`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log("응답 데이터:", response.data);
         setApplySchedule(response.data.results);
       } catch (error) {
         console.error("신청한 모임 조회 실패:", error);
         alert("신청한 모임 조회에 실패했습니다. 다시 시도해주세요.");
       }
     };
-  
+
     fetchAppliedMeetings();
-  }, [router]);
+  }, [router, accessToken]);
 
   if (applySchedule.length === 0) {
     return (
