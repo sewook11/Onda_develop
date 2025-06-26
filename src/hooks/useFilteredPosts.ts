@@ -9,7 +9,8 @@ export function useFilteredPosts(searchParams: SearchParams, page: number) {
   const hasFilter =
     !!searchParams.category?.id ||
     !!searchParams.interest?.id ||
-    !!searchParams.area?.childId.id ||
+    !!searchParams.area?.parentId.id ||
+    !!searchParams.area?.childId?.id ||
     !!searchParams.keyword?.trim();
 
   const filtered = useMemo<Post[]>(() => {
@@ -25,9 +26,11 @@ export function useFilteredPosts(searchParams: SearchParams, page: number) {
         searchParams.interest?.id === 0 ||
         post.interest?.id === searchParams.interest.id;
 
-      const filteredArea =
-        searchParams.area?.childId?.id === 0 ||
-        post.area?.id === searchParams.area.childId.id;
+      const filteredArea = searchParams.area?.childId?.id
+        ? post.area?.id === searchParams.area.childId.id
+        : searchParams.area?.parentId?.id
+          ? post.area?.id === searchParams.area.parentId.id
+          : true;
 
       const filteredKeyword =
         !searchParams.keyword || post.title.includes(searchParams.keyword);

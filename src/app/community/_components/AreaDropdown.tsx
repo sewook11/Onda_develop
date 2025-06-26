@@ -7,8 +7,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Option } from "@/types/post";
 
 export interface SelectedArea {
-  parentId: Option;
-  childId: Option;
+  parentId?: Option;
+  childId?: Option;
 }
 
 interface AreaDropdownProps {
@@ -34,9 +34,11 @@ export default function AreaDropdown({
   useClickOutside(dropdownRef, () => setOpen(false));
 
   useEffect(() => {
-    if (value) {
+    if (value?.parentId) {
       setSelectedParentId(value.parentId.id);
-      setSelectedChildId(value.childId.id);
+      if (value.childId) {
+        setSelectedChildId(value.childId?.id);
+      }
     }
   }, [value]);
 
@@ -50,7 +52,18 @@ export default function AreaDropdown({
   const displayText =
     selectedParent && selectedChild
       ? `${selectedParent.area_name} ${selectedChild.area_name}`
-      : placeholder;
+      : selectedParent
+        ? selectedParent.area_name
+        : placeholder;
+
+  const handleChangeParentOnly = (parent: Area) => {
+    setSelectedParentId(parent.id);
+    setSelectedChildId(null);
+    onChange({
+      parentId: { id: parent.id, name: parent.area_name },
+      childId: undefined, // 선택 안 된 상태
+    });
+  };
 
   const handleChange = (childId: number, parent: Area) => {
     const child = parent.children?.find((c) => c.id === childId);
@@ -90,7 +103,7 @@ export default function AreaDropdown({
                     <button
                       key={area.id}
                       type="button"
-                      onClick={() => setSelectedParentId(area.id)}
+                      onClick={() => handleChangeParentOnly(area)}
                       className={`w-full text-left px-3 py-2 rounded ${
                         selectedParent?.area_name === area.area_name
                           ? "border-orange-500 bg-orange-100 font-bold text-orange-600"

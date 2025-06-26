@@ -4,21 +4,21 @@ import { Option } from "@/types/post";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-interface DropdownInput {
-  value?: Option;
-  onChange: (value: Option) => void;
-  options: Option[];
+interface DropdownInputProps<T extends Option> {
+  value: T | undefined;
+  onChange: (value: T) => void;
+  options: T[];
   placeholder?: string;
   className?: string;
 }
 
-export default function DropdownInput({
+export default function DropdownInput<T extends Option>({
   value,
   onChange,
   options,
   placeholder = "선택하세요.",
   className,
-}: DropdownInput) {
+}: DropdownInputProps<T>) {
   const [open, setOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +31,11 @@ export default function DropdownInput({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // 옵션 잘 들어오는지 확인
+  useEffect(() => {
+    console.log("DropdownInput options:", options);
+  }, [options]);
 
   return (
     <div className={`${className}`}>
