@@ -1,18 +1,18 @@
-'use client';
-import { useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { DecodedToken, useAuthStore } from '@/stores/useAuth';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { useSignupSubmit } from '@/hooks/useSignupSubmit';
-import { END_POINT } from '@/constants/route';
-import api from '@/apis/app';
+"use client";
+import { useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { DecodedToken, useAuthStore } from "@/stores/useAuth";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useSignupSubmit } from "@/hooks/useSignupSubmit";
+import { END_POINT } from "@/constants/route";
+import api from "@/apis/app";
 
 function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const code = searchParams.get('code');
-  const state = searchParams.get('state');
+  const code = searchParams.get("code");
+  const state = searchParams.get("state");
 
   const auth = useAuthStore.getState();
   const { setSignupData } = useSignupSubmit();
@@ -23,7 +23,7 @@ function KakaoCallbackContent() {
     (async () => {
       try {
         const res = await axios.post(
-          'https://api.ondamoim.com/api/users/kakao/callback',
+          "https://api.ondamoim.com/api/users/kakao/callback",
           { code, state },
           { withCredentials: true }
         );
@@ -48,31 +48,41 @@ function KakaoCallbackContent() {
             Authorization: `Bearer ${access_token}`,
           },
         });
-        console.log('👀 profile data:', profile.data);
+        console.log("👀 profile data:", profile.data);
         const { area, interests, digital_level } = profile.data;
-        const isNewUser = !area || !interests?.length || !digital_level;
+        console.log("profile data:", profile.data);
+        // const isNewUser = !area || !interests?.length || !digital_level;
+        const isNewUser =
+          !area ||
+          !Array.isArray(interests) ||
+          interests.length === 0 ||
+          digital_level === null ||
+          digital_level === undefined;
+
         // redirect
         if (isNewUser) {
           // 회원가입 폼에 미리 email, nickname 채워놓기
-          setSignupData((prev) => ({
-            ...prev,
-            isKakaoUser: true,
-            email: decoded.email,
-            nickname: decoded.nickname,
-          }));
-          router.push('/signup?kakao=1');
+          // setSignupData((prev) => ({
+          //   ...prev,
+          //   isKakaoUser: true,
+          //   email: decoded.email,
+          //   nickname: decoded.nickname,
+          // }));
+          // router.push("/signup?kakao=1");
+          router.push(
+            `/signup?kakao=1&email=${encodeURIComponent(decoded.email)}&nickname=${encodeURIComponent(decoded.nickname)}`
+          );
         } else {
           useAuthStore.getState().setKakaoUserSignedUp(true);
-          router.push('/');
+          router.push("/");
         }
       } catch (err) {
         useAuthStore.getState().setKakaoUserSignedUp(true);
         console.error(err);
-        router.push('/login'); // 실패할 경우 로그인 페이지로
+        router.push("/login"); // 실패할 경우 로그인 페이지로
       }
     })();
   }, [code, state, router, auth, setSignupData]);
-
 
   return (
     <div className="flex justify-center items-center h-screen">
