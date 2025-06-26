@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Providers from "./providers";
 import ReviewDetailModal from "./mypage/_components/ReviewDetailModal";
+import ChatModal from "./(chat)/_components/ChatModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <ReviewDetailModal />
+          <ChatModal />
         </Providers>
       </body>
     </html>

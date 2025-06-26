@@ -66,14 +66,14 @@ export default function MeeringStatusButtons({
                 신청하기
               </button>
             )}
-            {status === '모집 마감' && !isMyPage && (
+            {status === '마감' && !isMyPage && (
               <button className="flex-1 bg-gray-300 text-white py-2 rounded-md cursor-not-allowed" disabled>
                 모집 마감
               </button>
             )}
 
             <Link href={`/meet/${id}`}>
-              <button className="flex-1 border border-orange-500 text-orange-500 py-2 rounded-md hover:bg-orange-50 transition">
+              <button className="flex-1 border border-orange-500 text-orange-500 p-2 rounded-md hover:bg-orange-50 transition">
                 상세 보기
               </button>
             </Link>

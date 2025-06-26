@@ -33,6 +33,7 @@ module.exports = {
         "accent-red": "#FF4B4A",
         "accent-blue": "#2D60FF",
         "accent-main": "#F26B38",
+        "accent-purple": "#476CFF",
 
         // Gray Scale
         "gray-800": "#222222",
