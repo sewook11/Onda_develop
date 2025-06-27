@@ -49,7 +49,7 @@ export default function PastScheduleList() {
         setPastScheduleList(filtered);
       } catch (error) {
         console.error("지난 모임 조회 실패:", error);
-        alert("지난 모임 조회에 실패했습니다. 다시 시도해주세요.");
+        // alert("지난 모임 조회에 실패했습니다. 다시 시도해주세요.");
       }
     };
 

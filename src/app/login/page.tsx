@@ -37,7 +37,7 @@ export default function LoginPage() {
   }, [user, isKakaoUserSignedUp, router]);
 
   const handleKakaoLogin = () => {
-    const callbackUrl = "http://localhost:3000/users/kakao/callback";
+    const callbackUrl = "https://www.ondamoim.com/users/kakao/callback";
     window.location.href = `https://api.ondamoim.com/api/users/kakao/login?callback_url=${callbackUrl}`;
   };
 

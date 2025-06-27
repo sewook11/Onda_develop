@@ -62,12 +62,13 @@ export default function MeetDetailPage({
       </div>
       {/* 이미지 + 리더정보 */}
       <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-1 bg-gray-100 h-[300px] rounded-xl flex items-center justify-center text-sm text-gray-400">
+        <div className="flex-1 overflow-hidden bg-gray-100 h-[300px] rounded-xl flex items-center justify-center text-sm text-gray-400">
           <Image
             src={meetDetail.file?.file}
             alt={meetDetail.title}
             width={300}
             height={300}
+            className="object-cover"
           />
         </div>
 
