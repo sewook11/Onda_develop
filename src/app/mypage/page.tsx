@@ -4,7 +4,6 @@ import PastScheduleList from "./_components/PastScheduleList";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
 import UserProfile from "./_components/UserProfile";
-import ReviewList from "../meet/review/_components/ReviewList";
 import MoreLinkButton from "@/components/common/Buttons/MoreLinkButton";
 import LeaderMeetingList from "./_components/LeaderMeetingList";
 import ApplicantTable from "../leader/_components/ApplicantTable";
@@ -13,6 +12,7 @@ import {
   useLeaderMeetingsById,
   useLeaderMeetingsReviews,
 } from "@/hooks/useLeader";
+import MyReviewList from "./_components/MyReviewList";
 
 export default function Mypage() {
   const { user, profile } = useAuthStore();
@@ -57,7 +57,7 @@ export default function Mypage() {
                 )}
               </div>
               <div>
-                <ReviewList reviews={reviewData?.data ?? []} />
+                <MyReviewList reviews={reviewData?.data ?? []} />
                 {reviewData?.totalCount !== 0 && (
                   <MoreLinkButton href="/mypage/mymeet/reviews">
                     전체 보기

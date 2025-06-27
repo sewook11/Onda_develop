@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
 import { useReviewsByMeetingId } from "@/hooks/useLeader";
-import ReviewList from "@/app/meet/review/_components/ReviewList";
 import { useState } from "react";
 import { useParams } from "next/navigation";
+import MyReviewList from "@/app/mypage/_components/MyReviewList";
 
 const MyMeetingReviewPage = () => {
   const { meetId } = useParams(); // URL의 [meetId] 값 가져오기
@@ -18,11 +18,11 @@ const MyMeetingReviewPage = () => {
     size,
   });
 
-  console.log("review:", reviewData);
+  console.log("review:",reviewData)
 
   return (
     <main className="px-10 py-12 max-w-5xl mx-auto space-y-10">
-      <ReviewList
+      <MyReviewList
         reviews={reviewData?.data || []}
         currentPage={page}
         onPageChange={(newPage) => setPage(newPage)}

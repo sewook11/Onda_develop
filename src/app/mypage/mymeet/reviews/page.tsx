@@ -1,30 +1,33 @@
-"use client";
+'use client'
 
-import { useLeaderMeetingsReviews } from "@/hooks/useLeader";
-import ReviewList from "../../../meet/review/_components/ReviewList";
+import { useLeaderMeetingsById } from "@/hooks/useLeader";
+import { useAuthStore } from "@/stores/useAuth";
 import { useState } from "react";
+import LeaderMeetingList from "../../_components/LeaderMeetingList";
 
-const MyMeetingReviewPage = () => {
+const MyMeetingPage = () => {
+  const { profile } = useAuthStore();
   const [page, setPage] = useState(1);
   const size = 10;
 
-  const { data: reviewData } = useLeaderMeetingsReviews({
+  const { data: meetingData } = useLeaderMeetingsById({
+    user_id: profile?.id,
     page,
     size,
   });
 
   return (
     <main className="px-10 py-12 max-w-5xl mx-auto space-y-10">
-      <ReviewList
-        reviews={reviewData?.data || []}
+      <LeaderMeetingList
+        meetings={meetingData?.data || []}
         currentPage={page}
         onPageChange={(newPage) => setPage(newPage)}
         perPage={size}
         showPagination={true}
-        totalCount={reviewData?.totalCount || 0}
-      />
+        totalCount={meetingData?.totalCount || 0}
+       />
     </main>
   );
 };
 
-export default MyMeetingReviewPage;
+export default MyMeetingPage;

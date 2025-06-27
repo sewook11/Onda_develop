@@ -5,7 +5,6 @@ import { MeetingCard } from "@/components/common/MeetingCard";
 import { useRouter } from "next/navigation";
 import api from "@/apis/app";
 import { FileData } from "@/types/file";
-import { useAuthStore } from "@/stores/useAuth";
 
 interface Meeting {
   meet_id: number;
@@ -31,23 +30,12 @@ export default function AppliedScheduleList() {
   const [applySchedule, setApplySchedule] = useState<Meeting[]>([]);
   console.log(applySchedule);
   const router = useRouter();
-  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
-    if (!accessToken) return;
 
     const fetchAppliedMeetings = async () => {
       try {
-        console.log("accessToken:", accessToken);
-        if (!accessToken) {
-          router.push("/login");
-          return;
-        }
-        const response = await api.get(`/meets/users`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await api.get(`/meets/users`);
         console.log("응답 데이터:", response.data);
         setApplySchedule(response.data.results);
       } catch (error) {
@@ -57,7 +45,7 @@ export default function AppliedScheduleList() {
     };
 
     fetchAppliedMeetings();
-  }, []);
+  }, [router]);
 
   if (applySchedule.length === 0) {
     return (

@@ -1,7 +1,7 @@
 "use client";
 import { useModalStore } from "@/stores/useModalStore";
-import ChatRoomPage from "../[roomId]/ChatRoom";
 import { X } from "lucide-react";
+import ChatRoom from "../[roomId]/ChatRoom";
 
 export default function ChatModal() {
   const { modals, modalData, closeModal } = useModalStore();
@@ -35,7 +35,7 @@ export default function ChatModal() {
           </button>
         </div>
         {/* props로 token 넘겨줌 */}
-        <ChatRoomPage roomId={roomId} token={token} />
+        <ChatRoom roomId={roomId} token={token} />
       </div>
     </div>
   );

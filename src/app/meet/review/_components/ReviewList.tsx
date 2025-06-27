@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/useAuth";
 import { useModalStore } from "@/stores/useModalStore";
 import api from "@/apis/app";
 import Button from "@/components/common/Button";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import ReviewEditModal from "@/app/meet/review/_components/ReviewEditModal";
+import ReviewEditModal from "./ReviewEditModal";
 
 interface Review {
   id: number;
@@ -16,24 +17,18 @@ interface Review {
   content: string;
   created_at: string;
 }
+
 interface ReviewListProps {
   meetId: number;
 }
+
 export default function ReviewList({ meetId }: ReviewListProps) {
   const { user } = useAuthStore();
   const { modals, modalData, openModal, closeModal } = useModalStore();
+
   const [reviews, setReviews] = useState<Review[]>([]);
   const [averageRating, setAverageRating] = useState<number | null>(null);
-  const fetchReviews = async () => {
-    try {
-      const res = await api.get(`/meets/${meetId}/reviews`);
-      // console.log('res', res);
-      setReviews(res.data.reviews);
-      setAverageRating(res.data.average_rating);
-    } catch (err) {
-      console.error("리뷰 불러오기 실패:", err);
-    }
-  };
+
   const handleDeleteReview = async (reviewId: number) => {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
     try {
@@ -44,9 +39,23 @@ export default function ReviewList({ meetId }: ReviewListProps) {
       alert("삭제에 실패했습니다.");
     }
   };
-  useEffect(() => {
-    if (meetId) fetchReviews();
+
+  const fetchReviews = useCallback(async () => {
+    try {
+      const res = await api.get(`/meets/${meetId}/reviews`);
+      setReviews(res.data.reviews);
+      setAverageRating(res.data.average_rating);
+    } catch (err) {
+      console.error("리뷰 불러오기 실패", err);
+    }
   }, [meetId]);
+
+  useEffect(() => {
+    if (meetId) {
+      fetchReviews();
+    }
+  }, [meetId, fetchReviews]);
+
   return (
     <div>
       {/* 평균 별점 */}

@@ -1,5 +1,5 @@
 import Modal from "@/components/common/Modal";
-import { useModalStore } from "@/stores/useModalStore";
+import { ModalData, useModalStore } from "@/stores/useModalStore";
 import { AlertCircle, CheckCircle, LogInIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -9,7 +9,7 @@ export function PostSuccessModal() {
   const { modals, modalData, closeModal } = useModalStore();
 
   const isOpen = modals["PostSuccessModal"];
-  const postId = modalData["PostSuccessModal"] as number | undefined;
+  const postId = modalData["PostSuccessModal"] as ModalData | undefined;
 
   if (!isOpen || !postId) return null;
 

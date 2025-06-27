@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 // 모달 데이터 타입 정의
-interface ModalData {
+export interface ModalData {
   meetId?: number | string;
   [key: string]: unknown;
 }

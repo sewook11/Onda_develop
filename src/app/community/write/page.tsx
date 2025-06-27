@@ -28,7 +28,7 @@ export default function Page() {
 
     try {
       const data = await createPost.mutateAsync(payload);
-      openModal("PostSuccessModal", data.id);
+      openModal("PostSuccessModal", {postId: data.id});
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? error.response?.data?.message || "서버 오류가 발생했습니다."

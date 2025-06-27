@@ -78,7 +78,7 @@ const LeaderMeetingList = ({
         <>
           <div className="space-y-4">
             {paginated.map((meeting) => (
-              <LeaderMeetingCard key={meeting.id} {...meeting} />
+              <LeaderMeetingCard key={meeting.id} meeting={meeting} />
             ))}
           </div>
 

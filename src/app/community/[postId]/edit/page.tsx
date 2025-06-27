@@ -22,7 +22,7 @@ export default function PostEditPage() {
         payload,
       });
 
-      openModal("PostSuccessModal", data.id);
+      openModal("PostSuccessModal", {postId: data.id});
       router.push(`/community/${data.id}`);
     } catch (error) {
       const message = "게시글 수정에 실패했습니다.";
