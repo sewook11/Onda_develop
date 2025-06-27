@@ -5,7 +5,7 @@ import DefaultGatheringImage from "../common/DefaultMeetingImage";
 
 //import { INTEREST_CATEGORY_MAP } from "@/constants/interestCategory";
 import { MeetingCardProps } from "@/types/meetings";
-import MeeringStatusButtons from "../../app/_components/MeetingStatusButton";
+import MeetingStatusButtons from "../../app/_components/MeetingStatusButton";
 import api from "@/apis/app";
 import { useRouter, usePathname } from "next/navigation";
 import { END_POINT } from "@/constants/route";
@@ -45,20 +45,19 @@ export const MeetingCard = ({
   };
 
   const handleOpenChat = async () => {
-    if (typeof id !== 'number') {
+    if (typeof id !== "number") {
       console.error("잘못된 모임 ID입니다.");
       return;
     }
-    
+
     try {
-      const roomId = await joinGroupChat(id); 
-      openModal("chat", { roomId, title } );
+      const roomId = await joinGroupChat(id);
+      openModal("chat", { roomId, title });
     } catch (error) {
       console.error("채팅방 입장 실패:", error);
       alert("채팅방 입장에 실패했습니다. 다시 시도해주세요.");
     }
   };
-  
 
   return (
     <div className="rounded-2xl border border-gray-200 shadow-sm p-5 hover:shadow-lg mb-2 transition-all bg-white">
@@ -95,33 +94,38 @@ export const MeetingCard = ({
       <div className="text-gray-600 text-xs flex items-center mb-1">
         <MapPin size={16} className="mr-1" />
         {area}
-        {area}
       </div>
       {isApplied ? (
-          <div className="flex gap-2 items-center mb-1 break-all">
-            <button
-              className="flex-1 flex justify-center items-center gap-2 text-white p-2 rounded-md bg-accent-purple"
-              onClick={handleOpenChat}
-            >
-              <MessageSquareIcon size={16} fill="white" />
-              모임 그룹 채팅
+        <div className="flex gap-2 items-center mb-1 break-all">
+          <button
+            className="flex-1 flex justify-center items-center gap-2 text-white p-2 rounded-md bg-accent-purple"
+            onClick={handleOpenChat}
+          >
+            <MessageSquareIcon size={16} fill="white" />
+            모임 그룹 채팅
+          </button>
+          <Link href={`/meet/${id}`}>
+            <button className="flex-1 border border-orange-500 text-orange-500 p-2 rounded-md hover:bg-orange-50 transition">
+              상세 보기
             </button>
-            <Link href={`/meet/${id}`}>
-              <button className="flex-1 border border-orange-500 text-orange-500 p-2 rounded-md hover:bg-orange-50 transition">
-                상세 보기
-              </button>
-            </Link>
-          </div>
-        ) : (
-          <MeeringStatusButtons
-            status={status}
-            mode={context === "past" ? "past" : "default"}
-            id={id}
-            onClickApply={isMyPage ? undefined : handleApply}
-          />
-        )}
-
-
+          </Link>
+        </div>
+      ) : (
+        <MeetingStatusButtons
+          status={status}
+          mode={context === "past" ? "past" : "default"}
+          id={id}
+          onClickDetail={() => {
+            console.log("디테일 버튼 클릭", id);
+            openModal(`finishedMeetDetail-${id}`, { meetId: id });
+          }}
+          onClickReview={() => {
+            console.log("후기 버튼 클릭", id);
+            openModal(`reviewWrite-${id}`, { meetId: id });
+          }}
+          onClickApply={isMyPage ? undefined : handleApply}
+        />
+      )}
     </div>
   );
 };

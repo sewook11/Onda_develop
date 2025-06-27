@@ -57,7 +57,7 @@ export default function AppliedScheduleList() {
     };
 
     fetchAppliedMeetings();
-  }, [router, accessToken]);
+  }, []);
 
   if (applySchedule.length === 0) {
     return (
@@ -74,11 +74,9 @@ export default function AppliedScheduleList() {
     <section className="px-4 py-6">
       <h2 className="text-lg font-bold mb-4">신청한 모임</h2>
       <div className="md:grid-cols-3 md:grid flex flex-col gap-7">
-        {applySchedule.map(
-          (meeting) => (
-            <MeetingCard key={meeting.meet_id} item={meeting} isApplied />
-          )
-        )}
+        {applySchedule.map((meeting) => (
+          <MeetingCard key={meeting.meet_id} item={meeting} isApplied />
+        ))}
       </div>
     </section>
   );

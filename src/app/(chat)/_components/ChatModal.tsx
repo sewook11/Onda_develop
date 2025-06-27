@@ -1,12 +1,10 @@
 "use client";
 import { useModalStore } from "@/stores/useModalStore";
-import { useAuthStore } from "@/stores/useAuth";
-import ChatRoom from "../[roomId]/ChatRoom";
+import ChatRoomPage from "../[roomId]/ChatRoom";
 import { X } from "lucide-react";
 
 export default function ChatModal() {
   const { modals, modalData, closeModal } = useModalStore();
-  const token = useAuthStore((state) => state.accessToken);
 
   // modal이 안 열려 있으면 아예 렌더링하지 않음
   if (!modals["chat"]) return null;
@@ -18,6 +16,7 @@ export default function ChatModal() {
 
   const { roomId, title } = chatData;
 
+  const token = localStorage.getItem("accessToken");
   console.log("토큰:", token);
 
   if (!token) {
@@ -36,7 +35,7 @@ export default function ChatModal() {
           </button>
         </div>
         {/* props로 token 넘겨줌 */}
-        <ChatRoom roomId={roomId} token={token} />
+        <ChatRoomPage roomId={roomId} token={token} />
       </div>
     </div>
   );

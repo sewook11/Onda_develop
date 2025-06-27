@@ -4,7 +4,7 @@ import PastScheduleList from "./_components/PastScheduleList";
 import { useAuthStore } from "@/stores/useAuth";
 import { useRouter } from "next/navigation";
 import UserProfile from "./_components/UserProfile";
-import ReviewList from "./_components/ReviewList";
+import ReviewList from "../meet/review/_components/ReviewList";
 import MoreLinkButton from "@/components/common/Buttons/MoreLinkButton";
 import LeaderMeetingList from "./_components/LeaderMeetingList";
 import ApplicantTable from "../leader/_components/ApplicantTable";

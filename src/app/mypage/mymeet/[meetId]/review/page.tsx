@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
 import { useReviewsByMeetingId } from "@/hooks/useLeader";
-import ReviewList from "@/app/mypage/_components/ReviewList";
+import ReviewList from "@/app/meet/review/_components/ReviewList";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -18,7 +18,7 @@ const MyMeetingReviewPage = () => {
     size,
   });
 
-  console.log("review:",reviewData)
+  console.log("review:", reviewData);
 
   return (
     <main className="px-10 py-12 max-w-5xl mx-auto space-y-10">
