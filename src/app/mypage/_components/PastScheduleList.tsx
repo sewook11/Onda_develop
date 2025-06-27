@@ -67,19 +67,30 @@ export default function PastScheduleList() {
 
     fetchAppliedMeetings();
   }, [router, accessToken]);
+
   return (
     <section className="px-4 py-6">
       <div className="md:grid-cols-3 md:grid flex flex-col gap-4">
-        {pastScheduleList.map((meeting) => (
-          <MeetingCard key={meeting.id} item={meeting} context="past" />
-        ))}
+        {pastScheduleList.map(
+          (meeting) => (
+            // isMobile ? (
+            //   <MeetingCardHorizontal
+            //     key={meeting.meet_id}
+            //     item={meeting}
+            //     isApplied={false}
+            //   />
+            // ) : (
+            <MeetingCard key={meeting.meet_id} item={meeting} context="past" />
+          )
+          // )
+        )}
         {modals["reviewWrite"] && (
           <ReviewWriteModal
             modalKey="reviewWrite"
             onClose={() => closeModal("reviewWrite")}
-            // onSubmit={(rating, content) => {
-            //   console.log("후기 제출", rating, content);
-            // }}
+            onSubmit={(rating, content) => {
+              console.log("후기 제출", rating, content);
+            }}
             meetId={2}
           />
         )}
