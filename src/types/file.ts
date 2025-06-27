@@ -1,3 +1,5 @@
+export type FileCategory = "post" | "profile" | "meet" | "certificate" | "other";
+
 export type FileData = {
     id: number;
     user_id?: number;

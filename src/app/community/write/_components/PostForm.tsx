@@ -23,8 +23,8 @@ export interface PostFormData {
   category?: Option;
   interest?: Option;
   area?: {
-    parentId: Option;
-    childId: Option;
+    parentId?: Option;
+    childId?: Option;
   };
   file?: PostFile | File | null;
 }

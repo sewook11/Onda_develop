@@ -42,11 +42,11 @@ export interface MeetingCardProps {
 }
 
 export type Review = {
-  id: number;
+  id?: number;
   nickname: string;
   rating: number;
   content: string;
-  created_at: string;
+  created_at?: string;
   meet_title: string;
   meet_date: string;
   meet_location: string;

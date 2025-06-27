@@ -29,7 +29,7 @@ export default function MeetImageUploader({
     if (initialImageId) {
       setImageId(initialImageId);
     }
-  }, [initialImageId]);
+  }, [initialImageId, setImageId]);
 
   const handleImageUpload = async (file: File) => {
     const response = await uploadFiles(file, "meet");

@@ -4,10 +4,8 @@ import React, { useState, useEffect } from "react";
 import { MeetingCard } from "@/components/common/MeetingCard";
 import { useModalStore } from "@/stores/useModalStore";
 import ReviewWriteModal from "@/app/meet/review/_components/ReviewWriteModal";
-import { useRouter } from "next/navigation";
 import api from "@/apis/app";
 import { Meeting } from "@/types/meetings";
-import { useAuthStore } from "@/stores/useAuth";
 
 interface Review {
   id: number;
@@ -23,25 +21,15 @@ interface Review {
 export default function PastScheduleList() {
   const [pastScheduleList, setPastScheduleList] = useState<Meeting[]>([]);
   const { modals, closeModal } = useModalStore();
-  const router = useRouter();
-  const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
     const fetchAppliedMeetings = async () => {
       try {
-        if (!accessToken) {
-          router.push("/login");
-          return;
-        }
 
         const [appliedRes, pastRes, reviewRes] = await Promise.all([
-          api.get("/meets/users", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
+          api.get("/meets/users"),
           api.get("/meets?status=false"),
-          api.get("/users/reviews", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }),
+          api.get("/users/reviews"),
         ]);
 
         const appliedMeetings: Meeting[] = appliedRes?.data?.results;
@@ -66,7 +54,7 @@ export default function PastScheduleList() {
     };
 
     fetchAppliedMeetings();
-  }, [router, accessToken]);
+  }, []);
 
   return (
     <section className="px-4 py-6">

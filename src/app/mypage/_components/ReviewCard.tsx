@@ -5,7 +5,7 @@ import StarRating from '@/components/StarRating';
 import { useModalStore } from '@/stores/useModalStore';
 import { Review } from '@/types/meetings';
 
-type ReviewCardProps = Review;
+export type ReviewCardProps = Review;
 
 const ReviewCard = ({
   nickname,
